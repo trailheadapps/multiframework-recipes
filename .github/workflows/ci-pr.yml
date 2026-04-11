@@ -1,0 +1,282 @@
+# Unique name for this workflow
+name: CI on PR
+
+# Definition when the workflow should run
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: "Run on a prerelease org?"
+        required: false
+        type: boolean
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+# Workflow environment variables
+env:
+  # Is the PR base branch a prerelease branch
+  IS_PRERELEASE: ${{ startsWith(github.event.pull_request.base.ref, 'prerelease/') || inputs.prerelease  }}
+
+# Jobs to be executed
+jobs:
+  # Dummy job used to skip CI run on automated PRs
+  skip-ci:
+    if: github.actor == 'trailheadapps-bot'
+    runs-on: trailheadapps-Ubuntu
+    steps:
+      - name: Noop
+        run: |
+          echo "Skipping CI run for automated PRs."
+
+  # Formatting and linting only runs on human-submitted PRs
+  format-lint-react-tests:
+    if: github.actor != 'trailheadapps-bot'
+    runs-on: trailheadapps-Ubuntu
+    steps:
+      # Checkout the source code
+      - name: "Checkout source code"
+        uses: actions/checkout@v4
+
+      # Install Volta to enforce proper node and package manager versions
+      - name: "Install Volta"
+        uses: volta-cli/action@v4
+
+      # Cache node_modules to speed up the process
+      - name: "Restore node_modules cache"
+        id: cache-npm
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ env.cache-name }}-
+            npm-
+
+      # Install npm dependencies for Prettier
+      - name: "Install npm dependencies"
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: HUSKY=0 npm ci
+
+      # Cache React app node_modules
+      - name: "Restore React app node_modules cache"
+        id: cache-react-npm
+        uses: actions/cache@v4
+        with:
+          path: force-app/main/react-recipes/uiBundles/reactRecipes/node_modules
+          key: react-npm-${{ hashFiles('force-app/main/react-recipes/uiBundles/reactRecipes/package-lock.json') }}
+
+      # Install React app dependencies
+      - name: "Install React app dependencies"
+        if: steps.cache-react-npm.outputs.cache-hit != 'true'
+        run: npm ci --prefix force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Lint React app
+      - name: "Lint"
+        run: npm run lint
+
+      # Run React tests with coverage
+      - name: "Test"
+        run: npm run test -- --run --coverage
+
+      # Upload code coverage data
+      - name: "Upload code coverage for React to Codecov.io"
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: multiframework-recipes
+
+      # Build React app
+      - name: "Build"
+        run: npm run build
+
+      # Cache Playwright browsers
+      - name: "Restore Playwright browser cache"
+        id: cache-playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('force-app/main/react-recipes/uiBundles/reactRecipes/package-lock.json') }}
+
+      # Install Playwright browsers
+      - name: "Install Playwright browsers"
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Install Playwright system dependencies (needed even on cache hit)
+      - name: "Install Playwright system dependencies"
+        if: steps.cache-playwright.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Build for E2E
+      - name: "Build for E2E"
+        run: npm run build:e2e
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Run E2E tests
+      - name: "Run Playwright E2E tests"
+        run: npm run test:e2e
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Prettier formatting
+      - name: "Code formatting verification with Prettier"
+        run: npm run prettier:verify
+
+      # Install Salesforce CLI
+      - name: "Install Salesforce CLI"
+        run: |
+          npm install @salesforce/cli --location=global
+          nodeInstallPath=$(npm config get prefix)
+          echo "$nodeInstallPath/bin" >> $GITHUB_PATH
+          cd "$nodeInstallPath/bin"
+          ./sf --version
+
+      # Install Salesforce CLI Code Analyzer plugin
+      - name: "Install Salesforce CLI Code Analyzer plugin"
+        run: sf plugins install code-analyzer
+
+      # Run Code Analyzer
+      - name: "Run Code Analyzer"
+        id: run-code-analyzer
+        uses: forcedotcom/run-code-analyzer@v2
+        with:
+          run-arguments: --workspace "force-app/main" --view detail --output-file "sca-results.csv" --config-file "code-analyzer.yml"
+          results-artifact-name: code-analyzer-results
+          github-token: ${{ github.token }}
+
+      # Check for Code Analyzer critical or high severity violations
+      - name: "Check for Code Analyzer critical or high severity violations"
+        if: |
+          steps.run-code-analyzer.outputs.exit-code > 0 ||
+          steps.run-code-analyzer.outputs.num-sev1-violations > 0 ||
+          steps.run-code-analyzer.outputs.num-sev2-violations > 0
+        run: |
+          echo One of more Code Analyzer critical or high severity violations found
+          exit 1
+
+  scratch-org-test:
+    runs-on: trailheadapps-Ubuntu
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      # Checkout the source code
+      - name: "Checkout source code"
+        uses: actions/checkout@v4
+
+      # Install Salesforce CLI
+      - name: "Install Salesforce CLI"
+        run: |
+          npm install @salesforce/cli --location=global
+          nodeInstallPath=$(npm config get prefix)
+          echo "$nodeInstallPath/bin" >> $GITHUB_PATH
+          sf --version
+
+      # Store secret for dev hub
+      - name: "Populate auth file with DEVHUB_SFDX_URL secret"
+        shell: bash
+        run: |
+          echo ${{ secrets.DEVHUB_SFDX_URL }} > ./DEVHUB_SFDX_URL.txt
+          secretFileSize=$(wc -c "./DEVHUB_SFDX_URL.txt" | awk '{print $1}')
+          if [ $secretFileSize == 1 ]; then
+              echo "Missing DEVHUB_SFDX_URL secret. Is this workflow running on a fork?";
+              exit 1;
+          fi
+
+      # Authenticate dev hub
+      - name: "Authenticate Dev Hub"
+        run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a devhub -d
+
+      # Create prerelease scratch org
+      - name: "Create prerelease scratch org"
+        if: ${{ env.IS_PRERELEASE }}
+        run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1 --release=preview
+
+      # Create scratch org
+      - name: "Create scratch org"
+        if: ${{ !env.IS_PRERELEASE }}
+        run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1
+
+      # Deploy shared metadata to scratch org
+      - name: "Deploy source to scratch org"
+        run: sf project deploy start -d force-app/main/default/objects -d force-app/main/default/classes -d force-app/main/default/permissionsets -d force-app/main/default/cspTrustedSites
+
+      # Assign permissionset
+      - name: "Assign permissionset to default user"
+        run: sf org assign permset -n recipes
+
+      # Import sample data
+      - name: "Import sample data"
+        run: sf data tree import -p ./data/data-plan.json
+
+      # Install React app dependencies
+      - name: "Install React app dependencies"
+        run: npm ci --prefix force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Fetch GraphQL schema and run codegen
+      - name: "GraphQL schema and codegen"
+        run: |
+          npm run graphql:schema
+          npm run graphql:codegen
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Build React app
+      - name: "Build React app"
+        run: npm run build
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Deploy UI bundle to scratch org
+      - name: "Deploy UI bundle"
+        run: sf project deploy start --source-dir force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Run Apex tests in scratch org
+      - name: "Run Apex tests"
+        run: sf apex test run --code-coverage --result-format human -d ./tests/apex -w 20
+
+      # Upload code coverage data
+      - name: "Upload code coverage for Apex to Codecov.io"
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: Apex
+
+      # Housekeeping
+      - name: "Delete scratch org"
+        if: always()
+        run: sf org delete scratch -p -o scratch-org
+
+  # Auto merge Dependabot PRs for:
+  # - patch updates on prod dependencies
+  # - minor updates on dev dependencies
+  dependabot-auto-merge:
+    # Only run for Dependabot PRs
+    if: github.actor == 'dependabot[bot]'
+    runs-on: trailheadapps-Ubuntu
+    needs: format-lint-react-tests
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - name: "Fetch Dependabot metadata"
+        id: dependabot
+        uses: dependabot/fetch-metadata@v2
+
+      - name: "Check auto merge conditions"
+        id: auto-merge
+        if: |
+          (
+            steps.dependabot.outputs.update-type == 'version-update:semver-patch' &&
+            contains('direct:production,indirect:production', steps.dependabot.outputs.dependency-type)
+          ) || (
+            contains('version-update:semver-minor,version-update:semver-patch', steps.dependabot.outputs.update-type) &&
+            contains('direct:development,indirect:development', steps.dependabot.outputs.dependency-type)
+          )
+        run: echo "::notice ::auto-merge conditions satisfied"
+
+      - name: "Approve and merge PR"
+        if: steps.auto-merge.conclusion == 'success'
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --rebase "$PR_URL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}

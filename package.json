@@ -1,0 +1,40 @@
+{
+  "name": "@salesforce/multiframework-recipes",
+  "version": "0.1.0",
+  "description": "Multiframework Recipes",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "author": "salesforce.com",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trailheadapps/multiframework-recipes"
+  },
+  "scripts": {
+    "build": "npm run build --prefix force-app/main/react-recipes/uiBundles/reactRecipes",
+    "dev": "npm run dev --prefix force-app/main/react-recipes/uiBundles/reactRecipes",
+    "lint": "npm run lint --prefix force-app/main/react-recipes/uiBundles/reactRecipes",
+    "test": "npm run test --prefix force-app/main/react-recipes/uiBundles/reactRecipes",
+    "test:coverage": "npm run test:coverage --prefix force-app/main/react-recipes/uiBundles/reactRecipes",
+    "prettier": "prettier --write \"**/*.{cls,trigger,xml,yaml,yml}\"",
+    "prettier:verify": "prettier --check \"**/*.{cls,trigger,xml,yaml,yml}\"",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "**/*.{cls,trigger,xml,yaml,yml}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@prettier/plugin-xml": "^3.4.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-apex": "^2.2.6"
+  },
+  "volta": {
+    "node": "22.16.0"
+  }
+}

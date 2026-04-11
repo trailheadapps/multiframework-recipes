@@ -1,0 +1,16 @@
+{
+  "orgName": "My Saleforce Org",
+  "edition": "developer",
+  "features": ["EnableSetPasswordInApi"],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "UIBundleSettings": {
+      "webAppOptIn": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    }
+  }
+}

@@ -1,0 +1,118 @@
+/*
+ * Dark-theme overrides for @shikijs/twoslash style-rich.css
+ * Tuned for material-theme-darker (#212121 background)
+ */
+
+/* ===== Base variables ===== */
+.twoslash {
+  --twoslash-border-color: #4a4a4a;
+  --twoslash-underline-color: #b0b0b0;
+  --twoslash-highlighted-border: #e5c07b50;
+  --twoslash-highlighted-bg: #e5c07b15;
+  --twoslash-popup-bg: #1a1a1a;
+  --twoslash-popup-color: #eeffff;
+  --twoslash-popup-shadow: rgba(0, 0, 0, 0.4) 0px 4px 16px;
+  --twoslash-docs-color: #9a9a9a;
+  --twoslash-docs-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --twoslash-code-font: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace;
+  --twoslash-code-font-size: 1em;
+  --twoslash-matched-color: #eeffff;
+  --twoslash-unmatched-color: #666;
+  --twoslash-cursor-color: #ffcc00aa;
+  --twoslash-error-color: #f07178;
+  --twoslash-error-bg: #f0717815;
+  --twoslash-warn-color: #ffcb6b;
+  --twoslash-warn-bg: #ffcb6b15;
+  --twoslash-tag-color: #82aaff;
+  --twoslash-tag-bg: #82aaff15;
+  --twoslash-tag-warn-color: var(--twoslash-warn-color);
+  --twoslash-tag-warn-bg: var(--twoslash-warn-bg);
+  --twoslash-tag-annotate-color: #c3e88d;
+  --twoslash-tag-annotate-bg: #c3e88d15;
+}
+
+/* ===== Hover underline ===== */
+.twoslash .twoslash-hover {
+  border-bottom-style: dotted;
+  border-bottom-width: 1px;
+  border-bottom-color: transparent;
+  transition: border-color 0.2s ease;
+}
+
+.twoslash:hover .twoslash-hover {
+  border-bottom-color: #555;
+}
+
+.twoslash .twoslash-hover:hover {
+  border-bottom-color: var(--twoslash-underline-color);
+}
+
+/* ===== Popup ===== */
+.twoslash .twoslash-popup-container {
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  min-width: 280px;
+  max-width: min(640px, 90vw);
+  width: max-content;
+}
+
+.twoslash .twoslash-popup-arrow {
+  background: var(--twoslash-popup-bg);
+}
+
+.twoslash .twoslash-popup-code {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.twoslash .twoslash-popup-docs {
+  font-size: 1em;
+  line-height: 1.5;
+  padding: 8px 10px !important;
+}
+
+/* ===== Error squiggly ===== */
+.twoslash .twoslash-error {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 3' enable-background='new 0 0 6 3' height='3' width='6'%3E%3Cg fill='%23f07178'%3E%3Cpolygon points='5.5,0 2.5,3 1.1,3 4.1,0'/%3E%3Cpolygon points='4,0 6,2 6,0.6 5.4,0'/%3E%3Cpolygon points='0,2 1,3 2.4,3 0,0.6'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.twoslash .twoslash-error.twoslash-error-level-warning {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 3' enable-background='new 0 0 6 3' height='3' width='6'%3E%3Cg fill='%23ffcb6b'%3E%3Cpolygon points='5.5,0 2.5,3 1.1,3 4.1,0'/%3E%3Cpolygon points='4,0 6,2 6,0.6 5.4,0'/%3E%3Cpolygon points='0,2 1,3 2.4,3 0,0.6'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ===== Error line ===== */
+.twoslash .twoslash-error-line {
+  border-radius: 0 4px 4px 0;
+  font-size: 1em;
+}
+
+/* ===== Completion list ===== */
+.twoslash .twoslash-completion-cursor .twoslash-completion-list {
+  background: var(--twoslash-popup-bg);
+  border-color: var(--twoslash-border-color);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  padding: 4px;
+}
+
+.twoslash-completion-list li {
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size: 1em;
+}
+
+.twoslash-completion-list li:hover {
+  background: #ffffff10;
+}
+
+/* ===== Tag lines ===== */
+.twoslash .twoslash-tag-line {
+  border-radius: 0 4px 4px 0;
+  font-size: 1em;
+}
+
+/* ===== Highlighted tokens ===== */
+.twoslash-highlighted {
+  border-radius: 3px;
+}

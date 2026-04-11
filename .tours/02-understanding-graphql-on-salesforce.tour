@@ -1,0 +1,46 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "02 - Understanding GraphQL on Salesforce",
+  "steps": [
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/read-data/SingleRecord.tsx",
+      "line": 16,
+      "description": "## Your First UIAPI GraphQL Query\n\nThe `gql` tagged template literal defines a GraphQL query. Every UIAPI query starts with `uiapi { query { ... } }` and uses the **Relay connection pattern**.\n\nKey concepts:\n- The top-level object name matches the Salesforce object API name (`Contact`)\n- `first: 1` limits to one record (like `LIMIT 1` in SOQL)\n- `where` and `orderBy` filter and sort server-side\n- Fields are requested explicitly -- no `SELECT *`"
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/read-data/SingleRecord.tsx",
+      "line": 28,
+      "description": "## The { value } Wrapper\n\nNotice that every scalar field is wrapped: `Name { value }`, `Title { value }`, etc.\n\nThis is unique to Salesforce's UIAPI GraphQL. If you have used `record.fields.Name.value` with LWC's `@wire(getRecord)`, this is the same shape. The `{ value }` wrapper exists because UIAPI fields can also carry metadata like `displayValue` for formatted output."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/read-data/SingleRecord.tsx",
+      "line": 11,
+      "description": "## Relay Connection Pattern\n\nUIAPI uses the Relay connection pattern: results arrive as `edges[].node` instead of a plain array.\n\n```\nContact {\n  edges {\n    node {\n      Name { value }\n    }\n  }\n}\n```\n\nTo get a single record's Name, you unwrap: `data.uiapi.query.Contact.edges[0].node.Name.value`\n\nThis pattern enables cursor-based pagination (see the PaginatedList recipe)."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/modify-data/CreateRecord.tsx",
+      "line": 16,
+      "description": "## GraphQL Mutations\n\nMutations follow a different pattern than queries:\n- Entry point: `uiapi { <Object>Create(input: $input) { ... } }`\n- Input type: `<Object>CreateInput!`\n- The response nests under `uiapi.<Object>Create.Record`\n\nUpdate and Delete mutations follow the same naming convention: `AccountUpdate`, `AccountDelete`, etc."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/modify-data/CreateRecord.tsx",
+      "line": 17,
+      "description": "## Mutation Variables\n\nThe `$input` variable is typed as `AccountCreateInput!`. When calling the mutation, you pass the variable as:\n\n```ts\nsdk.graphql(CREATE_ACCOUNT, {\n  variables: {\n    input: { Account: { Name: 'Acme Corp' } }\n  }\n})\n```\n\nThe input wraps the object name again (`{ Account: { ...fields } }`) -- this is a UIAPI convention."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/error-handling/GraphqlErrors.tsx",
+      "line": 1,
+      "description": "## Error Handling\n\nUIAPI GraphQL surfaces query-level errors in `result.errors[]` rather than throwing. This means a query can return **partial data plus errors** in the same response.\n\nThis recipe intentionally requests a nonexistent field to demonstrate both error patterns:\n1. **Query-level errors** -- found in `result.errors[]`\n2. **Thrown exceptions** -- network failures or SDK errors caught with try/catch\n\nAlways check both layers when handling GraphQL responses."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/read-data/PaginatedList.tsx",
+      "line": 14,
+      "description": "## Cursor-Based Pagination\n\nUIAPI uses Relay-style cursor pagination, not offset-based pagination:\n- `first: 2` -- fetch 2 records per page\n- `after: $after` -- pass the cursor from the previous page\n- `pageInfo { hasNextPage, endCursor }` -- tells you if more pages exist and provides the cursor for the next request\n\nEach \"Load More\" click passes `pageInfo.endCursor` as `$after` to fetch the next page. Records are appended to local state rather than replaced."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/read-data/AliasedMultiObjectQuery.tsx",
+      "line": 1,
+      "description": "## Aliased Queries\n\nGraphQL aliases let you query multiple objects in a single request. Instead of making separate calls for Accounts and Contacts, you write:\n\n```graphql\naccounts: Account { ... }\ncontacts: Contact { ... }\n```\n\nThe alias names (`accounts`, `contacts`) become the keys in the response object. In LWC, this would require two separate `@wire` calls or an Apex method."
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "01 - Your First Recipe",
+  "steps": [
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/hello/HelloWorld.tsx",
+      "line": 1,
+      "description": "## The Simplest Recipe\n\nEvery recipe is a single `.tsx` file. This one is the smallest possible Salesforce web application component -- a plain React function that returns JSX.\n\nNotice there are no imports from Salesforce SDKs here. The component renders inside a UI Bundle exactly like any other React component."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/hello/HelloWorld.tsx",
+      "line": 7,
+      "description": "## JSX Binding\n\nThe `{greeting}` expression binds a JavaScript variable into the rendered HTML. This is the foundation of every recipe -- data flows from variables into the UI via JSX expressions."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/read-data/SingleRecord.tsx",
+      "line": 8,
+      "description": "## Your First Data Recipe\n\nNow let's look at a recipe that fetches real Salesforce data. This file imports `createDataSDK` and `gql` from the Salesforce SDK. These two imports are the foundation of every data recipe:\n\n- `gql` -- a tagged template literal for writing GraphQL queries\n- `createDataSDK` -- creates an SDK instance that can execute those queries against the UIAPI GraphQL endpoint"
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/read-data/SingleRecord.tsx",
+      "line": 16,
+      "description": "## The GraphQL Query\n\nEvery recipe **inlines** its query right in the file. This is intentional -- you can read the entire pattern without jumping between files.\n\nThe query structure follows UIAPI conventions:\n- `uiapi.query.<Object>` is the entry point\n- Results use the **Relay connection pattern**: `edges` -> `node` -> fields\n- Every scalar field is wrapped in `{ value }` (e.g., `Name { value }`)"
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/read-data/SingleRecord.tsx",
+      "line": 49,
+      "description": "## Explicit Types\n\nEach recipe defines its own TypeScript interface that mirrors the query shape. This makes the response type visible right next to the query -- no need to look up shared type files."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/pages/Hello.tsx",
+      "line": 21,
+      "description": "## How Recipes Are Displayed\n\nEach page component defines an array of `RecipeItem` objects. Each item has a `name`, `description`, the React `component` to render, and its syntax-highlighted `source` code (imported with a custom `?shiki` Vite plugin that pre-renders highlighting at build time).\n\nThe `Layout` component renders these as a sidebar list on the left and a split view (live demo + source code) on the right."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/pages/Hello.tsx",
+      "line": 80,
+      "description": "## The Layout Component\n\nThe `<Layout>` component handles the entire recipe browsing experience: sidebar navigation, live component rendering, and syntax-highlighted source code display. Every page follows this same pattern.\n\nYou now know the anatomy of a recipe! Try opening any `.tsx` file under `src/recipes/` to explore more patterns."
+    }
+  ]
+}

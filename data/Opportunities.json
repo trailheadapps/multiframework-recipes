@@ -1,0 +1,68 @@
+{
+  "records": [
+    {
+      "attributes": { "type": "Opportunity", "referenceId": "OpportunityRef1" },
+      "Name": "Acme Platform Upgrade",
+      "StageName": "Prospecting",
+      "CloseDate": "2026-06-30",
+      "Amount": 75000,
+      "AccountId": "@AccountRef1"
+    },
+    {
+      "attributes": { "type": "Opportunity", "referenceId": "OpportunityRef2" },
+      "Name": "Global Industries ERP Integration",
+      "StageName": "Qualification",
+      "CloseDate": "2026-09-15",
+      "Amount": 250000,
+      "AccountId": "@AccountRef2"
+    },
+    {
+      "attributes": { "type": "Opportunity", "referenceId": "OpportunityRef3" },
+      "Name": "Bright Horizon EMR System",
+      "StageName": "Needs Analysis",
+      "CloseDate": "2026-07-31",
+      "Amount": 150000,
+      "AccountId": "@AccountRef3"
+    },
+    {
+      "attributes": { "type": "Opportunity", "referenceId": "OpportunityRef4" },
+      "Name": "Cloud Dynamics SaaS Bundle",
+      "StageName": "Value Proposition",
+      "CloseDate": "2026-05-31",
+      "Amount": 45000,
+      "AccountId": "@AccountRef4"
+    },
+    {
+      "attributes": { "type": "Opportunity", "referenceId": "OpportunityRef5" },
+      "Name": "Summit Financial Analytics",
+      "StageName": "Proposal/Price Quote",
+      "CloseDate": "2026-08-31",
+      "Amount": 120000,
+      "AccountId": "@AccountRef5"
+    },
+    {
+      "attributes": { "type": "Opportunity", "referenceId": "OpportunityRef6" },
+      "Name": "Green Energy Smart Grid",
+      "StageName": "Negotiation/Review",
+      "CloseDate": "2026-10-31",
+      "Amount": 380000,
+      "AccountId": "@AccountRef6"
+    },
+    {
+      "attributes": { "type": "Opportunity", "referenceId": "OpportunityRef7" },
+      "Name": "Pacific Retail POS Upgrade",
+      "StageName": "Closed Won",
+      "CloseDate": "2026-03-15",
+      "Amount": 85000,
+      "AccountId": "@AccountRef7"
+    },
+    {
+      "attributes": { "type": "Opportunity", "referenceId": "OpportunityRef8" },
+      "Name": "SteelWorks Automation Suite",
+      "StageName": "Closed Lost",
+      "CloseDate": "2026-02-28",
+      "Amount": 420000,
+      "AccountId": "@AccountRef10"
+    }
+  ]
+}

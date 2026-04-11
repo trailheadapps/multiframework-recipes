@@ -1,0 +1,84 @@
+{
+  "records": [
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef1" },
+      "Name": "Acme Corp",
+      "Industry": "Technology",
+      "AnnualRevenue": 10000000,
+      "Website": "https://www.acme.example.com",
+      "Phone": "415-555-0101"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef2" },
+      "Name": "Global Industries",
+      "Industry": "Manufacturing",
+      "AnnualRevenue": 50000000,
+      "Website": "https://www.globalind.example.com",
+      "Phone": "312-555-0102"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef3" },
+      "Name": "Bright Horizon Health",
+      "Industry": "Healthcare",
+      "AnnualRevenue": 25000000,
+      "Website": "https://www.brighthorizon.example.com",
+      "Phone": "617-555-0103"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef4" },
+      "Name": "Cloud Dynamics",
+      "Industry": "Technology",
+      "AnnualRevenue": 8000000,
+      "Website": "https://www.clouddynamics.example.com",
+      "Phone": "206-555-0104"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef5" },
+      "Name": "Summit Financial",
+      "Industry": "Finance",
+      "AnnualRevenue": 30000000,
+      "Website": "https://www.summitfinancial.example.com",
+      "Phone": "212-555-0105"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef6" },
+      "Name": "Green Energy Co",
+      "Industry": "Energy",
+      "AnnualRevenue": 15000000,
+      "Website": "https://www.greenenergy.example.com",
+      "Phone": "720-555-0106"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef7" },
+      "Name": "Pacific Retail Group",
+      "Industry": "Retail",
+      "AnnualRevenue": 20000000,
+      "Website": "https://www.pacificretail.example.com",
+      "Phone": "503-555-0107"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef8" },
+      "Name": "Metro Services Inc",
+      "Industry": "Consulting",
+      "AnnualRevenue": 12000000,
+      "Website": "https://www.metroservices.example.com",
+      "Phone": "404-555-0108"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef9" },
+      "Name": "Prime Education",
+      "Industry": "Education",
+      "AnnualRevenue": 5000000,
+      "Website": "https://www.primeeducation.example.com",
+      "Phone": "512-555-0109"
+    },
+    {
+      "attributes": { "type": "Account", "referenceId": "AccountRef10" },
+      "Name": "SteelWorks Inc",
+      "Industry": "Manufacturing",
+      "AnnualRevenue": 75000000,
+      "Website": "https://www.steelworks.example.com",
+      "Phone": "216-555-0110"
+    }
+  ]
+}

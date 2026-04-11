@@ -1,0 +1,36 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "03 - Deploying a UI Bundle",
+  "steps": [
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/reactRecipes.uibundle-meta.xml",
+      "line": 1,
+      "description": "## Salesforce Metadata\n\nEvery UI Bundle starts with a `.uibundle-meta.xml` file. This is the Salesforce metadata that registers your app with the platform.\n\n- `masterLabel` -- the display name shown in Setup\n- `description` -- a short summary of the app\n- `isActive` -- whether the app is accessible to users\n- `version` -- the metadata version\n\nThis file lives alongside your source code and is deployed via `sf project deploy`."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/ui-bundle.json",
+      "line": 1,
+      "description": "## UI Bundle Configuration\n\nThe `ui-bundle.json` file configures how Salesforce serves your built app:\n\n- `outputDir` -- where Vite outputs the production build (the `dist/` folder)\n- `routing.trailingSlash` -- URL normalization (\"never\" removes trailing slashes)\n- `routing.fallback` -- enables client-side routing by serving `index.html` for all routes\n\nThe fallback setting is critical for React Router -- without it, refreshing on a deep route like `/read-data` would return a 404."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/vite.config.ts",
+      "line": 7,
+      "description": "## Vite + Salesforce Plugin\n\nThe `@salesforce/vite-plugin-ui-bundle` plugin integrates Vite with the Salesforce platform. It handles:\n\n- Injecting the runtime `basePath` so your app works under Salesforce's URL structure\n- Configuring the build output to match what `ui-bundle.json` expects\n\nThe rest of the Vite config is standard React: the React plugin for JSX, Tailwind for styling, and path aliases for clean imports."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/index.html",
+      "line": 1,
+      "description": "## The Entry Point\n\nThis is a standard Vite entry point. The key elements:\n\n- `<div id=\"root\">` -- React mounts here\n- `<script type=\"module\" src=\"src/app.tsx\">` -- Vite resolves this to your app's root module\n\nDuring development (`npm run dev`), Vite serves this directly with hot module replacement. For production, `npm run build` bundles everything into the `dist/` folder."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/app.tsx",
+      "line": 1,
+      "description": "## Router Setup\n\nThe app module creates the React Router instance and renders it into the DOM:\n\n1. `createBrowserRouter(routes, { basename })` -- creates a router with all routes defined in `routes.tsx`. The `basename` comes from Salesforce's runtime environment so routes work under the platform's URL prefix.\n2. `createRoot(document.getElementById('root')!)` -- mounts React to the `#root` div from `index.html`.\n3. `IconSettings` wraps the app to configure SLDS icon sprite paths.\n\nThis is the bridge between a standard React app and the Salesforce platform."
+    },
+    {
+      "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/routes.tsx",
+      "line": 15,
+      "description": "## Route Definitions\n\nAll routes are defined as a flat array of `RouteObject` entries. The root route uses `AppLayout` (which renders the navbar + an `<Outlet />`), and each child route maps a URL path to a page component.\n\nThe `handle` property stores metadata like `showInNavigation` and `label` -- the navbar reads these to build its menu dynamically.\n\n## Build, Deploy, Open\n\nTo get this app running on Salesforce:\n1. `npm run build` -- Vite builds into `dist/`\n2. `sf project deploy start` -- deploys metadata + built assets\n3. Open the app URL in your org\n\nThe entire flow uses standard web tooling (Vite, React Router, npm) with a thin Salesforce integration layer."
+    }
+  ]
+}

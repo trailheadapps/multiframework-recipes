@@ -1,0 +1,31 @@
+@layer base, slds;
+@import '@salesforce-ux/design-system/assets/styles/salesforce-lightning-design-system.min.css' layer(slds);
+
+@keyframes slds-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.slds-skeleton-block {
+  display: block;
+  background: linear-gradient(90deg, #e5e5e5 25%, #f5f5f5 50%, #e5e5e5 75%);
+  background-size: 200% 100%;
+  animation: slds-shimmer 1.5s ease-in-out infinite;
+  border-radius: 0.25rem;
+}
+
+@layer slds {
+  .slds-context-bar {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .slds-button_icon-border-filled {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .slds-button_icon-border-filled:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 0 0 black;
+  }
+}
