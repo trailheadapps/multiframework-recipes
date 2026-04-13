@@ -9,9 +9,11 @@ A collection of easy-to-digest code examples for building apps on the Salesforce
 
 This sample application is designed to run on the Salesforce Platform. It covers what a frontend developer needs to know about Salesforce, and what a Salesforce developer needs to know about modern frameworks — taught at the intersection.
 
-> **Note:** Multi-Framework currently supports **React**, with additional frameworks coming over time. The feature is in Beta and only available in Scratch Orgs and Sandboxes — not yet in Developer Edition orgs or Trailhead Playgrounds.
+> Multi-Framework currently supports **React**, with additional frameworks coming over time. The feature is in Beta and only available in Scratch Orgs and Sandboxes — not yet in Developer Edition orgs or Trailhead Playgrounds.
+>
+> There is a known limitation where orgs that do not use English (`en_US`) as the default language may experience issues. The scratch org definition in this project explicitly sets `"language": "en_US"` to work around this. If you are using a sandbox or other org type, ensure the default language is set to English.
 
-> **Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/reactdev-overview.html) for a comprehensive overview.
+**Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/reactdev-overview.html) for a comprehensive overview.
 
 ## Architecture
 

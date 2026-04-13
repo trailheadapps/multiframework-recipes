@@ -1,6 +1,7 @@
 {
   "orgName": "My Saleforce Org",
   "edition": "developer",
+  "language": "en_US",
   "features": ["EnableSetPasswordInApi"],
   "settings": {
     "lightningExperienceSettings": {
