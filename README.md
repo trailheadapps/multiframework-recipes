@@ -45,11 +45,7 @@ graph LR
 
 1. Make sure you have **Node.js v22+** and **npm** installed.
 
-1. Install the ui-bundle-dev plugin:
-
-   ```bash
-   sf plugins install @salesforce/plugin-ui-bundle-dev
-   ```
+1. Make sure you have **Salesforce CLI v2.130.7+** installed. This version includes the UI Bundle plugin. Check your version with `sf --version` and update with `sf update` if needed.
 
 1. If you haven't already done so, authorize your hub org and provide it with an alias (**myhuborg** in the command below):
 
@@ -97,11 +93,7 @@ graph LR
 
 1. Make sure you have **Node.js v22+** and **npm** installed.
 
-1. Install the ui-bundle-dev plugin:
-
-   ```bash
-   sf plugins install @salesforce/plugin-ui-bundle-dev
-   ```
+1. Make sure you have **Salesforce CLI v2.130.7+** installed. This version includes the UI Bundle plugin. Check your version with `sf --version` and update with `sf update` if needed.
 
 1. Authorize your sandbox org and provide it with an alias (**mysandbox** in the command below):
 
