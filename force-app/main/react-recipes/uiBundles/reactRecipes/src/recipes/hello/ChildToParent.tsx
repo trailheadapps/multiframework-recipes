@@ -74,8 +74,9 @@ export default function ChildToParent() {
 
     const fetchAccounts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>(QUERY, {
-        industry,
+      const result = await sdk.graphql?.<QueryResponse>({
+        query: QUERY,
+        variables: { industry },
       });
 
       if (result?.errors?.length) {

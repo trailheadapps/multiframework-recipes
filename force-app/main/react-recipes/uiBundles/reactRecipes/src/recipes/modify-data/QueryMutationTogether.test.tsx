@@ -140,12 +140,12 @@ describe('QueryMutationTogether', () => {
     await waitFor(() =>
       expect(screen.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument()
     );
-    expect(mockGraphql).toHaveBeenLastCalledWith(
-      expect.any(String),
-      expect.objectContaining({
+    expect(mockGraphql).toHaveBeenLastCalledWith({
+      query: expect.any(String),
+      variables: expect.objectContaining({
         input: expect.objectContaining({ Id: '001' }),
-      })
-    );
+      }),
+    });
   });
 
   it('shows an inline error and keeps the form open when the mutation fails', async () => {

@@ -81,7 +81,7 @@ export default function RelatedRecords() {
   useEffect(() => {
     const fetchContacts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<ContactsWithAccountResponse>(QUERY);
+      const result = await sdk.graphql?.<ContactsWithAccountResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

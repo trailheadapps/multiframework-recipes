@@ -122,10 +122,10 @@ describe('DeleteRecord', () => {
     await waitFor(() =>
       expect(screen.queryByText('Acme Corp')).not.toBeInTheDocument()
     );
-    expect(mockGraphql).toHaveBeenLastCalledWith(
-      expect.any(String),
-      expect.objectContaining({ input: { Id: '001' } })
-    );
+    expect(mockGraphql).toHaveBeenLastCalledWith({
+      query: expect.any(String),
+      variables: expect.objectContaining({ input: { Id: '001' } }),
+    });
   });
 
   it('shows "Deleting…" in the row while the mutation is in flight', async () => {

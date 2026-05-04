@@ -157,10 +157,10 @@ describe('RouteParametersDetail', () => {
     await screen.findByText('Acme Corp');
     // Verify the route param was forwarded to the query — the equivalent of
     // confirming @wire(getRecord, { recordId: '$recordId' }) received the right id.
-    expect(mockGraphql).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({ id: '001' })
-    );
+    expect(mockGraphql).toHaveBeenCalledWith({
+      query: expect.any(String),
+      variables: expect.objectContaining({ id: '001' }),
+    });
   });
 
   it('renders a back link pointing to /routing', async () => {

@@ -45,7 +45,7 @@ export type Contact = ContactNode;
 
 export async function getContacts(): Promise<(ContactNode | undefined)[]> {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql?.<GetContactsQuery>(GET_CONTACTS);
+  const result = await sdk.graphql?.<GetContactsQuery>({ query: GET_CONTACTS });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map(e => e.message).join('; '));

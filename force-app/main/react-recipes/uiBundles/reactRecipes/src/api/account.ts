@@ -65,7 +65,7 @@ export function useFirstAccount(): {
 
 export async function getFirstAccount(): Promise<AccountNode | undefined> {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql?.<GetFirstAccountQuery>(GET_FIRST_ACCOUNT);
+  const result = await sdk.graphql?.<GetFirstAccountQuery>({ query: GET_FIRST_ACCOUNT });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map(e => e.message).join('; '));
@@ -106,7 +106,7 @@ export type Account = NonNullable<AccountListNode>;
 
 export async function getAccounts(): Promise<Account[]> {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql?.<GetAccountsQuery>(GET_ACCOUNTS);
+  const result = await sdk.graphql?.<GetAccountsQuery>({ query: GET_ACCOUNTS });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map(e => e.message).join('; '));

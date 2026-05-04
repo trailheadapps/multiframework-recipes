@@ -79,12 +79,12 @@ describe('CreateRecord', () => {
     // In LWC you'd assert createRecord was called with { apiName, fields };
     // here you assert the graphql function was called with a variables object.
     await screen.findByRole('status');
-    expect(mockGraphql).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({
+    expect(mockGraphql).toHaveBeenCalledWith({
+      query: expect.any(String),
+      variables: expect.objectContaining({
         input: { Account: { Name: 'New Account' } },
-      })
-    );
+      }),
+    });
   });
 
   it('shows a "Create Another" button after success that resets the form', async () => {

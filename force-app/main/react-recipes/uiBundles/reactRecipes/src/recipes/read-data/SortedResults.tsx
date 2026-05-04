@@ -87,9 +87,9 @@ export default function SortedResults() {
 
     const fetchSorted = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<SortedContactsResponse>(
-        buildQuery(field, dir)
-      );
+      const result = await sdk.graphql?.<SortedContactsResponse>({
+        query: buildQuery(field, dir),
+      });
 
       if (result?.errors?.length) {
         throw new Error(

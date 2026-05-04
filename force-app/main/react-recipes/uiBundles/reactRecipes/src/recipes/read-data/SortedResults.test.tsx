@@ -72,7 +72,7 @@ describe('SortedResults', () => {
 
     await screen.findByText('Alice');
     expect(mockGraphql).toHaveBeenLastCalledWith(
-      expect.stringContaining('Title')
+      expect.objectContaining({ query: expect.stringContaining('Title') })
     );
   });
 
@@ -86,7 +86,7 @@ describe('SortedResults', () => {
 
     await screen.findByText('Alice');
     expect(mockGraphql).toHaveBeenLastCalledWith(
-      expect.stringContaining('DESC')
+      expect.objectContaining({ query: expect.stringContaining('DESC') })
     );
   });
 

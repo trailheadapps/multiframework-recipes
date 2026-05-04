@@ -56,9 +56,9 @@ export async function getAccountsWithContacts(): Promise<
   AccountWithContacts[]
 > {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql?.<GetAccountsWithContactsQuery>(
-    GET_ACCOUNTS_WITH_CONTACTS
-  );
+  const result = await sdk.graphql?.<GetAccountsWithContactsQuery>({
+    query: GET_ACCOUNTS_WITH_CONTACTS,
+  });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map(e => e.message).join('; '));

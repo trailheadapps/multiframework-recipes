@@ -113,7 +113,7 @@ export function RouteParametersList() {
   useEffect(() => {
     const fetch = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<ListResponse>(LIST_QUERY);
+      const result = await sdk.graphql?.<ListResponse>({ query: LIST_QUERY });
 
       if (result?.errors?.length) {
         throw new Error(
@@ -177,8 +177,9 @@ export function RouteParametersDetail() {
 
     const fetch = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<DetailResponse>(DETAIL_QUERY, {
-        id: accountId,
+      const result = await sdk.graphql?.<DetailResponse>({
+        query: DETAIL_QUERY,
+        variables: { id: accountId },
       });
 
       if (result?.errors?.length) {

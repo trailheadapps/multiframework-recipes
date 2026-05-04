@@ -82,7 +82,7 @@ export default function ListOfRecords() {
   useEffect(() => {
     const fetchContacts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<ListContactsResponse>(QUERY);
+      const result = await sdk.graphql?.<ListContactsResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

@@ -130,7 +130,7 @@ export default function UpdateRecord() {
     (async () => {
       try {
         const sdk = await createDataSDK();
-        const res = await sdk.graphql?.<LoadResponse>(LOAD_QUERY);
+        const res = await sdk.graphql?.<LoadResponse>({ query: LOAD_QUERY });
         if (res?.errors?.length) {
           throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
         }
@@ -158,9 +158,12 @@ export default function UpdateRecord() {
 
     try {
       const sdk = await createDataSDK();
-      const res = await sdk.graphql?.<UpdateResponse>(UPDATE_MUTATION, {
-        // Id is a top-level field on the input, not nested inside Account
-        input: { Id: accountId, Account: { Name: name, Industry: industry } },
+      const res = await sdk.graphql?.<UpdateResponse>({
+        query: UPDATE_MUTATION,
+        variables: {
+          // Id is a top-level field on the input, not nested inside Account
+          input: { Id: accountId, Account: { Name: name, Industry: industry } },
+        },
       });
 
       if (res?.errors?.length) {
