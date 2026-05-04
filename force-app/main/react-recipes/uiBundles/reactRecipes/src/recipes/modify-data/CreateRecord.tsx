@@ -57,8 +57,9 @@ export default function CreateRecord() {
 
     try {
       const sdk = await createDataSDK();
-      const res = await sdk.graphql?.<CreateAccountResponse>(CREATE_ACCOUNT, {
-        input: { Account: { Name: name.trim() } },
+      const res = await sdk.graphql?.<CreateAccountResponse>({
+        query: CREATE_ACCOUNT,
+        variables: { input: { Account: { Name: name.trim() } } },
       });
 
       if (res?.errors?.length) {

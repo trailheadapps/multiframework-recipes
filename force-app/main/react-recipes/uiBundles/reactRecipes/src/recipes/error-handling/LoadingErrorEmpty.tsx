@@ -89,7 +89,7 @@ export default function LoadingErrorEmpty() {
   function fetchContacts() {
     const run = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>(QUERY);
+      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

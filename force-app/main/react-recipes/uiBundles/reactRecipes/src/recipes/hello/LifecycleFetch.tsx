@@ -84,7 +84,7 @@ function ContactFetcher() {
 
     const fetchContact = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>(QUERY);
+      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
 
       if (stale) return; // component was unmounted while fetching
 

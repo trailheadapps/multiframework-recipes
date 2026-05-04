@@ -88,7 +88,7 @@ export default function SingleRecord() {
   useEffect(() => {
     const fetchContact = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<SingleContactResponse>(QUERY);
+      const result = await sdk.graphql?.<SingleContactResponse>({ query: QUERY });
 
       // GraphQL errors don't throw — they're returned in the errors array
       // alongside partial data. Always check before reading data.

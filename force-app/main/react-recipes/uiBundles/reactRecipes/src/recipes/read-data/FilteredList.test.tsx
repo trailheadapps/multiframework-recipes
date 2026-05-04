@@ -108,8 +108,9 @@ describe('FilteredList', () => {
       await vi.advanceTimersByTimeAsync(350);
     });
     expect(screen.getByText('Alice')).toBeInTheDocument();
-    expect(mockGraphql).toHaveBeenCalledWith(expect.any(String), {
-      name: '%Alice%',
+    expect(mockGraphql).toHaveBeenCalledWith({
+      query: expect.any(String),
+      variables: { name: '%Alice%' },
     });
   });
 

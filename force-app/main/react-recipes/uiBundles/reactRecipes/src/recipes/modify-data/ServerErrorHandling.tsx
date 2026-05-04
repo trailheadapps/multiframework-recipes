@@ -60,13 +60,16 @@ export default function ServerErrorHandling() {
 
     try {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<ContactCreateResult>(CREATE_CONTACT, {
-        input: {
-          Contact: {
-            // LastName is intentionally omitted here — it is required by
-            // Salesforce, so submitting without it triggers a server error
-            Email: email || undefined,
-            Phone: phone || undefined,
+      const result = await sdk.graphql?.<ContactCreateResult>({
+        query: CREATE_CONTACT,
+        variables: {
+          input: {
+            Contact: {
+              // LastName is intentionally omitted here — it is required by
+              // Salesforce, so submitting without it triggers a server error
+              Email: email || undefined,
+              Phone: phone || undefined,
+            },
           },
         },
       });

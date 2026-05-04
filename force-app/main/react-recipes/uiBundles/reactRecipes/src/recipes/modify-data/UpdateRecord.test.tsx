@@ -127,12 +127,12 @@ describe('UpdateRecord', () => {
 
     // Id is a top-level field on the input, not nested inside Account —
     // verify the correct shape is sent to the mutation.
-    expect(mockGraphql).toHaveBeenLastCalledWith(
-      expect.any(String),
-      expect.objectContaining({
+    expect(mockGraphql).toHaveBeenLastCalledWith({
+      query: expect.any(String),
+      variables: expect.objectContaining({
         input: expect.objectContaining({ Id: '001' }),
-      })
-    );
+      }),
+    });
   });
 
   it('shows an error alert when the update mutation fails', async () => {

@@ -94,8 +94,9 @@ export default function FilteredList() {
       const fetchFiltered = async () => {
         const sdk = await createDataSDK();
         // Wrap the search term in % wildcards for the `like` operator
-        const result = await sdk.graphql?.<FilteredContactsResponse>(QUERY, {
-          name: `%${search}%`,
+        const result = await sdk.graphql?.<FilteredContactsResponse>({
+          query: QUERY,
+          variables: { name: `%${search}%` },
         });
 
         if (result?.errors?.length) {

@@ -90,7 +90,7 @@ export default function DeleteRecord() {
     (async () => {
       try {
         const sdk = await createDataSDK();
-        const res = await sdk.graphql?.<ListResponse>(LIST_QUERY);
+        const res = await sdk.graphql?.<ListResponse>({ query: LIST_QUERY });
         if (res?.errors?.length) {
           throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
         }
@@ -112,8 +112,9 @@ export default function DeleteRecord() {
 
     try {
       const sdk = await createDataSDK();
-      const res = await sdk.graphql?.<DeleteResponse>(DELETE_MUTATION, {
-        input: { Id: id },
+      const res = await sdk.graphql?.<DeleteResponse>({
+        query: DELETE_MUTATION,
+        variables: { input: { Id: id } },
       });
       if (res?.errors?.length) {
         throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));

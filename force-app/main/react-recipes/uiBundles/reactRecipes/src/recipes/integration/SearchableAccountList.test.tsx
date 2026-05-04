@@ -125,8 +125,9 @@ describe('SearchableAccountList', () => {
     await act(async () => {
       await vi.advanceTimersByTimeAsync(350);
     });
-    expect(mockGraphql).toHaveBeenCalledWith(expect.any(String), {
-      name: '%Acme%',
+    expect(mockGraphql).toHaveBeenCalledWith({
+      query: expect.any(String),
+      variables: { name: '%Acme%' },
     });
     expect(screen.getByText('Acme Corp')).toBeInTheDocument();
   });

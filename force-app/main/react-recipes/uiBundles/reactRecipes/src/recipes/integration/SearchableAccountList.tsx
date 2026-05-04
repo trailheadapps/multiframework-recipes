@@ -85,8 +85,9 @@ export default function SearchableAccountList() {
     try {
       const sdk = await createDataSDK();
       // Wrap the search term in wildcards for the `like` operator
-      const result = await sdk.graphql?.<QueryResponse>(QUERY, {
-        name: term ? `%${term}%` : '%%',
+      const result = await sdk.graphql?.<QueryResponse>({
+        query: QUERY,
+        variables: { name: term ? `%${term}%` : '%%' },
       });
 
       if (result?.errors?.length) {

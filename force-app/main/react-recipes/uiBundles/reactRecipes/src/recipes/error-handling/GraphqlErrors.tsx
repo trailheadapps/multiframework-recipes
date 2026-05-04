@@ -71,7 +71,7 @@ export default function GraphqlErrors() {
 
     try {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.(query);
+      const result = await sdk.graphql?.({ query });
 
       // Layer 1: result.errors[] — query-level errors (bad fields, auth, etc.)
       if (result?.errors?.length) {

@@ -151,8 +151,9 @@ describe('PaginatedList', () => {
     await screen.findByRole('button', { name: 'Load More' });
     await user.click(screen.getByRole('button', { name: 'Load More' }));
     await screen.findByText('Carol');
-    expect(mockGraphql).toHaveBeenLastCalledWith(expect.any(String), {
-      after: 'cursor1',
+    expect(mockGraphql).toHaveBeenLastCalledWith({
+      query: expect.any(String),
+      variables: { after: 'cursor1' },
     });
   });
 

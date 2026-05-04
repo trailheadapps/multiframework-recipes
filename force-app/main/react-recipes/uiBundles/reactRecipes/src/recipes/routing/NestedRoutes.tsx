@@ -71,7 +71,7 @@ export default function NestedRoutes() {
   useEffect(() => {
     const fetchAccounts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>(QUERY);
+      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

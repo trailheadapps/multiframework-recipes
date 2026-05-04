@@ -143,7 +143,7 @@ export default function QueryMutationTogether() {
     (async () => {
       try {
         const sdk = await createDataSDK();
-        const res = await sdk.graphql?.<ListResponse>(LIST_QUERY);
+        const res = await sdk.graphql?.<ListResponse>({ query: LIST_QUERY });
         if (res?.errors?.length) {
           throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
         }
@@ -180,10 +180,13 @@ export default function QueryMutationTogether() {
 
     try {
       const sdk = await createDataSDK();
-      const res = await sdk.graphql?.<UpdateResponse>(UPDATE_MUTATION, {
-        input: {
-          Id: editId,
-          Account: { Name: editName, Industry: editIndustry },
+      const res = await sdk.graphql?.<UpdateResponse>({
+        query: UPDATE_MUTATION,
+        variables: {
+          input: {
+            Id: editId,
+            Account: { Name: editName, Industry: editIndustry },
+          },
         },
       });
 

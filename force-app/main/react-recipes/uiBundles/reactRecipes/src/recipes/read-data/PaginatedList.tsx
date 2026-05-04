@@ -87,10 +87,10 @@ export default function PaginatedList() {
     const sdk = await createDataSDK();
     // Pass the cursor as a GraphQL variable — omit for the first page
     const variables = after ? { after } : {};
-    const result = await sdk.graphql?.<PaginatedContactsResponse>(
-      QUERY,
-      variables
-    );
+    const result = await sdk.graphql?.<PaginatedContactsResponse>({
+      query: QUERY,
+      variables,
+    });
 
     if (result?.errors?.length) {
       throw new Error(
