@@ -142,7 +142,7 @@ export async function executeGraphQL({
   variables?: Record<string, unknown>;
 }) {
   const sdk = await createDataSDK();
-  const response = await sdk.graphql?.(query, variables);
+  const response = await sdk.graphql?.({ query, variables });
   // ... error handling, returns response.data
 }
 ```

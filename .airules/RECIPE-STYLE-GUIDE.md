@@ -62,7 +62,7 @@ const QUERY = gql`
 useEffect(() => {
   const fetch = async () => {
     const sdk = await createDataSDK();
-    const result = await sdk.graphql(QUERY);
+    const result = await sdk.graphql({ query: QUERY });
     // Unwrap: edges → node → Field.value
     const node = result?.data?.uiapi?.query?.Contact?.edges?.[0]?.node;
     if (node) {
@@ -112,7 +112,7 @@ const DELETE_ACCOUNT = gql`
 
 async function handleDelete(id: string) {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql(DELETE_ACCOUNT, { input: { Id: id } });
+  const result = await sdk.graphql({ query: DELETE_ACCOUNT, variables: { input: { Id: id } } });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map((e) => e.message).join("; "));
@@ -275,7 +275,7 @@ export default function BindingAccountName() {
   useEffect(() => {
     const fetch = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql(QUERY);
+      const result = await sdk.graphql({ query: QUERY });
       const node = result?.data?.uiapi?.query?.Account?.edges?.[0]?.node;
       // Salesforce wraps every field in { value }
       setName(node?.Name?.value ?? "Unknown");
