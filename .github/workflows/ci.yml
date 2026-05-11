@@ -138,6 +138,30 @@ jobs:
           echo One of more Code Analyzer critical or high severity violations found
           exit 1
 
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - name: "Checkout source code"
+        uses: actions/checkout@v4
+
+      - name: "Setup Node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: force-app/main/react-recipes/uiBundles/reactRecipes/package-lock.json
+
+      - name: "Install React app dependencies"
+        run: npm ci --prefix force-app/main/react-recipes/uiBundles/reactRecipes
+
+      - name: "Build"
+        run: npm run build
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      - name: "Test"
+        run: npx vitest --run
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
   scratch-org-test:
     runs-on: trailheadapps-Ubuntu
     if: github.actor != 'dependabot[bot]'
