@@ -1,4 +1,4 @@
-import 'vitest';
-import 'vitest/globals';
-import '@testing-library/jest-dom';
-import 'vitest-axe/extend-expect';
+/// <reference types="vitest" />
+/// <reference types="@testing-library/jest-dom" />
+/// <reference types="vitest/globals" />
+/// <reference types="vitest-axe/extend-expect" />
