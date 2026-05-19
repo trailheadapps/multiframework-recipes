@@ -1,0 +1,37 @@
+name: Windows Build
+
+on:
+  workflow_call:
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - name: "Checkout source code"
+        uses: actions/checkout@v4
+
+      - name: "Setup Node"
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: "package.json"
+          cache: npm
+          cache-dependency-path: force-app/main/react-recipes/uiBundles/reactRecipes/package-lock.json
+
+      - name: "Restore React app node_modules cache"
+        id: cache-react-npm
+        uses: actions/cache@v4
+        with:
+          path: force-app/main/react-recipes/uiBundles/reactRecipes/node_modules
+          key: windows-react-npm-${{ hashFiles('force-app/main/react-recipes/uiBundles/reactRecipes/package-lock.json') }}
+
+      - name: "Install React app dependencies"
+        if: steps.cache-react-npm.outputs.cache-hit != 'true'
+        run: npm ci --prefix force-app/main/react-recipes/uiBundles/reactRecipes
+
+      - name: "Build"
+        run: npm run build
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      - name: "Test"
+        run: npm run test -- --run
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
