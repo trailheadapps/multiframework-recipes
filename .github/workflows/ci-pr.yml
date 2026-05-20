@@ -155,6 +155,10 @@ jobs:
           echo One of more Code Analyzer critical or high severity violations found
           exit 1
 
+  windows-build:
+    if: github.actor != 'trailheadapps-bot'
+    uses: ./.github/workflows/windows-build.yml
+
   scratch-org-test:
     runs-on: trailheadapps-Ubuntu
     if: github.actor != 'dependabot[bot]'
