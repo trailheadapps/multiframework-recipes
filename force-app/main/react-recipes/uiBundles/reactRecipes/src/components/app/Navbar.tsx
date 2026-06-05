@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Code2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SearchBar from './SearchBar';
+import FrameworkSwitcher from './FrameworkSwitcher';
 
 const navItems = [
   { to: '/hello', label: 'Hello' },
@@ -12,6 +13,7 @@ const navItems = [
   { to: '/error-handling', label: 'Error Handling' },
   { to: '/styling', label: 'Styling' },
   { to: '/routing', label: 'Routing' },
+  { to: '/mfe', label: 'Embedding' },
 ];
 
 export default function Navbar() {
@@ -20,14 +22,18 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 border-b-2 border-b-primary/30 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-screen-2xl items-center gap-6 px-6">
+      <div className="mx-auto flex h-14 max-w-screen-2xl items-center gap-4 px-6">
         <button
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
           onClick={() => navigate('/')}
         >
           <Code2 className="h-5 w-5 text-primary" />
-          <span className="font-semibold tracking-tight">React Recipes</span>
+          <span className="font-semibold tracking-tight">
+            Multi-Framework Recipes
+          </span>
         </button>
+
+        <FrameworkSwitcher />
 
         <nav className="flex items-center gap-1">
           {navItems.map(({ to, label }) => {

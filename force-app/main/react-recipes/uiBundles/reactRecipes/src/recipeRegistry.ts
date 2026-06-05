@@ -1,19 +1,59 @@
 /**
  * Central registry of all recipes, keyed by category route.
- * Each entry stores the recipe name, description, and the category it belongs to.
- * Used by the Home page for counts and by the global search bar for filtering.
+ *
+ * Each recipe has one or more flavors — a (hosting, framework) pair plus
+ * optional flavor-specific source imports. The first flavor is the default
+ * shown to users; "(soon)" UI states reference flavors that are not yet built.
  */
 
+export type Hosting = 'salesforce-hosted' | 'externally-hosted';
+export type Framework = 'react' | 'vue' | 'angular';
+
+export interface RecipeFlavor {
+  hosting: Hosting;
+  framework: Framework;
+  /** Source-file imports for code tabs. Shape varies by category; empty when not yet wired. */
+  sources?: Record<string, string>;
+  /** Optional flavor-specific description override. */
+  notes?: string;
+}
+
 export interface RecipeEntry {
+  /** Stable ID, kebab-case, unique within a category. e.g. "basic-embed" */
+  id: string;
   name: string;
   description: string;
   category: string;
   categoryRoute: string;
   /** Zero-based index of this recipe within its category page. */
   recipeIndex: number;
+  /** At least one. flavors[0] is the default. */
+  flavors: RecipeFlavor[];
 }
 
-export const recipeRegistry: RecipeEntry[] = [
+const CATEGORY_DEFAULTS: Record<string, { hosting: Hosting; framework: Framework }> = {
+  '/hello': { hosting: 'salesforce-hosted', framework: 'react' },
+  '/read-data': { hosting: 'salesforce-hosted', framework: 'react' },
+  '/modify-data': { hosting: 'salesforce-hosted', framework: 'react' },
+  '/salesforce-apis': { hosting: 'salesforce-hosted', framework: 'react' },
+  '/error-handling': { hosting: 'salesforce-hosted', framework: 'react' },
+  '/styling': { hosting: 'salesforce-hosted', framework: 'react' },
+  '/routing': { hosting: 'salesforce-hosted', framework: 'react' },
+  '/integration': { hosting: 'salesforce-hosted', framework: 'react' },
+  '/mfe': { hosting: 'externally-hosted', framework: 'react' },
+};
+
+interface RawRecipeEntry {
+  category: string;
+  categoryRoute: string;
+  recipeIndex: number;
+  name: string;
+  description: string;
+  id?: string;
+  flavors?: RecipeFlavor[];
+}
+
+const rawRecipes: RawRecipeEntry[] = [
   // Hello
   {
     category: 'Hello',
@@ -373,9 +413,192 @@ export const recipeRegistry: RecipeEntry[] = [
     description:
       'Fetches Accounts, Contacts, and Opportunities in a single aliased GraphQL request.',
   },
+
+  // MFE
+  {
+    category: 'Embedding',
+    categoryRoute: '/mfe',
+    recipeIndex: 0,
+    name: 'Basic Embed',
+    description:
+      'Minimum viable lwc-shell embed. Creates the shell imperatively, sets src and sandbox, and handles widget-ready.',
+  },
+  {
+    category: 'Embedding',
+    categoryRoute: '/mfe',
+    recipeIndex: 1,
+    name: 'Receive Data',
+    description:
+      'Pushes data from the LWC host into the MFE via shell.updateData(). The MFE receives it with bridge.addEventListener(\'data\', handler).',
+  },
+  {
+    category: 'Embedding',
+    categoryRoute: '/mfe',
+    recipeIndex: 2,
+    name: 'Send Event',
+    description:
+      'The MFE dispatches custom events to the LWC host via bridge.dispatchEvent(). The host catches them on the shell element.',
+  },
+  {
+    category: 'Embedding',
+    categoryRoute: '/mfe',
+    recipeIndex: 3,
+    name: 'Auto-Resize',
+    description:
+      'The iframe height adjusts automatically as MFE content grows or shrinks via a ResizeObserver inside the iframe.',
+  },
+  {
+    category: 'Embedding',
+    categoryRoute: '/mfe',
+    recipeIndex: 4,
+    name: 'Theme Tokens',
+    description:
+      'Salesforce CSS custom properties are sent to the MFE on connect and re-synced on demand via shell.refreshTheme().',
+  },
+  {
+    category: 'Embedding',
+    categoryRoute: '/mfe',
+    recipeIndex: 5,
+    name: 'Dirty State',
+    description:
+      'The MFE notifies the host of unsaved changes via trackdirtystate events so the host can block navigation.',
+  },
+  {
+    category: 'Embedding',
+    categoryRoute: '/mfe',
+    recipeIndex: 6,
+    name: 'GraphQL Bridge',
+    description:
+      'The MFE executes Salesforce GraphQL queries proxied through the host via bridge.graphql(). No allow-same-origin needed.',
+  },
 ];
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[()]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function buildRegistry(): RecipeEntry[] {
+  return rawRecipes.map((entry) => {
+    const flavors: RecipeFlavor[] =
+      entry.flavors ??
+      (() => {
+        const defaults = CATEGORY_DEFAULTS[entry.categoryRoute];
+        if (!defaults) {
+          throw new Error(
+            `Recipe "${entry.name}" in "${entry.categoryRoute}" has no category default and no explicit flavors.`
+          );
+        }
+        return [{ hosting: defaults.hosting, framework: defaults.framework }];
+      })();
+
+    if (flavors.length === 0) {
+      throw new Error(
+        `Recipe "${entry.name}" in "${entry.categoryRoute}" must have at least one flavor.`
+      );
+    }
+
+    // Validate (hosting, framework) pairs are unique within a recipe.
+    const seen = new Set<string>();
+    for (const f of flavors) {
+      const key = `${f.hosting}|${f.framework}`;
+      if (seen.has(key)) {
+        throw new Error(
+          `Recipe "${entry.name}" has duplicate flavor (${f.hosting}, ${f.framework}).`
+        );
+      }
+      seen.add(key);
+    }
+
+    return {
+      id: entry.id ?? slugify(entry.name),
+      name: entry.name,
+      description: entry.description,
+      category: entry.category,
+      categoryRoute: entry.categoryRoute,
+      recipeIndex: entry.recipeIndex,
+      flavors,
+    };
+  });
+}
+
+export const recipeRegistry: RecipeEntry[] = buildRegistry();
 
 /** Returns the number of recipes for a given category route (e.g. "/hello"). */
 export function getRecipeCount(categoryRoute: string): number {
   return recipeRegistry.filter((r) => r.categoryRoute === categoryRoute).length;
+}
+
+/** Returns the default hosting for a category, or undefined if the category is unknown. */
+export function getCategoryHosting(categoryRoute: string): Hosting | undefined {
+  return CATEGORY_DEFAULTS[categoryRoute]?.hosting;
+}
+
+/** Returns the default framework for a category, or undefined if the category is unknown. */
+export function getCategoryFramework(categoryRoute: string): Framework | undefined {
+  return CATEGORY_DEFAULTS[categoryRoute]?.framework;
+}
+
+/** Look up a recipe by category route + id. */
+export function getRecipe(categoryRoute: string, id: string): RecipeEntry | undefined {
+  return recipeRegistry.find(
+    (r) => r.categoryRoute === categoryRoute && r.id === id
+  );
+}
+
+/** List recipes, optionally narrowed to those that have at least one matching flavor. */
+export function listRecipes(filter?: {
+  hosting?: Hosting;
+  framework?: Framework;
+}): RecipeEntry[] {
+  if (!filter || (!filter.hosting && !filter.framework)) return recipeRegistry;
+  return recipeRegistry.filter((r) =>
+    r.flavors.some(
+      (f) =>
+        (!filter.hosting || f.hosting === filter.hosting) &&
+        (!filter.framework || f.framework === filter.framework)
+    )
+  );
+}
+
+/** True if the recipe declares a flavor exactly matching (hosting, framework). */
+export function hasFlavor(
+  recipe: RecipeEntry,
+  hosting: Hosting,
+  framework: Framework
+): boolean {
+  return recipe.flavors.some(
+    (f) => f.hosting === hosting && f.framework === framework
+  );
+}
+
+/**
+ * Resolve the best-matching flavor for the requested (hosting, framework).
+ * Fallback order: exact match → hosting only → framework only → flavors[0].
+ * Callers that care which axis matched should compare the returned flavor's
+ * fields to what they requested.
+ */
+export function resolveFlavor(
+  recipe: RecipeEntry,
+  hosting?: Hosting,
+  framework?: Framework
+): RecipeFlavor {
+  if (hosting && framework) {
+    const exact = recipe.flavors.find(
+      (f) => f.hosting === hosting && f.framework === framework
+    );
+    if (exact) return exact;
+  }
+  if (hosting) {
+    const byHosting = recipe.flavors.find((f) => f.hosting === hosting);
+    if (byHosting) return byHosting;
+  }
+  if (framework) {
+    const byFramework = recipe.flavors.find((f) => f.framework === framework);
+    if (byFramework) return byFramework;
+  }
+  return recipe.flavors[0];
 }

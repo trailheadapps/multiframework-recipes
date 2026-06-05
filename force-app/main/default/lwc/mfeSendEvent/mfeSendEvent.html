@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="MFE Send Event" icon-name="custom:custom59">
+        <div class="slds-p-around_medium">
+            <p class="slds-text-body_regular slds-m-bottom_medium">
+                Click an action button in the MFE — the event arrives here via
+                <code>shell.addEventListener('mfe-action', handler)</code>.
+            </p>
+            <template if:true={lastAction}>
+                <div class="slds-notify slds-notify_alert slds-theme_info slds-m-bottom_small" role="status">
+                    <span>Last action from MFE: <strong>{lastAction}</strong></span>
+                </div>
+            </template>
+            <div class="shell-container" lwc:dom="manual"></div>
+        </div>
+    </lightning-card>
+</template>
