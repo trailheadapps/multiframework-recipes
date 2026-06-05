@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="MFE Theme Tokens" icon-name="custom:custom59">
+        <div class="slds-p-around_medium">
+            <p class="slds-text-body_regular slds-m-bottom_medium">
+                Salesforce CSS custom properties are sent to the MFE automatically on connect.
+                Click Refresh to re-sync after a theme change.
+            </p>
+            <lightning-button
+                label="Refresh theme"
+                onclick={handleRefreshTheme}
+                class="slds-m-bottom_medium"
+            ></lightning-button>
+            <div class="shell-container" lwc:dom="manual"></div>
+        </div>
+    </lightning-card>
+</template>

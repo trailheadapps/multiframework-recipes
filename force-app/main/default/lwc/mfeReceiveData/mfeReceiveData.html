@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="MFE Receive Data" icon-name="custom:custom59">
+        <div class="slds-p-around_medium">
+            <p class="slds-text-body_regular slds-m-bottom_medium">
+                Type a message and click Send — the MFE receives it via
+                <code>bridge.addEventListener('data', handler)</code>.
+            </p>
+            <div class="slds-form-element slds-m-bottom_small">
+                <lightning-input
+                    label="Message to MFE"
+                    value={inputValue}
+                    onchange={handleInputChange}
+                ></lightning-input>
+            </div>
+            <lightning-button
+                label="Send to MFE"
+                variant="brand"
+                onclick={handleSend}
+                class="slds-m-bottom_medium"
+            ></lightning-button>
+            <div class="shell-container" lwc:dom="manual"></div>
+        </div>
+    </lightning-card>
+</template>

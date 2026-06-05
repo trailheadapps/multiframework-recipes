@@ -1,36 +1,72 @@
-# Multiframework Recipes
+# Multi-Framework Recipes
 
 [![CI](https://github.com/trailheadapps/multiframework-recipes/actions/workflows/ci.yml/badge.svg)](https://github.com/trailheadapps/multiframework-recipes/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/trailheadapps/multiframework-recipes/branch/main/graph/badge.svg)](https://codecov.io/gh/trailheadapps/multiframework-recipes)
 
 ![React Recipes](force-app/main/react-recipes/uiBundles/reactRecipes/react-recipes.png)
 
-A collection of easy-to-digest code examples for building apps on the Salesforce platform using modern frontend frameworks. Each recipe demonstrates how to accomplish a specific task — from querying data with GraphQL to handling errors and navigating between views — in the fewest lines of code possible while following best practices. Each recipe includes an inline source code viewer so you can see exactly how it works.
+A collection of easy-to-digest code examples for building Salesforce apps with modern frontend frameworks. Every recipe teaches one concept — querying data with GraphQL, handling errors, navigating between views, embedding an external app — in the fewest lines of code possible while following best practices. Each recipe includes an inline source code viewer so you can see exactly how it works.
 
-This sample application is designed to run on the Salesforce Platform. It covers what a frontend developer needs to know about Salesforce, and what a Salesforce developer needs to know about modern frameworks — taught at the intersection.
+The repo covers both axes a modern Salesforce frontend developer needs to navigate:
 
-> Multi-Framework currently supports **React**, with additional frameworks coming over time. The feature is in Beta and only available in Scratch Orgs and Sandboxes — not yet in Developer Edition orgs or Trailhead Playgrounds.
+- **Framework:** React today, with Vue and Angular planned. Same recipes, different implementations.
+- **Hosting mode:** Whether you run the app on your own infrastructure or ship it to the Salesforce platform.
+
+> **Status:** React is the only framework implemented today. Vue and Angular are planned. Multi-Framework is in Beta and available in Scratch Orgs and Sandboxes — not yet in Developer Edition orgs or Trailhead Playgrounds.
 >
-> There is a known limitation where orgs that do not use English (`en_US`) as the default language may experience issues. The scratch org definition in this project explicitly sets `"language": "en_US"` to work around this. If you are using a sandbox or other org type, ensure the default language is set to English.
+> **Known limitation:** orgs that do not use English (`en_US`) as the default language may experience issues. The scratch org definition in this project explicitly sets `"language": "en_US"` to work around this. On sandbox or other org types, ensure the default language is English.
 
 **Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/reactdev-overview.html) for a comprehensive overview.
 
-## Architecture
+## The Two Hosting Modes
+
+Every recipe in this repo falls into one of two hosting modes. The framework code is similar; the deployment, distribution, and integration story is very different.
+
+### Salesforce-Hosted
+
+The framework app is built as a **Salesforce UI Bundle** and deployed directly to the org. Salesforce serves the static assets from the platform; no external hosting required.
 
 ```mermaid
 graph LR
-    A[React App<br/>Vite + TypeScript] -->|Build| B[UI Bundle]
+    A[Framework App<br/>Vite + TypeScript] -->|Build| B[UI Bundle]
     B -->|Deploy| C[Salesforce Org]
     C -->|Query| D[GraphQL UIAPI]
     C -->|Fetch| E[REST APIs]
 ```
+
+**Use when:** you want a single-team workflow, zero external infrastructure, and deep integration with Salesforce's security/identity model.
+
+Today this mode lives in [`force-app/main/react-recipes/uiBundles/reactRecipes/`](force-app/main/react-recipes/uiBundles/reactRecipes/).
+
+### Externally Hosted
+
+The framework app runs on your own infrastructure (Vercel, AWS, anywhere) and is embedded into a Salesforce Lightning page via `lwc-shell`. A postMessage bridge proxies data, events, and GraphQL between the two sides.
+
+```mermaid
+graph LR
+    A[External Framework App<br/>mfe-app/] -->|iframe src| B[lwc-shell]
+    B -->|embedded in| C[LWC Host Component]
+    C -->|deployed to| D[Salesforce Org]
+    B <-->|postMessage bridge| A
+    D -->|updateData / events| B
+    A -->|bridge.graphql| D
+```
+
+**Use when:** you already have an externally hosted app, need your own build/release cadence, or want to reuse the same app across Salesforce and non-Salesforce surfaces.
+
+Today this mode lives in [`mfe-app/`](mfe-app/) (the external React app) plus [`force-app/main/default/lwc/mfe*`](force-app/main/default/lwc/) (the LWC host components).
+
+### The Platform SDK: one API, both modes
+
+Both hosting modes use the **Platform SDK** as the unifying contract — it's how the framework app reads Salesforce data, dispatches events to the host, and stays in sync with org-level theme tokens. The SDK surface is the same whether the app is Salesforce-hosted or externally hosted; only the transport underneath differs. Learning the SDK is the portable skill this repo teaches.
 
 ## Table of Contents
 
 - [Setting up a Scratch Org](#setting-up-a-scratch-org)
 - [Setting up a Sandbox](#setting-up-a-sandbox)
 - [Developer Edition](#developer-edition)
-- [Install & Deploy React Recipes](#install--deploy-react-recipes)
+- [Install & Deploy Salesforce-Hosted Recipes](#install--deploy-salesforce-hosted-recipes)
+- [Install & Run Externally Hosted Recipes](#install--run-externally-hosted-recipes)
 - [Local Development](#local-development)
 - [Testing](#testing)
 - [Optional installation instructions](#optional-installation-instructions)
@@ -138,7 +174,9 @@ graph LR
 
 Developer Edition support is coming soon.
 
-## Install & Deploy React Recipes
+## Install & Deploy Salesforce-Hosted Recipes
+
+These recipes run as a Salesforce UI Bundle served directly from the org. Today the only implementation is React; Vue and Angular are planned.
 
 1. Install dependencies, fetch the GraphQL schema, and run codegen:
 
@@ -167,6 +205,52 @@ Developer Edition support is coming soon.
    ```bash
    sf org open
    ```
+
+## Install & Run Externally Hosted Recipes
+
+These recipes run an external framework app on your own server and embed it into Salesforce via `lwc-shell`. In development, "externally hosted" means `localhost:4300`; in production you would point the LWC host at your deployed URL. Today the only implementation is React; Vue and Angular are planned.
+
+> **Note:** The CSP trusted site for `localhost:4300` is included in the shared metadata deployed in the org setup steps above. No additional metadata deploy is needed.
+
+1. Install dependencies for the external app:
+
+   ```bash
+   cd mfe-app
+   npm install
+   ```
+
+1. Start the external app's dev server:
+
+   ```bash
+   npm run dev
+   ```
+
+   The app starts at `http://localhost:4300`. Keep this running while using the externally hosted recipes in your org.
+
+1. Deploy the LWC host components:
+
+   ```bash
+   cd ..
+   sf project deploy start -d force-app/main/default/lwc
+   ```
+
+1. Open the scratch org, go to App Launcher, and search for any of the host components (`mfeBasicEmbed`, `mfeReceiveData`, etc.) to add them to a Lightning page.
+
+### Available externally hosted recipes
+
+| LWC host component | External app route | What it demonstrates |
+|---|---|---|
+| `mfeBasicEmbed` | `/basic-embed` | Minimum viable embed — bridge connection detection |
+| `mfeReceiveData` | `/receive-data` | Host pushes data into guest via `shell.updateData()` |
+| `mfeSendEvent` | `/send-event` | Guest dispatches events to host via `bridge.dispatchEvent()` |
+| `mfeAutoResize` | `/auto-resize` | iframe height follows guest content via ResizeObserver |
+| `mfeThemeTokens` | `/theme-tokens` | Salesforce CSS custom properties synced to guest |
+| `mfeDirtyState` | `/dirty-state` | Guest notifies host of unsaved changes |
+| `mfeGraphQL` | `/graphql-bridge` | Guest queries Salesforce GraphQL proxied through host |
+
+### Pointing at a deployed external app
+
+For production or sandbox use, deploy the external app to a hosted URL and set the `baseUrl` property on each LWC host component to point at that URL instead of `localhost:4300`.
 
 ## Local Development
 
