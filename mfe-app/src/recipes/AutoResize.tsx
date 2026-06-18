@@ -1,18 +1,20 @@
 /**
  * Auto-Resize
  *
- * Demonstrates iframe height auto-adjustment. As content is added or removed
- * the lwc-shell on the host side receives resize events and updates the iframe
- * height automatically — no fixed height is set.
+ * Demonstrates calling viewSDK.resize() to ask the host to resize the
+ * embedding container. A ResizeObserver tracks document.body's height and
+ * forwards the new size to the host on every change.
  *
- * Key concept: the bridge reports height changes via a ResizeObserver on
- * document.body. This happens automatically when using
- * @salesforce/experimental-mfe-bridge — no explicit setup needed in the app.
- * Simply add or remove content and the iframe height follows.
+ * Key concept: viewSDK.resize(width, height) accepts CSS-style strings
+ * ("auto", "100%", "320px"). Pass "auto" for either axis to let the host
+ * compute its own size, or a specific value to pin it. Unlike the legacy
+ * bridge — which auto-pushed body height — the SDK is explicit: you decide
+ * when (and what dimensions) to send.
  *
  * @see ThemeTokens — receiving Salesforce design tokens
  */
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSdk } from '../sdk-context';
 
 interface Item {
     id: number;
@@ -26,7 +28,22 @@ function makeItem(): Item {
 }
 
 export default function AutoResize() {
+    const { view } = useSdk();
     const [items, setItems] = useState<Item[]>([makeItem(), makeItem()]);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!view.resize || !containerRef.current) return;
+
+        const observer = new ResizeObserver(entries => {
+            const height = entries[0]?.contentRect.height;
+            if (height != null) {
+                void view.resize?.('auto', `${Math.ceil(height)}px`);
+            }
+        });
+        observer.observe(document.body);
+        return () => observer.disconnect();
+    }, [view]);
 
     function addItem() {
         setItems(prev => [...prev, makeItem()]);
@@ -37,12 +54,11 @@ export default function AutoResize() {
     }
 
     return (
-        <div className="recipe-container">
+        <div className="recipe-container" ref={containerRef}>
             <h2 className="recipe-title">Auto-Resize</h2>
             <p className="recipe-description">
-                Add or remove items — the Salesforce iframe height adjusts automatically.
-                No fixed height is set on the host. The bridge reports content height via
-                a ResizeObserver.
+                Add or remove items — a ResizeObserver tracks body height and calls{' '}
+                <code>viewSDK.resize()</code> so the host iframe matches the content.
             </p>
 
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>

@@ -2,16 +2,18 @@
  * Send Event
  *
  * Dispatches a custom event from the MFE back to the Salesforce LWC host.
- * The host listens on the shell element: shell.addEventListener('mfe-action', handler).
+ * The host listens on the embedding element:
+ *   shell.addEventListener('mfe-action', handler)
  *
- * Key concept: bridge.dispatchEvent(new CustomEvent(type, { detail })) sends the
- * event through lwc-shell to the parent LWC. The host catches it as a DOM event
- * on the shell element. Any serialisable object is valid as the detail payload.
+ * Key concept: viewSDK.dispatchEvent(name, data) sends the event through
+ * <lightning-embedding> to the parent LWC. The host catches it as a DOM
+ * event on the embedding element. The data argument is any serialisable
+ * key/value bag and lands on event.detail.
  *
  * @see ReceiveData — receiving data pushed from the host
  */
 import { useState } from 'react';
-import bridge from '@salesforce/experimental-mfe-bridge';
+import { useSdk } from '../sdk-context';
 
 const ACTIONS = ['approve', 'reject', 'request-docs', 'escalate'] as const;
 type Action = (typeof ACTIONS)[number];
@@ -22,16 +24,14 @@ interface EventLog {
 }
 
 export default function SendEvent() {
+    const { view, chat } = useSdk();
     const [log, setLog] = useState<EventLog[]>([]);
+    const connected = Object.keys(chat.getHostContext?.() ?? {}).length > 0;
 
-    function handleAction(action: Action) {
-        // Dispatch a custom event that bubbles up to the LWC host.
+    async function handleAction(action: Action) {
+        // dispatchEvent forwards (name, data) to the host LWC.
         // The host listens: shell.addEventListener('mfe-action', handler)
-        bridge.dispatchEvent(
-            new CustomEvent('mfe-action', {
-                detail: { action, timestamp: Date.now() },
-            }),
-        );
+        await view.dispatchEvent?.('mfe-action', { action, timestamp: Date.now() });
 
         setLog(prev => [
             { action, timestamp: new Date().toLocaleTimeString() },
@@ -44,11 +44,11 @@ export default function SendEvent() {
             <h2 className="recipe-title">Send Event</h2>
             <p className="recipe-description">
                 Dispatches custom events to the Salesforce LWC host via{' '}
-                <code>bridge.dispatchEvent()</code>. The host receives them on the shell
-                element.
+                <code>viewSDK.dispatchEvent()</code>. The host receives them on the
+                embedding element.
             </p>
 
-            {!bridge.isConnected() && (
+            {!connected && (
                 <div className="recipe-alert alert-info">
                     Running standalone — events are dispatched but no host is listening.
                 </div>

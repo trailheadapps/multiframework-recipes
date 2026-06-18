@@ -2,17 +2,17 @@
  * Dirty State
  *
  * Notifies the Salesforce host when this MFE has unsaved changes. The host
- * listens for the 'trackdirtystate' event on the shell element and can use
- * it to block tab navigation or show a "You have unsaved changes" warning.
+ * may show a "you have unsaved changes" warning before navigation.
  *
- * Key concept: dispatch a 'trackdirtystate' CustomEvent with
- * { isDirty: boolean, label: string } whenever the form state changes.
- * Set isDirty: false when the user saves or discards changes.
+ * Key concept: viewSDK.markDirtyState() and viewSDK.clearDirtyState() are
+ * the explicit dirty-state API. Call markDirtyState() whenever the form
+ * mutates and clearDirtyState() after a successful save (or discard). The
+ * host decides how to surface the state — typically a navigation guard.
  *
  * @see SendEvent — dispatching generic events to the host
  */
-import { useState, useEffect } from 'react';
-import bridge from '@salesforce/experimental-mfe-bridge';
+import { useEffect, useState } from 'react';
+import { useSdk } from '../sdk-context';
 
 interface FormState {
     name: string;
@@ -27,6 +27,7 @@ function isDirtyCheck(current: FormState, saved: FormState) {
 }
 
 export default function DirtyState() {
+    const { view } = useSdk();
     const [form, setForm] = useState<FormState>(INITIAL);
     const [saved, setSaved] = useState<FormState>(INITIAL);
     const [isDirty, setIsDirty] = useState(false);
@@ -35,17 +36,12 @@ export default function DirtyState() {
         const dirty = isDirtyCheck(form, saved);
         setIsDirty(dirty);
 
-        // Notify the Salesforce host whenever dirty state changes.
-        // The host uses this to show a warning before the user navigates away.
-        bridge.dispatchEvent(
-            new CustomEvent('trackdirtystate', {
-                detail: {
-                    isDirty: dirty,
-                    label: dirty ? 'Loan application has unsaved changes' : '',
-                },
-            }),
-        );
-    }, [form, saved]);
+        if (dirty) {
+            void view.markDirtyState?.();
+        } else {
+            void view.clearDirtyState?.();
+        }
+    }, [form, saved, view]);
 
     function handleChange(field: keyof FormState, value: string) {
         setForm(prev => ({ ...prev, [field]: value }));
@@ -64,8 +60,8 @@ export default function DirtyState() {
             <h2 className="recipe-title">Dirty State</h2>
             <p className="recipe-description">
                 Edit the form — the host is notified of unsaved changes via{' '}
-                <code>bridge.dispatchEvent('trackdirtystate')</code>. The host can block
-                navigation until the user saves or discards.
+                <code>viewSDK.markDirtyState()</code> and cleared with{' '}
+                <code>clearDirtyState()</code> on save.
             </p>
 
             {isDirty && (

@@ -2,15 +2,19 @@
     <lightning-card title="MFE Theme Tokens" icon-name="custom:custom59">
         <div class="slds-p-around_medium">
             <p class="slds-text-body_regular slds-m-bottom_medium">
-                Salesforce CSS custom properties are sent to the MFE automatically on connect.
-                Click Refresh to re-sync after a theme change.
+                The host's theme mode is delivered to the MFE through the
+                Platform SDK. The guest reads it via
+                <code>viewSDK.getTheme()</code> and the broader environment
+                via <code>chatSDK.getHostContext()</code>.
             </p>
-            <lightning-button
-                label="Refresh theme"
-                onclick={handleRefreshTheme}
-                class="slds-m-bottom_medium"
-            ></lightning-button>
-            <div class="shell-container" lwc:dom="manual"></div>
+            <div class="shell-container" style="height: 400px">
+                <lightning-embedding
+                    sandbox="allow-forms allow-modals"
+                    shell-title="MFE Theme Tokens"
+                    debug={debug}
+                    src={computedSrc}
+                ></lightning-embedding>
+            </div>
         </div>
     </lightning-card>
 </template>

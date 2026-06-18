@@ -1,41 +1,58 @@
 /**
  * Receive Data
  *
- * Listens for data pushed from the Salesforce LWC host via updateData().
- * The host calls shell.updateData({ recordId, name }) after @wire(getRecord)
- * resolves — this component receives and displays that payload.
+ * Listens for UI props pushed from the Salesforce LWC host. The host LWC
+ * sets properties on <lightning-embedding> (e.g. recordId, name) and the SDK
+ * makes them available via viewSDK.getUiProps().
  *
- * Key concept: bridge.addEventListener('data', handler) fires every time
- * the host calls updateData(). The event detail is the exact object passed
- * to updateData(). Always remove the listener in the cleanup function to
- * prevent stale handlers after unmount.
+ * Key concept: viewSDK.getUiProps() returns { props, subscribe }. The
+ * props promise resolves with the initial snapshot; the subscribe callback
+ * fires every time the host updates any prop. Always call the unsubscribe
+ * function in cleanup so stale handlers don't leak after unmount.
  *
  * @see SendEvent — dispatching events back to the host
  */
 import { useEffect, useState } from 'react';
-import bridge from '@salesforce/experimental-mfe-bridge';
-
-interface HostData {
-    recordId?: string;
-    name?: string;
-    [key: string]: unknown;
-}
+import { useSdk } from '../sdk-context';
 
 export default function ReceiveData() {
-    const [hostData, setHostData] = useState<HostData>({});
+    const { view, chat } = useSdk();
+    const [hostData, setHostData] = useState<Record<string, unknown>>({});
     const [updateCount, setUpdateCount] = useState(0);
+    const connected = Object.keys(chat.getHostContext?.() ?? {}).length > 0;
 
     useEffect(() => {
-        const handleData = (e: Event) => {
-            const detail = (e as CustomEvent<HostData>).detail ?? {};
-            setHostData(detail);
+        // Fallback for hosts that pass data via URL query params (e.g. the
+        // mfeReceiveData LWC re-mounts <lightning-embedding> with a new src
+        // since src is session-binding). URLSearchParams is read-once.
+        const params = new URLSearchParams(window.location.search);
+        if ([...params.keys()].length > 0) {
+            setHostData(Object.fromEntries(params.entries()));
             setUpdateCount(c => c + 1);
-        };
+        }
 
-        // 'data' fires whenever the host calls shell.updateData(payload)
-        bridge.addEventListener('data', handleData);
-        return () => bridge.removeEventListener('data', handleData);
-    }, []);
+        const uiProps = view.getUiProps?.();
+        if (!uiProps) return;
+
+        let unsubscribe: (() => void) | undefined;
+
+        uiProps.props.then(initial => {
+            if (Object.keys(initial).length > 0) {
+                setHostData(initial);
+                setUpdateCount(c => c + 1);
+            }
+        });
+
+        // subscribe() fires on every host-side prop update. Capture the
+        // returned unsubscribe (when the SDK provides one) for cleanup.
+        const result = uiProps.subscribe(next => {
+            setHostData(next);
+            setUpdateCount(c => c + 1);
+        }) as unknown;
+        if (typeof result === 'function') unsubscribe = result as () => void;
+
+        return () => unsubscribe?.();
+    }, [view]);
 
     const hasData = Object.keys(hostData).length > 0;
 
@@ -43,12 +60,12 @@ export default function ReceiveData() {
         <div className="recipe-container">
             <h2 className="recipe-title">Receive Data</h2>
             <p className="recipe-description">
-                Displays data pushed from the Salesforce host via{' '}
-                <code>shell.updateData()</code>. Interact with the host component to
-                trigger an update.
+                Displays UI props pushed from the Salesforce host. The host LWC sets
+                properties on <code>&lt;lightning-embedding&gt;</code>; the SDK delivers
+                them via <code>viewSDK.getUiProps()</code>.
             </p>
 
-            {!bridge.isConnected() && (
+            {!connected && (
                 <div className="recipe-alert alert-info">
                     Running standalone — no host data will arrive. Embed this app in the
                     mfeReceiveData LWC to see live data.

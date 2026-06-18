@@ -2,11 +2,19 @@
     <lightning-card title="MFE Auto-Resize" icon-name="custom:custom59">
         <div class="slds-p-around_medium">
             <p class="slds-text-body_regular slds-m-bottom_medium">
-                Add or remove items in the MFE — the iframe height adjusts automatically.
-                No fixed height is set. The bridge reports content height changes via a
-                ResizeObserver.
+                Add or remove items in the MFE — the guest calls
+                <code>viewSDK.resize()</code> on every body-size change. The
+                host applies the requested dimensions to the embedding
+                container.
             </p>
-            <div class="shell-container" lwc:dom="manual"></div>
+            <div class="shell-container" style="height: 400px">
+                <lightning-embedding
+                    sandbox="allow-forms allow-modals"
+                    shell-title="MFE Auto-Resize"
+                    debug={debug}
+                    src={computedSrc}
+                ></lightning-embedding>
+            </div>
         </div>
     </lightning-card>
 </template>

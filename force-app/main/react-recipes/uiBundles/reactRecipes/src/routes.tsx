@@ -93,9 +93,9 @@ export const routes: RouteObject[] = [
         handle: { showInNavigation: true, label: 'Integration' },
       },
       {
-        path: 'mfe',
+        path: 'embedding',
         element: <Mfe />,
-        handle: { showInNavigation: true, label: 'Mfe' },
+        handle: { showInNavigation: true, label: 'Embedding' },
       },
       {
         path: '*',

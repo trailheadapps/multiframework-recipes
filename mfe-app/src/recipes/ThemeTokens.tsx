@@ -1,88 +1,65 @@
 /**
  * Theme Tokens
  *
- * Receives Salesforce CSS custom properties (design tokens) from the host
- * and applies them to the UI. The bridge sends all --slds-* properties from
- * the lwc-shell element automatically on connect, and again whenever the host
- * calls shell.refreshTheme().
+ * Reads the host theme via viewSDK.getTheme() and the broader host context
+ * via chatSDK.getHostContext(). Applies the theme mode to a CSS class on
+ * the document root so styles cascade through the whole MFE.
  *
- * Key concept: bridge.addEventListener('theme', handler) receives a map of
- * CSS custom property names to values. Apply them to document.documentElement
- * via setProperty() so they cascade to the whole app. The bridge does this
- * automatically — this recipe makes the process explicit and visible.
+ * Key concept: getTheme() returns { mode: 'light' | 'dark' } or null when
+ * the host hasn't supplied a theme. getHostContext() also exposes locale,
+ * userAgent, displayMode, and host-provided styles. Re-read on demand —
+ * the host pushes updates through getUiProps(), so subscribe there if you
+ * need live theme refreshes.
  *
  * @see DirtyState — notifying the host about unsaved changes
  */
 import { useEffect, useState } from 'react';
-import bridge from '@salesforce/experimental-mfe-bridge';
-
-interface ThemeData {
-    [property: string]: string;
-}
+import { useSdk } from '../sdk-context';
 
 export default function ThemeTokens() {
-    const [tokens, setTokens] = useState<ThemeData>({});
-    const [syncCount, setSyncCount] = useState(0);
+    const { view, chat } = useSdk();
+    const [mode, setMode] = useState<string | null>(null);
+    const [hostContext, setHostContext] = useState<Record<string, unknown>>({});
+    const connected = Object.keys(chat.getHostContext?.() ?? {}).length > 0;
 
     useEffect(() => {
-        const handleTheme = (e: Event) => {
-            const detail = (e as CustomEvent<ThemeData>).detail ?? {};
+        const theme = view.getTheme?.();
+        setMode(theme?.mode ?? null);
+        setHostContext({ ...(chat.getHostContext?.() ?? {}) });
 
-            // Apply every CSS custom property to the document root so they
-            // cascade to all components in this MFE.
-            Object.entries(detail).forEach(([prop, value]) => {
-                document.documentElement.style.setProperty(prop, value);
-            });
-
-            setTokens(detail);
-            setSyncCount(c => c + 1);
-        };
-
-        // 'theme' fires on connect and whenever the host calls shell.refreshTheme()
-        bridge.addEventListener('theme', handleTheme);
-        return () => bridge.removeEventListener('theme', handleTheme);
-    }, []);
-
-    const tokenEntries = Object.entries(tokens).slice(0, 20);
+        if (theme?.mode) {
+            document.documentElement.dataset.theme = theme.mode;
+        }
+    }, [view, chat]);
 
     return (
         <div className="recipe-container">
             <h2 className="recipe-title">Theme Tokens</h2>
             <p className="recipe-description">
-                Displays Salesforce CSS custom properties received from the host.
-                The host sends them automatically; call{' '}
-                <code>shell.refreshTheme()</code> to re-sync after a theme change.
+                Reads the host theme via <code>viewSDK.getTheme()</code> and the broader
+                environment via <code>chatSDK.getHostContext()</code>. Apply the result
+                to your styles however you like.
             </p>
 
-            {!bridge.isConnected() && (
+            {!connected && (
                 <div className="recipe-alert alert-info">
                     Running standalone — no theme data will arrive from a host.
                 </div>
             )}
 
             <div className="recipe-card">
-                <p className="recipe-label">Syncs received: {syncCount}</p>
-                <p className="recipe-label">Tokens (first 20 of {Object.keys(tokens).length})</p>
+                <p className="recipe-label">Theme mode</p>
+                <p className="recipe-value" style={{ fontFamily: 'monospace' }}>
+                    {mode ?? '—'}
+                </p>
 
-                {tokenEntries.length === 0 ? (
-                    <p style={{ color: '#9ca3af', fontSize: 13 }}>Waiting for theme data…</p>
+                <p className="recipe-label">Host context</p>
+                {Object.keys(hostContext).length === 0 ? (
+                    <p style={{ color: '#9ca3af', fontSize: 13 }}>No host context yet.</p>
                 ) : (
-                    <table style={{ width: '100%', fontSize: 11, borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr>
-                                <th style={{ textAlign: 'left', padding: '4px 8px 4px 0', color: '#888' }}>Property</th>
-                                <th style={{ textAlign: 'left', padding: '4px 0', color: '#888' }}>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tokenEntries.map(([prop, value]) => (
-                                <tr key={prop}>
-                                    <td style={{ padding: '2px 8px 2px 0', fontFamily: 'monospace', color: '#0a7cae' }}>{prop}</td>
-                                    <td style={{ padding: '2px 0', fontFamily: 'monospace' }}>{value}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <pre style={{ margin: 0, fontSize: 12, fontFamily: 'monospace' }}>
+                        {JSON.stringify(hostContext, null, 2)}
+                    </pre>
                 )}
             </div>
         </div>

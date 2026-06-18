@@ -1,50 +1,50 @@
 /**
  * Basic Embed
  *
- * The minimum viable MFE. Checks whether the bridge is connected on mount
- * and displays the connection status.
+ * The minimum viable MFE. Resolves the Platform SDK once at app startup and
+ * renders the connection state plus the host context the SDK was given.
  *
- * On the Salesforce side the host LWC creates an <lwc-shell> pointing at
- * this route. The bridge auto-initialises when this page loads inside that
- * iframe — no explicit setup is needed.
+ * On the Salesforce side the host LWC declares <lightning-embedding> pointing
+ * at this route. The SDK auto-initialises via the side-effect import in
+ * main.tsx before any component renders.
  *
- * Key concept: bridge.isConnected() returns true only when running inside a
- * Salesforce lwc-shell iframe. Use it to detect the embedding context and
- * render accordingly.
+ * Key concept: createChatSDK() / createViewSDK() resolve once on app load.
+ * The result is shared via SdkProvider so every recipe consumes the same
+ * instance. When running standalone (no iframe), the SDKs still resolve but
+ * most methods are no-ops; surface detection drops to "WebApp".
  *
- * @see ReceiveData — receiving host data via the bridge
+ * @see ReceiveData — receiving host data via viewSDK.getUiProps()
  */
-import { useEffect, useState } from 'react';
-import bridge from '@salesforce/experimental-mfe-bridge';
+import { useSdk } from '../sdk-context';
 
 export default function BasicEmbed() {
-    const [connected, setConnected] = useState(false);
-
-    useEffect(() => {
-        // bridge.isConnected() is true when running inside an lwc-shell iframe.
-        // Outside Salesforce (plain browser tab) it returns false — useful for
-        // local development without a Salesforce org.
-        setConnected(bridge.isConnected());
-    }, []);
+    const { chat } = useSdk();
+    const hostContext = chat.getHostContext?.() ?? {};
+    const connected = Object.keys(hostContext).length > 0;
 
     return (
         <div className="recipe-container">
             <h2 className="recipe-title">Basic Embed</h2>
             <p className="recipe-description">
-                Detects whether this React app is running inside a Salesforce lwc-shell iframe.
+                Detects whether this React app is running inside a Salesforce{' '}
+                <code>&lt;lightning-embedding&gt;</code> iframe.
             </p>
 
             <div className="recipe-card">
-                <p className="recipe-label">Bridge status</p>
+                <p className="recipe-label">SDK status</p>
                 <p className="recipe-value">
                     <span className={`status-dot ${connected ? 'dot-green' : 'dot-gray'}`} />
                     {connected ? 'Connected — running inside Salesforce' : 'Not connected — running standalone'}
                 </p>
 
-                <p className="recipe-label">Instance ID</p>
-                <p className="recipe-value" style={{ fontFamily: 'monospace', fontSize: 12 }}>
-                    {connected ? bridge.instanceId : '—'}
-                </p>
+                <p className="recipe-label">Host context</p>
+                {connected ? (
+                    <pre style={{ margin: 0, fontSize: 12, fontFamily: 'monospace' }}>
+                        {JSON.stringify(hostContext, null, 2)}
+                    </pre>
+                ) : (
+                    <p className="recipe-value" style={{ color: '#9ca3af' }}>—</p>
+                )}
             </div>
         </div>
     );

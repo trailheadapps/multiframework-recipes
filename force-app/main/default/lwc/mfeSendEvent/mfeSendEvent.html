@@ -2,15 +2,20 @@
     <lightning-card title="MFE Send Event" icon-name="custom:custom59">
         <div class="slds-p-around_medium">
             <p class="slds-text-body_regular slds-m-bottom_medium">
-                Click an action button in the MFE — the event arrives here via
-                <code>shell.addEventListener('mfe-action', handler)</code>.
+                Click an action button in the MFE — the guest calls
+                <code>viewSDK.dispatchEvent(name, data)</code>. Surface-level
+                routing of those events to LWC code is host-runtime specific;
+                check your surface (MCPApps, OpenAI, etc.) for the listener
+                contract.
             </p>
-            <template if:true={lastAction}>
-                <div class="slds-notify slds-notify_alert slds-theme_info slds-m-bottom_small" role="status">
-                    <span>Last action from MFE: <strong>{lastAction}</strong></span>
-                </div>
-            </template>
-            <div class="shell-container" lwc:dom="manual"></div>
+            <div class="shell-container" style="height: 400px">
+                <lightning-embedding
+                    sandbox="allow-forms allow-modals"
+                    shell-title="MFE Send Event"
+                    debug={debug}
+                    src={computedSrc}
+                ></lightning-embedding>
+            </div>
         </div>
     </lightning-card>
 </template>
