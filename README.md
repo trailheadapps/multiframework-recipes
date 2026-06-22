@@ -62,8 +62,6 @@ The two hosting modes use different APIs because they run in different security 
 - **Salesforce-hosted** recipes call native Lightning modules directly — `lightning/uiRecordApi`, `lightning/navigation`, `lightning/graphql`, `@salesforce/apex` — same as any LWC.
 - **Externally hosted** recipes use the postMessage bridge ([`@salesforce/experimental-mfe-bridge`](https://www.npmjs.com/package/@salesforce/experimental-mfe-bridge)) to talk to the host LWC, which then calls Lightning modules on the MFE's behalf. The bridge surface (`bridge.isConnected()`, `bridge.dispatchEvent()`, `bridge.addEventListener('data', …)`, etc.) is the contract between the embedded app and the host shell.
 
-A unified GA SDK (`@salesforce/platform-sdk` + `<lightning-embedding>`) is in development and will eventually let externally-hosted apps share more of the Salesforce-hosted programming model. The recipes will move to it once it's published.
-
 ## Table of Contents
 
 - [Setting up a Scratch Org](#setting-up-a-scratch-org)
