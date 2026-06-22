@@ -214,7 +214,7 @@ These recipes run as a Salesforce UI Bundle served directly from the org. Today 
 
 These recipes run an external framework app on your own server and embed it into Salesforce via `lwc-shell`. In development, "externally hosted" means `localhost:4300`; in production you would point the LWC host at your deployed URL. Today the only implementation is React; Vue and Angular are planned.
 
-> **Note:** The CSP trusted site for `localhost:4300` is included in the shared metadata deployed in the org setup steps above. No additional metadata deploy is needed.
+> **Before you start:** complete the [Scratch Org](#setting-up-a-scratch-org) or [Sandbox](#setting-up-a-sandbox) setup first. Those steps deploy the shared metadata (objects, classes, **CSP Trusted Site for `localhost:4300`**), assign the `recipes` permission set, and import the sample Contact data the recipes display. Without them the iframe is blocked or shows empty data.
 
 1. Install dependencies for the external app:
 
@@ -235,10 +235,18 @@ These recipes run an external framework app on your own server and embed it into
 
    ```bash
    cd ..
-   sf project deploy start -d force-app/main/default/lwc
+   sf project deploy start --source-dir force-app/main/default/lwc
    ```
 
-1. Open the scratch org, go to App Launcher, and search for any of the host components (`mfeBasicEmbed`, `mfeReceiveData`, etc.) to add them to a Lightning page.
+   This deploys both the `mfe*` recipe wrappers and `vendorLwcShell`, which registers the `<lwc-shell>` custom element they all rely on. `vendorLwcShell` is a vendored bundle of [`@salesforce/experimental-mfe-lwc-shell`](https://www.npmjs.com/package/@salesforce/experimental-mfe-lwc-shell) — it's checked into the repo, so you don't need to build it yourself. Refresh from npm when a new version ships.
+
+1. Add a host component to a Lightning page:
+
+   ```bash
+   sf org open
+   ```
+
+   In the org, go to **Setup → Lightning App Builder → New → App Page**, drag a *Custom* component (e.g. `mfeBasicEmbed`, `mfeReceiveData`) from the left panel onto the canvas, then **Save → Activate** and pick the apps where it should appear. Open the page from App Launcher to use the recipe.
 
 ### Available externally hosted recipes
 
