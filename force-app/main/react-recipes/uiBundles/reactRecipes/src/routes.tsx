@@ -11,6 +11,7 @@ import ErrorHandling from './pages/ErrorHandling';
 import Styling from './pages/Styling';
 import Routing, { RouteParametersPage, NestedRoutesPage } from './pages/Routing';
 import Integration from './pages/Integration';
+import Mfe from './pages/Mfe';
 import { RouteParametersDetail } from './recipes/routing/RouteParameters';
 import NestedRoutes, {
   NestedRoutesIndex,
@@ -90,6 +91,11 @@ export const routes: RouteObject[] = [
         path: 'integration',
         element: <Integration />,
         handle: { showInNavigation: true, label: 'Integration' },
+      },
+      {
+        path: 'embedding',
+        element: <Mfe />,
+        handle: { showInNavigation: true, label: 'Embedding' },
       },
       {
         path: '*',

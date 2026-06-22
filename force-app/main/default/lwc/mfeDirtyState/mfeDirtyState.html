@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="MFE Dirty State" icon-name="custom:custom59">
+        <div class="slds-p-around_medium">
+            <p class="slds-text-body_regular slds-m-bottom_medium">
+                Type into any field in the MFE form. This component receives a
+                <code>trackdirtystate</code> event, re-dispatches it to Lightning
+                Experience (which blocks tab navigation), and attaches a
+                <code>beforeunload</code> handler so the browser also warns on
+                close or reload.
+            </p>
+            <div class={warningClass} role="alert">
+                <span>&#9888; {dirtyLabel} — save or discard before leaving.</span>
+            </div>
+            <div class="shell-container" lwc:dom="manual"></div>
+        </div>
+    </lightning-card>
+</template>
