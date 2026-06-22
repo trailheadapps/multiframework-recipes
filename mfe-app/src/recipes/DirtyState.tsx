@@ -30,21 +30,43 @@ export default function DirtyState() {
     const [form, setForm] = useState<FormState>(INITIAL);
     const [saved, setSaved] = useState<FormState>(INITIAL);
     const [isDirty, setIsDirty] = useState(false);
+    const [connected, setConnected] = useState(bridge.isConnected());
+
+    useEffect(() => {
+        // 'connected' fires once after the host's salesforce-shell-ready arrives.
+        const sync = () => setConnected(bridge.isConnected());
+        sync();
+        bridge.addEventListener('connected', sync);
+        return () => bridge.removeEventListener('connected', sync);
+    }, []);
 
     useEffect(() => {
         const dirty = isDirtyCheck(form, saved);
         setIsDirty(dirty);
 
-        // Notify the Salesforce host whenever dirty state changes.
-        // The host uses this to show a warning before the user navigates away.
-        bridge.dispatchEvent(
-            new CustomEvent('trackdirtystate', {
-                detail: {
-                    isDirty: dirty,
-                    label: dirty ? 'Loan application has unsaved changes' : '',
-                },
-            }),
-        );
+        // Notify the Salesforce host whenever dirty state changes. The bridge
+        // silently drops dispatchEvent calls made before the host completes its
+        // handshake, so wait for `connected` if it isn't ready yet.
+        function send() {
+            bridge.dispatchEvent(
+                new CustomEvent('trackdirtystate', {
+                    detail: {
+                        isDirty: dirty,
+                        // instanceId lets the host disambiguate which embedded
+                        // shell is dirty when several are mounted on one page.
+                        instanceId: bridge.instanceId,
+                        label: dirty ? 'Loan application has unsaved changes' : '',
+                    },
+                }),
+            );
+        }
+
+        if (bridge.isConnected()) {
+            send();
+            return;
+        }
+        bridge.addEventListener('connected', send, { once: true });
+        return () => bridge.removeEventListener('connected', send);
     }, [form, saved]);
 
     function handleChange(field: keyof FormState, value: string) {
@@ -61,7 +83,14 @@ export default function DirtyState() {
 
     return (
         <div className="recipe-container">
-            <h2 className="recipe-title">Dirty State</h2>
+            <h2 className="recipe-title">
+                Dirty State
+                <span
+                    className={`status-dot ${connected ? 'dot-green' : 'dot-gray'}`}
+                    title={connected ? 'Connected to Salesforce host' : 'Running standalone'}
+                    style={{ marginLeft: 8 }}
+                />
+            </h2>
             <p className="recipe-description">
                 Edit the form — the host is notified of unsaved changes via{' '}
                 <code>bridge.dispatchEvent('trackdirtystate')</code>. The host can block

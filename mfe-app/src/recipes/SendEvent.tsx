@@ -10,7 +10,7 @@
  *
  * @see ReceiveData — receiving data pushed from the host
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import bridge from '@salesforce/experimental-mfe-bridge';
 
 const ACTIONS = ['approve', 'reject', 'request-docs', 'escalate'] as const;
@@ -23,6 +23,14 @@ interface EventLog {
 
 export default function SendEvent() {
     const [log, setLog] = useState<EventLog[]>([]);
+    const [connected, setConnected] = useState(bridge.isConnected());
+
+    useEffect(() => {
+        const sync = () => setConnected(bridge.isConnected());
+        sync();
+        bridge.addEventListener('connected', sync);
+        return () => bridge.removeEventListener('connected', sync);
+    }, []);
 
     function handleAction(action: Action) {
         // Dispatch a custom event that bubbles up to the LWC host.
@@ -41,18 +49,19 @@ export default function SendEvent() {
 
     return (
         <div className="recipe-container">
-            <h2 className="recipe-title">Send Event</h2>
+            <h2 className="recipe-title">
+                Send Event
+                <span
+                    className={`status-dot ${connected ? 'dot-green' : 'dot-gray'}`}
+                    title={connected ? 'Connected to Salesforce host' : 'Running standalone'}
+                    style={{ marginLeft: 8 }}
+                />
+            </h2>
             <p className="recipe-description">
                 Dispatches custom events to the Salesforce LWC host via{' '}
                 <code>bridge.dispatchEvent()</code>. The host receives them on the shell
                 element.
             </p>
-
-            {!bridge.isConnected() && (
-                <div className="recipe-alert alert-info">
-                    Running standalone — events are dispatched but no host is listening.
-                </div>
-            )}
 
             <div className="recipe-card" style={{ marginBottom: 12 }}>
                 <p className="recipe-label">Actions</p>

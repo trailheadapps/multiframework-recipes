@@ -13,7 +13,7 @@ const navItems = [
   { to: '/error-handling', label: 'Error Handling' },
   { to: '/styling', label: 'Styling' },
   { to: '/routing', label: 'Routing' },
-  { to: '/mfe', label: 'Embedding' },
+  { to: '/embedding', label: 'Embedding' },
 ];
 
 export default function Navbar() {

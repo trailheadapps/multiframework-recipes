@@ -5,7 +5,6 @@ import SendEvent from './recipes/SendEvent';
 import AutoResize from './recipes/AutoResize';
 import ThemeTokens from './recipes/ThemeTokens';
 import DirtyState from './recipes/DirtyState';
-import GraphQLBridge from './recipes/GraphQLBridge';
 
 function Home() {
     return (
@@ -24,7 +23,6 @@ function Home() {
                     <li>/auto-resize</li>
                     <li>/theme-tokens</li>
                     <li>/dirty-state</li>
-                    <li>/graphql-bridge</li>
                 </ul>
             </div>
         </div>
@@ -42,7 +40,6 @@ function App() {
                 <Route path="/auto-resize" element={<AutoResize />} />
                 <Route path="/theme-tokens" element={<ThemeTokens />} />
                 <Route path="/dirty-state" element={<DirtyState />} />
-                <Route path="/graphql-bridge" element={<GraphQLBridge />} />
                 <Route path="*" element={<Home />} />
             </Routes>
         </BrowserRouter>

@@ -40,7 +40,7 @@ const CATEGORY_DEFAULTS: Record<string, { hosting: Hosting; framework: Framework
   '/styling': { hosting: 'salesforce-hosted', framework: 'react' },
   '/routing': { hosting: 'salesforce-hosted', framework: 'react' },
   '/integration': { hosting: 'salesforce-hosted', framework: 'react' },
-  '/mfe': { hosting: 'externally-hosted', framework: 'react' },
+  '/embedding': { hosting: 'externally-hosted', framework: 'react' },
 };
 
 interface RawRecipeEntry {
@@ -417,7 +417,7 @@ const rawRecipes: RawRecipeEntry[] = [
   // MFE
   {
     category: 'Embedding',
-    categoryRoute: '/mfe',
+    categoryRoute: '/embedding',
     recipeIndex: 0,
     name: 'Basic Embed',
     description:
@@ -425,7 +425,7 @@ const rawRecipes: RawRecipeEntry[] = [
   },
   {
     category: 'Embedding',
-    categoryRoute: '/mfe',
+    categoryRoute: '/embedding',
     recipeIndex: 1,
     name: 'Receive Data',
     description:
@@ -433,7 +433,7 @@ const rawRecipes: RawRecipeEntry[] = [
   },
   {
     category: 'Embedding',
-    categoryRoute: '/mfe',
+    categoryRoute: '/embedding',
     recipeIndex: 2,
     name: 'Send Event',
     description:
@@ -441,7 +441,7 @@ const rawRecipes: RawRecipeEntry[] = [
   },
   {
     category: 'Embedding',
-    categoryRoute: '/mfe',
+    categoryRoute: '/embedding',
     recipeIndex: 3,
     name: 'Auto-Resize',
     description:
@@ -449,7 +449,7 @@ const rawRecipes: RawRecipeEntry[] = [
   },
   {
     category: 'Embedding',
-    categoryRoute: '/mfe',
+    categoryRoute: '/embedding',
     recipeIndex: 4,
     name: 'Theme Tokens',
     description:
@@ -457,19 +457,11 @@ const rawRecipes: RawRecipeEntry[] = [
   },
   {
     category: 'Embedding',
-    categoryRoute: '/mfe',
+    categoryRoute: '/embedding',
     recipeIndex: 5,
     name: 'Dirty State',
     description:
       'The MFE notifies the host of unsaved changes via trackdirtystate events so the host can block navigation.',
-  },
-  {
-    category: 'Embedding',
-    categoryRoute: '/mfe',
-    recipeIndex: 6,
-    name: 'GraphQL Bridge',
-    description:
-      'The MFE executes Salesforce GraphQL queries proxied through the host via bridge.graphql(). No allow-same-origin needed.',
   },
 ];
 

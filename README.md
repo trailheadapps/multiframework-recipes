@@ -49,16 +49,20 @@ graph LR
     C -->|deployed to| D[Salesforce Org]
     B <-->|postMessage bridge| A
     D -->|updateData / events| B
-    A -->|bridge.graphql| D
 ```
 
 **Use when:** you already have an externally hosted app, need your own build/release cadence, or want to reuse the same app across Salesforce and non-Salesforce surfaces.
 
 Today this mode lives in [`mfe-app/`](mfe-app/) (the external React app) plus [`force-app/main/default/lwc/mfe*`](force-app/main/default/lwc/) (the LWC host components).
 
-### The Platform SDK: one API, both modes
+### How the framework app talks to Salesforce
 
-Both hosting modes use the **Platform SDK** as the unifying contract — it's how the framework app reads Salesforce data, dispatches events to the host, and stays in sync with org-level theme tokens. The SDK surface is the same whether the app is Salesforce-hosted or externally hosted; only the transport underneath differs. Learning the SDK is the portable skill this repo teaches.
+The two hosting modes use different APIs because they run in different security contexts:
+
+- **Salesforce-hosted** recipes call native Lightning modules directly — `lightning/uiRecordApi`, `lightning/navigation`, `lightning/graphql`, `@salesforce/apex` — same as any LWC.
+- **Externally hosted** recipes use the postMessage bridge ([`@salesforce/experimental-mfe-bridge`](https://www.npmjs.com/package/@salesforce/experimental-mfe-bridge)) to talk to the host LWC, which then calls Lightning modules on the MFE's behalf. The bridge surface (`bridge.isConnected()`, `bridge.dispatchEvent()`, `bridge.addEventListener('data', …)`, etc.) is the contract between the embedded app and the host shell.
+
+A unified GA SDK (`@salesforce/platform-sdk` + `<lightning-embedding>`) is in development and will eventually let externally-hosted apps share more of the Salesforce-hosted programming model. The recipes will move to it once it's published.
 
 ## Table of Contents
 
@@ -246,7 +250,6 @@ These recipes run an external framework app on your own server and embed it into
 | `mfeAutoResize` | `/auto-resize` | iframe height follows guest content via ResizeObserver |
 | `mfeThemeTokens` | `/theme-tokens` | Salesforce CSS custom properties synced to guest |
 | `mfeDirtyState` | `/dirty-state` | Guest notifies host of unsaved changes |
-| `mfeGraphQL` | `/graphql-bridge` | Guest queries Salesforce GraphQL proxied through host |
 
 ### Pointing at a deployed external app
 

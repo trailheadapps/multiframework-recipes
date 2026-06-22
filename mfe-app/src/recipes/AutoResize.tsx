@@ -12,7 +12,8 @@
  *
  * @see ThemeTokens — receiving Salesforce design tokens
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import bridge from '@salesforce/experimental-mfe-bridge';
 
 interface Item {
     id: number;
@@ -27,6 +28,16 @@ function makeItem(): Item {
 
 export default function AutoResize() {
     const [items, setItems] = useState<Item[]>([makeItem(), makeItem()]);
+    const [connected, setConnected] = useState(bridge.isConnected());
+
+    useEffect(() => {
+        // 'connected' fires once after the host's salesforce-shell-ready
+        // arrives — auto-resize only takes effect once the bridge is connected.
+        const sync = () => setConnected(bridge.isConnected());
+        sync();
+        bridge.addEventListener('connected', sync);
+        return () => bridge.removeEventListener('connected', sync);
+    }, []);
 
     function addItem() {
         setItems(prev => [...prev, makeItem()]);
@@ -38,7 +49,14 @@ export default function AutoResize() {
 
     return (
         <div className="recipe-container">
-            <h2 className="recipe-title">Auto-Resize</h2>
+            <h2 className="recipe-title">
+                Auto-Resize
+                <span
+                    className={`status-dot ${connected ? 'dot-green' : 'dot-gray'}`}
+                    title={connected ? 'Connected to Salesforce host' : 'Running standalone'}
+                    style={{ marginLeft: 8 }}
+                />
+            </h2>
             <p className="recipe-description">
                 Add or remove items — the Salesforce iframe height adjusts automatically.
                 No fixed height is set on the host. The bridge reports content height via

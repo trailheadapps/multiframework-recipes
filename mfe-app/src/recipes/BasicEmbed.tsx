@@ -21,10 +21,13 @@ export default function BasicEmbed() {
     const [connected, setConnected] = useState(false);
 
     useEffect(() => {
-        // bridge.isConnected() is true when running inside an lwc-shell iframe.
-        // Outside Salesforce (plain browser tab) it returns false — useful for
-        // local development without a Salesforce org.
-        setConnected(bridge.isConnected());
+        // The bridge's 'connected' event fires after the host posts
+        // `salesforce-shell-ready`. Subscribe — and sync once now in case the
+        // round-trip already completed before this component mounted.
+        const sync = () => setConnected(bridge.isConnected());
+        sync();
+        bridge.addEventListener('connected', sync);
+        return () => bridge.removeEventListener('connected', sync);
     }, []);
 
     return (
