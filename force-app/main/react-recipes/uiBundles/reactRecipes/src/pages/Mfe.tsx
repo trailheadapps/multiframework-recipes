@@ -42,7 +42,6 @@ import sendEventMfe from '../../../../../../../mfe-app/src/recipes/SendEvent.tsx
 import autoResizeMfe from '../../../../../../../mfe-app/src/recipes/AutoResize.tsx?shiki';
 import themeTokensMfe from '../../../../../../../mfe-app/src/recipes/ThemeTokens.tsx?shiki';
 import dirtyStateMfe from '../../../../../../../mfe-app/src/recipes/DirtyState.tsx?shiki';
-import graphQLMfe from '../../../../../../../mfe-app/src/recipes/GraphQLBridge.tsx?shiki';
 
 // LWC host JS sources (force-app/main/default/lwc/)
 import basicEmbedJs from '../../../../../default/lwc/mfeBasicEmbed/mfeBasicEmbed.js?shiki=js';
@@ -51,7 +50,6 @@ import sendEventJs from '../../../../../default/lwc/mfeSendEvent/mfeSendEvent.js
 import autoResizeJs from '../../../../../default/lwc/mfeAutoResize/mfeAutoResize.js?shiki=js';
 import themeTokensJs from '../../../../../default/lwc/mfeThemeTokens/mfeThemeTokens.js?shiki=js';
 import dirtyStateJs from '../../../../../default/lwc/mfeDirtyState/mfeDirtyState.js?shiki=js';
-import graphQLJs from '../../../../../default/lwc/mfeGraphQL/mfeGraphQL.js?shiki=js';
 
 // LWC host HTML sources (force-app/main/default/lwc/)
 import basicEmbedHtml from '../../../../../default/lwc/mfeBasicEmbed/mfeBasicEmbed.html?shiki=html';
@@ -60,7 +58,6 @@ import sendEventHtml from '../../../../../default/lwc/mfeSendEvent/mfeSendEvent.
 import autoResizeHtml from '../../../../../default/lwc/mfeAutoResize/mfeAutoResize.html?shiki=html';
 import themeTokensHtml from '../../../../../default/lwc/mfeThemeTokens/mfeThemeTokens.html?shiki=html';
 import dirtyStateHtml from '../../../../../default/lwc/mfeDirtyState/mfeDirtyState.html?shiki=html';
-import graphQLHtml from '../../../../../default/lwc/mfeGraphQL/mfeGraphQL.html?shiki=html';
 
 interface FlavorSources {
   mfeSource: string;
@@ -164,20 +161,6 @@ const recipes: MfeRecipe[] = [
       },
     ],
   },
-  {
-    name: 'GraphQL Bridge',
-    description:
-      'MFE executes Salesforce GraphQL via bridge.graphql(). The host proxies requests — no allow-same-origin needed. Up to 10 concurrent requests with automatic queuing.',
-    flavors: [
-      {
-        hosting: 'externally-hosted',
-        framework: 'react',
-        mfeSource: graphQLMfe,
-        lwcJsSource: graphQLJs,
-        lwcHtmlSource: graphQLHtml,
-      },
-    ],
-  },
 ];
 
 const HOSTINGS: Hosting[] = ['externally-hosted', 'salesforce-hosted'];
@@ -241,8 +224,9 @@ export default function Mfe() {
         </div>
         <p className="mt-1 text-sm text-muted-foreground">
           An external framework app embedded into Salesforce via{' '}
-          <code className="text-xs">lwc-shell</code>. The Platform SDK (bridge)
-          is the shared contract; a Salesforce-Hosted flavor is planned.
+          <code className="text-xs">lwc-shell</code>. The postMessage bridge (
+          <code className="text-xs">@salesforce/experimental-mfe-bridge</code>)
+          is the contract between the embedded app and the host LWC.
         </p>
         <div className="mt-1.5 h-0.5 w-12 rounded-full bg-primary" />
       </div>

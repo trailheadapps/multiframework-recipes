@@ -24,6 +24,7 @@ interface HostData {
 export default function ReceiveData() {
     const [hostData, setHostData] = useState<HostData>({});
     const [updateCount, setUpdateCount] = useState(0);
+    const [connected, setConnected] = useState(bridge.isConnected());
 
     useEffect(() => {
         const handleData = (e: Event) => {
@@ -31,29 +32,37 @@ export default function ReceiveData() {
             setHostData(detail);
             setUpdateCount(c => c + 1);
         };
+        const handleConnected = () => setConnected(bridge.isConnected());
 
         // 'data' fires whenever the host calls shell.updateData(payload)
         bridge.addEventListener('data', handleData);
-        return () => bridge.removeEventListener('data', handleData);
+        // 'connected' fires once the bridge handshake completes — re-render
+        // so the "running standalone" banner clears when we're embedded.
+        bridge.addEventListener('connected', handleConnected);
+        handleConnected();
+        return () => {
+            bridge.removeEventListener('data', handleData);
+            bridge.removeEventListener('connected', handleConnected);
+        };
     }, []);
 
     const hasData = Object.keys(hostData).length > 0;
 
     return (
         <div className="recipe-container">
-            <h2 className="recipe-title">Receive Data</h2>
+            <h2 className="recipe-title">
+                Receive Data
+                <span
+                    className={`status-dot ${connected ? 'dot-green' : 'dot-gray'}`}
+                    title={connected ? 'Connected to Salesforce host' : 'Running standalone'}
+                    style={{ marginLeft: 8 }}
+                />
+            </h2>
             <p className="recipe-description">
                 Displays data pushed from the Salesforce host via{' '}
                 <code>shell.updateData()</code>. Interact with the host component to
                 trigger an update.
             </p>
-
-            {!bridge.isConnected() && (
-                <div className="recipe-alert alert-info">
-                    Running standalone — no host data will arrive. Embed this app in the
-                    mfeReceiveData LWC to see live data.
-                </div>
-            )}
 
             <div className="recipe-card">
                 <p className="recipe-label">Updates received</p>

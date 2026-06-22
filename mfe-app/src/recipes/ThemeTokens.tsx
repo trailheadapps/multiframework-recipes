@@ -23,6 +23,7 @@ interface ThemeData {
 export default function ThemeTokens() {
     const [tokens, setTokens] = useState<ThemeData>({});
     const [syncCount, setSyncCount] = useState(0);
+    const [connected, setConnected] = useState(bridge.isConnected());
 
     useEffect(() => {
         const handleTheme = (e: Event) => {
@@ -37,28 +38,37 @@ export default function ThemeTokens() {
             setTokens(detail);
             setSyncCount(c => c + 1);
         };
+        const handleConnected = () => setConnected(bridge.isConnected());
 
         // 'theme' fires on connect and whenever the host calls shell.refreshTheme()
         bridge.addEventListener('theme', handleTheme);
-        return () => bridge.removeEventListener('theme', handleTheme);
+        // 'connected' fires once after the host's salesforce-shell-ready arrives;
+        // subscribe so the "running standalone" banner clears post-handshake.
+        bridge.addEventListener('connected', handleConnected);
+        handleConnected();
+        return () => {
+            bridge.removeEventListener('theme', handleTheme);
+            bridge.removeEventListener('connected', handleConnected);
+        };
     }, []);
 
     const tokenEntries = Object.entries(tokens).slice(0, 20);
 
     return (
         <div className="recipe-container">
-            <h2 className="recipe-title">Theme Tokens</h2>
+            <h2 className="recipe-title">
+                Theme Tokens
+                <span
+                    className={`status-dot ${connected ? 'dot-green' : 'dot-gray'}`}
+                    title={connected ? 'Connected to Salesforce host' : 'Running standalone'}
+                    style={{ marginLeft: 8 }}
+                />
+            </h2>
             <p className="recipe-description">
                 Displays Salesforce CSS custom properties received from the host.
                 The host sends them automatically; call{' '}
                 <code>shell.refreshTheme()</code> to re-sync after a theme change.
             </p>
-
-            {!bridge.isConnected() && (
-                <div className="recipe-alert alert-info">
-                    Running standalone — no theme data will arrive from a host.
-                </div>
-            )}
 
             <div className="recipe-card">
                 <p className="recipe-label">Syncs received: {syncCount}</p>

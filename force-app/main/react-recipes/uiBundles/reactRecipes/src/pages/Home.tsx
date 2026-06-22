@@ -73,10 +73,10 @@ const categories = [
       'End-to-end patterns that combine multiple Salesforce APIs and React features into realistic, production-style application pages.',
   },
   {
-    to: '/mfe',
+    to: '/embedding',
     name: 'Embedding',
     description:
-      'Embed an external framework app into Salesforce Lightning via lwc-shell. Covers the Platform SDK: basic embed, receiving host data, dispatching events, auto-resize, theme tokens, dirty state, and GraphQL proxying.',
+      'Embed an external framework app into Salesforce Lightning via lwc-shell. Covers the postMessage bridge: basic embed, receiving host data, dispatching events, auto-resize, theme tokens, and dirty state.',
   },
 ];
 

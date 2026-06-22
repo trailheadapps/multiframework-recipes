@@ -16,7 +16,7 @@ Work through the categories in this order. Each builds on concepts from the prev
 6. **Routing** -- React Router in UI Bundles: Link, NavLink, route parameters, nested routes, programmatic navigation
 7. **Styling** -- CSS approaches: SLDS utility classes, shadcn/ui + Tailwind, Design System React components
 8. **Integration** -- End-to-end patterns combining multiple APIs and React features
-9. **MFE (Externally Hosted)** -- Embed an external React app into Salesforce Lightning via `lwc-shell`. Covers the Platform SDK surface: connection detection, receiving host data, dispatching events, auto-resize, theme tokens, dirty state, and GraphQL proxying. Requires the `mfe-app/` dev server running at `localhost:4300` — see the repo README for setup steps.
+9. **MFE (Externally Hosted)** -- Embed an external React app into Salesforce Lightning via `lwc-shell`. Covers the postMessage bridge (`@salesforce/experimental-mfe-bridge`): connection detection, receiving host data, dispatching events, auto-resize, theme tokens, and dirty state. Requires the `mfe-app/` dev server running at `localhost:4300` — see the repo README for setup steps.
 
 ## Full Recipe Table
 
@@ -72,4 +72,3 @@ Work through the categories in this order. Each builds on concepts from the prev
 | MFE | AutoResize | iframe height adjusts automatically as MFE content grows or shrinks via a ResizeObserver inside the iframe. |
 | MFE | ThemeTokens | Salesforce CSS custom properties sent to the MFE on connect and re-synced on demand via `shell.refreshTheme()`. |
 | MFE | DirtyState | MFE notifies the host of unsaved changes via `trackdirtystate` events so the host can block navigation. |
-| MFE | GraphQLBridge | MFE executes Salesforce GraphQL queries proxied through the host via `bridge.graphql()`. No `allow-same-origin` needed. |

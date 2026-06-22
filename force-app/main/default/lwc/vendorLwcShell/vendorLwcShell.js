@@ -1,8 +1,6 @@
 /* eslint-disable */
 // Vendored from @salesforce/experimental-mfe-lwc-shell npm package
-/*! @salesforce/experimental-mfe-lwc-shell v2.2.1-rc.1 (2026-04-09) */
-import { gql, unstable_graphql_imperative } from 'lightning/graphql';
-
+/*! @salesforce/experimental-mfe-lwc-shell v2.2.1-rc.8 (2026-06-18) */
 /**
  * EmbeddingResizer - Handles dynamic iframe/container resizing
  * Uses ResizeObserver to monitor element size changes and notify the host
@@ -18,119 +16,6 @@ import { gql, unstable_graphql_imperative } from 'lightning/graphql';
  */
 function getUUID() {
     return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(36);
-}
-
-async function executeGraphQL(query, variables) {
-    if (typeof query !== "string" || query.trim() === "") {
-        throw new Error("Invalid GraphQL query: query must be a non-empty string.");
-    }
-    const documentNode = gql `
-        ${query}
-    `;
-    const result = await unstable_graphql_imperative({ query: documentNode, variables });
-    return { data: result?.data, errors: result?.errors };
-}
-class GraphQLBridgeHandler {
-    #sendResponse;
-    #pendingCount = 0;
-    #queue = [];
-    #maxConcurrent;
-    #maxQueueSize;
-    #generation = 0;
-    constructor(sendResponse, maxConcurrent = 10, maxQueueSize = 50) {
-        this.#sendResponse = sendResponse;
-        this.#maxConcurrent = maxConcurrent;
-        this.#maxQueueSize = maxQueueSize;
-    }
-    static isValidRequest(data) {
-        const req = data;
-        return (typeof req?.requestId === "string" &&
-            typeof req?.query === "string" &&
-            (req.variables == null || (typeof req.variables === "object" && !Array.isArray(req.variables))));
-    }
-    rejectInvalidRequest(data) {
-        const req = data;
-        if (typeof req?.requestId !== "string") {
-            this.#sendResponse({
-                requestId: req?.requestId,
-                ok: false,
-                error: { message: "Invalid GraphQL request data" },
-            });
-            return;
-        }
-        const { requestId, query, variables } = req;
-        if (typeof query !== "string") {
-            this.#sendResponse({
-                requestId: requestId,
-                ok: false,
-                error: { message: "Invalid GraphQL query: query must be a string" },
-            });
-            return;
-        }
-        if (variables != null && (typeof variables !== "object" || Array.isArray(variables))) {
-            this.#sendResponse({
-                requestId: requestId,
-                ok: false,
-                error: { message: "Invalid GraphQL variables: must be a plain object" },
-            });
-        }
-    }
-    handleRequest({ requestId, query, variables }) {
-        if (this.#pendingCount >= this.#maxConcurrent) {
-            return this.#enqueueRequest(requestId, query, variables);
-        }
-        return this.#execute(requestId, query, variables);
-    }
-    reset() {
-        this.#generation++;
-        this.#queue = [];
-        this.#pendingCount = 0;
-    }
-    #execute = async (requestId, query, variables) => {
-        const gen = this.#generation;
-        this.#pendingCount++;
-        try {
-            const result = await executeGraphQL(query, variables);
-            if (gen === this.#generation) {
-                this.#sendResponse({ requestId, ok: true, result });
-            }
-        }
-        catch (err) {
-            if (gen === this.#generation) {
-                this.#sendResponse({
-                    requestId,
-                    ok: false,
-                    error: { message: err?.message || "GraphQL request failed" },
-                });
-            }
-        }
-        finally {
-            if (gen === this.#generation) {
-                this.#pendingCount--;
-                this.#processRequestQueue();
-            }
-        }
-    };
-    #enqueueRequest = (requestId, query, variables) => {
-        if (this.#queue.length >= this.#maxQueueSize) {
-            this.#sendResponse({
-                requestId,
-                ok: false,
-                error: { message: "Too many queued GraphQL requests" },
-            });
-            return Promise.resolve();
-        }
-        return new Promise((resolve) => {
-            this.#queue.push({ requestId, query, variables, done: resolve });
-        });
-    };
-    #processRequestQueue = () => {
-        if (this.#queue.length === 0 || this.#pendingCount >= this.#maxConcurrent) {
-            return;
-        }
-        const next = this.#queue.shift();
-        this.#execute(next.requestId, next.query, next.variables).then(next.done);
-    };
 }
 
 /**
@@ -155,8 +40,6 @@ class GraphQLBridgeHandler {
  *
  * See the README and the `productRegistration` demo for a full recipe.
  */
-const MAX_CONCURRENT_GRAPHQL_REQUESTS = 10;
-const MAX_GRAPHQL_QUEUE_SIZE = 50;
 const BASE_TOKENS = ["allow-scripts", "allow-pointer-lock"];
 const OPTIONAL_TOKENS = ["allow-downloads", "allow-forms", "allow-modals"];
 const BLOCKED_TOKENS = ["allow-same-origin", "allow-top-navigation", "allow-popups"];
@@ -253,16 +136,12 @@ class InternalHostLwcShell extends HTMLElement {
     _title = "Embedded widget";
     _view = "compact";
     _debugEnabled = true;
-    _graphqlHandler;
     static get observedAttributes() {
         return ["src", "srcdoc", "sandbox", "title", "view", "debug"];
     }
     constructor() {
         super();
         this._shadow = this.attachShadow({ mode: "closed" });
-        this._graphqlHandler = new GraphQLBridgeHandler((data) => {
-            this._postToIframe("bridge-graphql-response", data);
-        }, MAX_CONCURRENT_GRAPHQL_REQUESTS, MAX_GRAPHQL_QUEUE_SIZE);
     }
     connectedCallback() {
         this._renderInitial();
@@ -271,7 +150,6 @@ class InternalHostLwcShell extends HTMLElement {
     }
     disconnectedCallback() {
         window.removeEventListener("message", this._handleMessage);
-        this._graphqlHandler.reset();
         if (this._readinessTimeout) {
             clearTimeout(this._readinessTimeout);
             this._readinessTimeout = null;
@@ -429,13 +307,8 @@ class InternalHostLwcShell extends HTMLElement {
         const shadow = this._shadow;
         shadow.innerHTML = `
             <style>${STYLES}</style>
-            <div class="container" data-state="${this._currentState}"
-                 tabindex="0" role="region" aria-label="${this._title}">
-                <iframe
-                    class="${this._frameClass}"
-                    title="${this._title}"
-                    aria-label="Interactive widget content"
-                ></iframe>
+            <div class="container" data-state="${this._currentState}">
+                <iframe class="${this._frameClass}" title="${this._title}"></iframe>
             </div>
         `;
         this._container = shadow.querySelector(".container");
@@ -454,9 +327,6 @@ class InternalHostLwcShell extends HTMLElement {
     _updateTitle() {
         if (this._iframe) {
             this._iframe.setAttribute("title", this._title);
-        }
-        if (this._container) {
-            this._container.setAttribute("aria-label", this._title);
         }
         this._log("title", this._title);
     }
@@ -534,14 +404,6 @@ class InternalHostLwcShell extends HTMLElement {
             }
             else {
                 this.dispatchEvent(new CustomEvent(eventType, { detail, bubbles: true, cancelable: true, composed: true }));
-            }
-        }
-        else if (type === "bridge-graphql-request") {
-            if (GraphQLBridgeHandler.isValidRequest(data)) {
-                this._graphqlHandler.handleRequest(data);
-            }
-            else {
-                this._graphqlHandler.rejectInvalidRequest(data);
             }
         }
         else if (type === "bridge-ready") {
@@ -649,7 +511,6 @@ class InternalHostLwcShell extends HTMLElement {
             return;
         // reset tracking
         this._bridgeReady = false;
-        this._graphqlHandler.reset();
         this._currentState = STATES.LOADING;
         this._updateContainerState();
         // clear existing
