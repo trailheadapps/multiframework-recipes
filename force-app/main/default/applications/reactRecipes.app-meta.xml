@@ -10,7 +10,7 @@
    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
-   <label>Multi Framework App</label>
+   <label>React Recipes</label>
    <navType>Standard</navType>
    <uiBundle>c__reactRecipes</uiBundle>
    <uiType>Lightning</uiType>
