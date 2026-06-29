@@ -1,8 +1,43 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { Search } from 'lucide-react';
-import { recipeRegistry, type RecipeEntry } from '@/recipeRegistry';
+import {
+  recipeRegistry,
+  type RecipeEntry,
+  type Hosting,
+  type Framework,
+} from '@/recipeRegistry';
 import { cn } from '@/lib/utils';
+
+const HOSTING_KEYWORDS: Record<Hosting, string[]> = {
+  'salesforce-hosted': ['salesforce-hosted', 'sf-hosted', 'salesforce', 'sf'],
+  'externally-hosted': ['externally-hosted', 'externally', 'external', 'ext', 'third-party'],
+};
+
+const FRAMEWORK_KEYWORDS: Record<Framework, string[]> = {
+  react: ['react'],
+  vue: ['vue'],
+  angular: ['angular'],
+};
+
+const HOSTING_LABEL: Record<Hosting, string> = {
+  'salesforce-hosted': 'SF',
+  'externally-hosted': 'Ext',
+};
+
+const FRAMEWORK_LABEL: Record<Framework, string> = {
+  react: 'React',
+  vue: 'Vue',
+  angular: 'Angular',
+};
+
+function flavorKeywords(entry: RecipeEntry): string[] {
+  const tokens: string[] = [];
+  for (const f of entry.flavors) {
+    tokens.push(...HOSTING_KEYWORDS[f.hosting], ...FRAMEWORK_KEYWORDS[f.framework]);
+  }
+  return tokens;
+}
 
 export default function SearchBar() {
   const [open, setOpen] = useState(false);
@@ -52,11 +87,12 @@ export default function SearchBar() {
   const results = useMemo(() => {
     if (!query.trim()) return [];
     const lower = query.toLowerCase();
-    return recipeRegistry.filter(
-      (r) =>
-        r.name.toLowerCase().includes(lower) ||
-        r.description.toLowerCase().includes(lower)
-    );
+    return recipeRegistry.filter((r) => {
+      if (r.name.toLowerCase().includes(lower)) return true;
+      if (r.description.toLowerCase().includes(lower)) return true;
+      if (r.category.toLowerCase().includes(lower)) return true;
+      return flavorKeywords(r).some((kw) => kw.includes(lower));
+    });
   }, [query]);
 
   // Group results by category
@@ -184,6 +220,10 @@ export default function SearchBar() {
                     {entries.map((entry) => {
                       const flatIndex = flatResults.indexOf(entry);
                       const isSelected = flatIndex === selectedIndex;
+                      const flavorChips = entry.flavors.map(
+                        (f) =>
+                          `${HOSTING_LABEL[f.hosting]} · ${FRAMEWORK_LABEL[f.framework]}`
+                      );
                       return (
                         <button
                           key={`${entry.categoryRoute}-${entry.name}`}
@@ -196,7 +236,19 @@ export default function SearchBar() {
                               : 'text-foreground/80 hover:bg-accent/50'
                           )}
                         >
-                          <div className="font-medium">{entry.name}</div>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-medium truncate">{entry.name}</span>
+                            <span className="flex shrink-0 gap-1">
+                              {flavorChips.map((label) => (
+                                <span
+                                  key={label}
+                                  className="rounded-full border border-border bg-muted px-1.5 py-0 text-[10px] font-medium text-muted-foreground"
+                                >
+                                  {label}
+                                </span>
+                              ))}
+                            </span>
+                          </div>
                           <div className="text-xs text-muted-foreground line-clamp-1">
                             {entry.description}
                           </div>

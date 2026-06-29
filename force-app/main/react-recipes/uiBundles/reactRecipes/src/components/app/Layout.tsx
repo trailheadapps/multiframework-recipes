@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { useSearchParams } from 'react-router';
+import { useLocation, useSearchParams } from 'react-router';
 import {
   Card,
   CardHeader,
@@ -9,6 +9,11 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import CodeBlock from './CodeBlock';
+import RecipeFlavorChips from './RecipeFlavorChips';
+import {
+  getCategoryFramework,
+  getCategoryHosting,
+} from '@/recipeRegistry';
 export interface RecipeItem {
   name: string;
   description?: string;
@@ -22,6 +27,11 @@ interface LayoutProps {
 }
 
 export default function Layout({ header, recipes = [] }: LayoutProps) {
+  const { pathname } = useLocation();
+  const hosting = getCategoryHosting(pathname);
+  const framework = getCategoryFramework(pathname);
+  const categoryFlavors =
+    hosting && framework ? [{ hosting, framework }] : [];
   const [searchParams, setSearchParams] = useSearchParams();
   // Derive initial index from ?recipe param; track the param we last consumed
   // to detect new search navigations without using setState in an effect.
@@ -62,7 +72,12 @@ export default function Layout({ header, recipes = [] }: LayoutProps) {
       {/* Page Header */}
       {header && (
         <div className="mb-5">
-          <h1 className="text-2xl font-semibold tracking-tight">{header}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-semibold tracking-tight">{header}</h1>
+            {categoryFlavors.length > 0 && (
+              <RecipeFlavorChips flavors={categoryFlavors} />
+            )}
+          </div>
           <div className="mt-1.5 h-0.5 w-12 rounded-full bg-primary" />
         </div>
       )}
