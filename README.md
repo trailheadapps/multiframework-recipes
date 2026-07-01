@@ -9,9 +9,7 @@ A collection of easy-to-digest code examples for building apps on the Salesforce
 
 This sample application is designed to run on the Salesforce Platform. It covers what a frontend developer needs to know about Salesforce, and what a Salesforce developer needs to know about modern frameworks — taught at the intersection.
 
-> Multi-Framework currently supports **React**, with additional frameworks coming over time. The feature is in Beta and only available in Scratch Orgs and Sandboxes — not yet in Developer Edition orgs or Trailhead Playgrounds.
->
-> There is a known limitation where orgs that do not use English (`en_US`) as the default language may experience issues. The scratch org definition in this project explicitly sets `"language": "en_US"` to work around this. If you are using a sandbox or other org type, ensure the default language is set to English.
+> Multi-Framework currently supports **React**, with additional frameworks coming over time.
 
 **Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/reactdev-overview.html) for a comprehensive overview.
 
@@ -28,9 +26,7 @@ graph LR
 ## Table of Contents
 
 - [Setting up a Scratch Org](#setting-up-a-scratch-org)
-- [Setting up a Sandbox](#setting-up-a-sandbox)
-- [Developer Edition](#developer-edition)
-- [Install & Deploy React Recipes](#install--deploy-react-recipes)
+- [Setting up a Developer Edition Org](#setting-up-a-developer-edition-org)
 - [Local Development](#local-development)
 - [Testing](#testing)
 - [Optional installation instructions](#optional-installation-instructions)
@@ -66,10 +62,21 @@ graph LR
    sf org create scratch -d -f config/project-scratch-def.json -a recipes
    ```
 
-1. Deploy shared metadata:
+1. Install dependencies, fetch the GraphQL schema, and build React Recipes:
 
    ```bash
-   sf project deploy start -d force-app/main/default/objects -d force-app/main/default/classes -d force-app/main/default/permissionsets -d force-app/main/default/cspTrustedSites
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
+   npm install
+   npm run graphql:schema
+   npm run graphql:codegen
+   npm run build
+   cd ../../../../..
+   ```
+
+1. Deploy metadata and the UI bundle:
+
+   ```bash
+   sf project deploy start
    ```
 
 1. Assign the **recipes** permission set to the default user:
@@ -84,7 +91,13 @@ graph LR
    sf data tree import -p ./data/data-plan.json
    ```
 
-## Setting up a Sandbox
+1. Open the org and select the **React Recipes** app in App Launcher:
+
+   ```bash
+   sf org open
+   ```
+
+## Setting up a Developer Edition Org
 
 1. Set up your environment. Follow the steps in the [Quick Start: Lightning Web Components](https://trailhead.salesforce.com/content/learn/projects/quick-start-lightning-web-components/) Trailhead project. The steps include:
    - Install Salesforce CLI
@@ -95,10 +108,10 @@ graph LR
 
 1. Make sure you have **Salesforce CLI v2.130.7+** installed. This version includes the UI Bundle plugin. Check your version with `sf --version` and update with `sf update` if needed.
 
-1. Authorize your sandbox org and provide it with an alias (**mysandbox** in the command below):
+1. Authorize your Developer Edition org and provide it with an alias (**mydevorg** in the command below):
 
    ```bash
-   sf org login web -a mysandbox
+   sf org login web -a mydevorg
    ```
 
 1. Clone this repository:
@@ -108,10 +121,21 @@ graph LR
    cd multiframework-recipes
    ```
 
-1. Deploy shared metadata:
+1. Install dependencies, fetch the GraphQL schema, and build React Recipes:
 
    ```bash
-   sf project deploy start -d force-app/main/default/objects -d force-app/main/default/classes -d force-app/main/default/permissionsets -d force-app/main/default/cspTrustedSites
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
+   npm install
+   npm run graphql:schema
+   npm run graphql:codegen
+   npm run build
+   cd ../../../../..
+   ```
+
+1. Deploy metadata and the UI bundle:
+
+   ```bash
+   sf project deploy start
    ```
 
 1. Assign the **recipes** permission set to the default user:
@@ -126,35 +150,7 @@ graph LR
    sf data tree import -p ./data/data-plan.json
    ```
 
-## Developer Edition
-
-Developer Edition support is coming soon.
-
-## Install & Deploy React Recipes
-
-1. Install dependencies, fetch the GraphQL schema, and run codegen:
-
-   ```bash
-   cd force-app/main/react-recipes/uiBundles/reactRecipes
-   npm install
-   npm run graphql:schema
-   npm run graphql:codegen
-   ```
-
-1. Build the app:
-
-   ```bash
-   npm run build
-   ```
-
-1. Deploy the UI bundle to your org:
-
-   ```bash
-   cd ../../../../..
-   sf project deploy start --source-dir force-app/main/react-recipes/uiBundles/reactRecipes
-   ```
-
-1. Open the scratch org and select the **React Recipes** app in App Launcher:
+1. Open the org and select the **React Recipes** app in App Launcher:
 
    ```bash
    sf org open

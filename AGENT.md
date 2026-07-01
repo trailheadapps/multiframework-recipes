@@ -14,7 +14,7 @@ The full project plan lives in **PLAN.md**. This file covers what you need to kn
 
 ```
 multiframework-recipes/                     # Repository root (Salesforce DX project)
-  sfdx-project.json                         # Salesforce DX config (API v66.0)
+  sfdx-project.json                         # Salesforce DX config (API v67.0)
   package.json                              # Root -- SFDX scripts only, NOT the React app
   data/                                     # Sample data for sf data import tree (planned)
   force-app/main/default/                        # Shared metadata (objects, classes, etc.)
@@ -323,7 +323,7 @@ Global styles: `src/styles/global.css` (Tailwind + CSS variables), `src/styles/s
 
 - **`ui-bundle.json`**: Output dir `dist/`, SPA fallback routing, trailing slash `never`
 - **`reactRecipes.uibundle-meta.xml`**: Metadata definition (v1, isActive)
-- **`sfdx-project.json`**: Package dir `force-app`, API version 66.0
+- **`sfdx-project.json`**: Package dir `force-app`, API version 67.0
 - Only one UI bundle can be deployed per metadata push
 
 ---
