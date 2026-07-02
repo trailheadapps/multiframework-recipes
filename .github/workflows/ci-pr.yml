@@ -204,13 +204,6 @@ jobs:
       - name: "Install React app dependencies"
         run: npm ci --prefix force-app/main/react-recipes/uiBundles/reactRecipes
 
-      # Fetch GraphQL schema and run codegen
-      - name: "GraphQL schema and codegen"
-        run: |
-          npm run graphql:schema
-          npm run graphql:codegen
-        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
-
       # Build React app
       - name: "Build React app"
         run: npm run build
@@ -223,6 +216,13 @@ jobs:
       # Assign permissionset
       - name: "Assign permissionset to default user"
         run: sf org assign permset -n recipes
+
+      # Fetch GraphQL schema and run codegen
+      - name: "GraphQL schema and codegen"
+        run: |
+          npm run graphql:schema
+          npm run graphql:codegen
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
 
       # Import sample data
       - name: "Import sample data"
