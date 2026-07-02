@@ -200,18 +200,6 @@ jobs:
         if: ${{ !env.IS_PRERELEASE }}
         run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1
 
-      # Deploy shared metadata to scratch org
-      - name: "Deploy source to scratch org"
-        run: sf project deploy start -d force-app/main/default/objects -d force-app/main/default/classes -d force-app/main/default/permissionsets -d force-app/main/default/cspTrustedSites
-
-      # Assign permissionset
-      - name: "Assign permissionset to default user"
-        run: sf org assign permset -n recipes
-
-      # Import sample data
-      - name: "Import sample data"
-        run: sf data tree import -p ./data/data-plan.json
-
       # Install React app dependencies
       - name: "Install React app dependencies"
         run: npm ci --prefix force-app/main/react-recipes/uiBundles/reactRecipes
@@ -228,9 +216,17 @@ jobs:
         run: npm run build
         working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
 
-      # Deploy UI bundle to scratch org
-      - name: "Deploy UI bundle"
-        run: sf project deploy start --source-dir force-app/main/react-recipes/uiBundles/reactRecipes
+      # Deploy to scratch org
+      - name: "Deploy source to scratch org"
+        run: sf project deploy start
+
+      # Assign permissionset
+      - name: "Assign permissionset to default user"
+        run: sf org assign permset -n recipes
+
+      # Import sample data
+      - name: "Import sample data"
+        run: sf data tree import -p ./data/data-plan.json
 
       # Run Apex tests in scratch org
       - name: "Run Apex tests"
