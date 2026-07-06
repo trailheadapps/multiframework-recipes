@@ -62,13 +62,11 @@ graph LR
    sf org create scratch -d -f config/project-scratch-def.json -a recipes
    ```
 
-1. Install dependencies, fetch the GraphQL schema, and build React Recipes:
+1. Install dependencies and build React Recipes:
 
    ```bash
    cd force-app/main/react-recipes/uiBundles/reactRecipes
    npm install
-   npm run graphql:schema
-   npm run graphql:codegen
    npm run build
    cd ../../../../..
    ```
@@ -83,6 +81,15 @@ graph LR
 
    ```bash
    sf org assign permset -n recipes
+   ```
+
+1. Fetch the GraphQL schema and run codegen:
+
+   ```bash
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
+   npm run graphql:schema
+   npm run graphql:codegen
+   cd ../../../../..
    ```
 
 1. Import sample data:
@@ -121,13 +128,11 @@ graph LR
    cd multiframework-recipes
    ```
 
-1. Install dependencies, fetch the GraphQL schema, and build React Recipes:
+1. Install dependencies and build React Recipes:
 
    ```bash
    cd force-app/main/react-recipes/uiBundles/reactRecipes
    npm install
-   npm run graphql:schema
-   npm run graphql:codegen
    npm run build
    cd ../../../../..
    ```
@@ -142,6 +147,15 @@ graph LR
 
    ```bash
    sf org assign permset -n recipes
+   ```
+
+1. Fetch the GraphQL schema and run codegen:
+
+   ```bash
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
+   npm run graphql:schema
+   npm run graphql:codegen
+   cd ../../../../..
    ```
 
 1. Import sample data:
