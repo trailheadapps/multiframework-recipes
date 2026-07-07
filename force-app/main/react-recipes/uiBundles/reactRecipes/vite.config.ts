@@ -34,6 +34,14 @@ export default defineConfig(({ mode }) => {
         : []),
     ] as import('vite').PluginOption[],
 
+    // Allow reading source files from mfe-app/ and force-app/main/default/lwc/
+    // for the MFE recipes ?shiki source imports.
+    server: {
+      fs: {
+        allow: [resolve(__dirname, '../../../../..')],
+      },
+    },
+
     // design-system-react ships CJS — pre-bundle for Vite's ESM dev server
     optimizeDeps: {
       include: ['@salesforce/design-system-react'],
