@@ -55,6 +55,9 @@ sfca_results.json
 schema.graphql
 
 # Playwright e2e test results:
-playwright-report/                                                                                            
-test-results/                                                                                                 
-  
+playwright-report/
+test-results/
+
+# Local E2E org scratch (auth, node_modules, reports, .env)
+e2e-org/
+
