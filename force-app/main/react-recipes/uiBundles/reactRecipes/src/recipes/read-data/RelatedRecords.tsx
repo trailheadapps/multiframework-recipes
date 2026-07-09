@@ -16,7 +16,7 @@
  * @see AliasedMultiObjectQuery — querying multiple objects in one request
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 
 // To traverse a lookup, nest the parent object's fields under the
 // relationship name. Here Contact.AccountId becomes `Account { Name { value } }`.
@@ -81,7 +81,7 @@ export default function RelatedRecords() {
   useEffect(() => {
     const fetchContacts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<ContactsWithAccountResponse>({ query: QUERY });
+      const result = await sdk.graphql?.query<ContactsWithAccountResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

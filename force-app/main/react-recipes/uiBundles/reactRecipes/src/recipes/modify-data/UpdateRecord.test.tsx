@@ -6,11 +6,11 @@
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import UpdateRecord from './UpdateRecord';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -55,7 +55,7 @@ describe('UpdateRecord', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {
@@ -128,7 +128,7 @@ describe('UpdateRecord', () => {
     // Id is a top-level field on the input, not nested inside Account —
     // verify the correct shape is sent to the mutation.
     expect(mockGraphql).toHaveBeenLastCalledWith({
-      query: expect.any(String),
+      mutation: expect.any(String),
       variables: expect.objectContaining({
         input: expect.objectContaining({ Id: '001' }),
       }),

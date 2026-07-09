@@ -13,8 +13,8 @@ import LoadingErrorEmpty from './LoadingErrorEmpty';
 
 const mockGraphql = vi.fn();
 
-vi.mock('@salesforce/sdk-data', () => ({
-  createDataSDK: vi.fn(() => Promise.resolve({ graphql: mockGraphql })),
+vi.mock('@salesforce/platform-sdk', () => ({
+  createDataSDK: vi.fn(() => Promise.resolve({ graphql: { query: mockGraphql, mutate: mockGraphql } })),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
 

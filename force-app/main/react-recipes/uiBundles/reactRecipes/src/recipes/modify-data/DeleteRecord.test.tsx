@@ -6,11 +6,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { type Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import DeleteRecord from './DeleteRecord';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -52,7 +52,7 @@ describe('DeleteRecord', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {
@@ -123,7 +123,7 @@ describe('DeleteRecord', () => {
       expect(screen.queryByText('Acme Corp')).not.toBeInTheDocument()
     );
     expect(mockGraphql).toHaveBeenLastCalledWith({
-      query: expect.any(String),
+      mutation: expect.any(String),
       variables: expect.objectContaining({ input: { Id: '001' } }),
     });
   });

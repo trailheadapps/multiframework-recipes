@@ -13,7 +13,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 
 type SortField = 'Name' | 'Title' | 'Phone';
 type SortDir = 'ASC' | 'DESC';
@@ -87,7 +87,7 @@ export default function SortedResults() {
 
     const fetchSorted = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<SortedContactsResponse>({
+      const result = await sdk.graphql?.query<SortedContactsResponse>({
         query: buildQuery(field, dir),
       });
 

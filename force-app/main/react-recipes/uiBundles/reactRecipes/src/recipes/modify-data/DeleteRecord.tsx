@@ -11,7 +11,7 @@
  * @see QueryMutationTogether — inline editing with read-then-write cycle
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 
 // ── Read: load Accounts to display ───────────────────────────────────────────
@@ -90,11 +90,11 @@ export default function DeleteRecord() {
     (async () => {
       try {
         const sdk = await createDataSDK();
-        const res = await sdk.graphql?.<ListResponse>({ query: LIST_QUERY });
+        const res = await sdk.graphql?.query<ListResponse>({ query: LIST_QUERY });
         if (res?.errors?.length) {
           throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
         }
-        const nodes = (res?.data.uiapi?.query?.Account?.edges ?? [])
+        const nodes = (res?.data?.uiapi?.query?.Account?.edges ?? [])
           .map(edge => edge?.node)
           .filter((n): n is Account => n != null);
         setAccounts(nodes);
@@ -112,8 +112,8 @@ export default function DeleteRecord() {
 
     try {
       const sdk = await createDataSDK();
-      const res = await sdk.graphql?.<DeleteResponse>({
-        query: DELETE_MUTATION,
+      const res = await sdk.graphql?.mutate<DeleteResponse>({
+        mutation: DELETE_MUTATION,
         variables: { input: { Id: id } },
       });
       if (res?.errors?.length) {

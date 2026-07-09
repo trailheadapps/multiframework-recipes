@@ -12,7 +12,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 
@@ -94,7 +94,7 @@ export default function FilteredList() {
       const fetchFiltered = async () => {
         const sdk = await createDataSDK();
         // Wrap the search term in % wildcards for the `like` operator
-        const result = await sdk.graphql?.<FilteredContactsResponse>({
+        const result = await sdk.graphql?.query<FilteredContactsResponse>({
           query: QUERY,
           variables: { name: `%${search}%` },
         });

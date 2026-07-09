@@ -11,7 +11,7 @@
  * @see UiApiRest — using the UI API REST endpoints directly
  */
 import { useState, type FormEvent } from 'react';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';

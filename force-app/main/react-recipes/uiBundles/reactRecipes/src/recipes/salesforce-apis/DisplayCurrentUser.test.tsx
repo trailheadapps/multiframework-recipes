@@ -3,11 +3,11 @@
  */
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import DisplayCurrentUser from './DisplayCurrentUser';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
 }));
 

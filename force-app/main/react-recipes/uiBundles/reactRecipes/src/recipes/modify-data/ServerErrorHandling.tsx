@@ -17,7 +17,7 @@
  * @see LoadingErrorEmpty — handling loading, error, and empty UI states
  */
 import { useState, type FormEvent } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -60,8 +60,8 @@ export default function ServerErrorHandling() {
 
     try {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<ContactCreateResult>({
-        query: CREATE_CONTACT,
+      const result = await sdk.graphql?.mutate<ContactCreateResult>({
+        mutation: CREATE_CONTACT,
         variables: {
           input: {
             Contact: {
@@ -80,7 +80,7 @@ export default function ServerErrorHandling() {
         return;
       }
 
-      const payload = result?.data.uiapi?.ContactCreate;
+      const payload = result?.data?.uiapi?.ContactCreate;
 
       // Success: no top-level errors
       setCreatedId(payload?.Record?.Id);

@@ -6,11 +6,11 @@
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import ServerErrorHandling from './ServerErrorHandling';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -19,7 +19,7 @@ describe('ServerErrorHandling', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {
