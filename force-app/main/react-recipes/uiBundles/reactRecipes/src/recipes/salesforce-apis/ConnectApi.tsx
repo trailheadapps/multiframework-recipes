@@ -11,7 +11,7 @@
  * @see ApexRest — calling custom Apex REST endpoints
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 // Minimal shape of a Chatter feed-elements response

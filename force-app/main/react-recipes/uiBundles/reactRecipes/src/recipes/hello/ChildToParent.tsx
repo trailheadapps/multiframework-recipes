@@ -12,7 +12,7 @@
  * @see StateManagement — sharing state between sibling components
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 
 // Industry picklist values from the Account standard object
 const INDUSTRIES = [
@@ -74,7 +74,7 @@ export default function ChildToParent() {
 
     const fetchAccounts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>({
+      const result = await sdk.graphql?.query<QueryResponse>({
         query: QUERY,
         variables: { industry },
       });

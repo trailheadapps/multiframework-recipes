@@ -21,6 +21,7 @@ export type Scalars = {
   EncryptedString: { input: string; output: string; }
   /** Can be set to an ID or a Reference to the result of another mutation operation. */
   IdOrRef: { input: string; output: string; }
+  JSON: { input: string; output: string; }
   Latitude: { input: number | string; output: number; }
   /** A 64-bit signed integer */
   Long: { input: number; output: number; }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import type {
   GetFirstAccountQuery,
   GetAccountsQuery,
@@ -65,13 +65,13 @@ export function useFirstAccount(): {
 
 export async function getFirstAccount(): Promise<AccountNode | undefined> {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql?.<GetFirstAccountQuery>({ query: GET_FIRST_ACCOUNT });
+  const result = await sdk.graphql?.query<GetFirstAccountQuery>({ query: GET_FIRST_ACCOUNT });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map(e => e.message).join('; '));
   }
 
-  return result?.data.uiapi?.query?.Account?.edges?.[0]?.node ?? undefined;
+  return result?.data?.uiapi?.query?.Account?.edges?.[0]?.node ?? undefined;
 }
 
 const GET_ACCOUNTS = gql`
@@ -106,13 +106,13 @@ export type Account = NonNullable<AccountListNode>;
 
 export async function getAccounts(): Promise<Account[]> {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql?.<GetAccountsQuery>({ query: GET_ACCOUNTS });
+  const result = await sdk.graphql?.query<GetAccountsQuery>({ query: GET_ACCOUNTS });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map(e => e.message).join('; '));
   }
 
-  return (result?.data.uiapi?.query?.Account?.edges ?? [])
+  return (result?.data?.uiapi?.query?.Account?.edges ?? [])
     .map(edge => edge?.node)
     .filter((node): node is Account => node != null);
 }

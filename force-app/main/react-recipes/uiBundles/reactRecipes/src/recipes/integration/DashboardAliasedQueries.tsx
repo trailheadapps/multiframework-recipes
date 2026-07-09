@@ -18,7 +18,7 @@
  * a wrapper object with counts for each object type.
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 
 // Three aliases in one request — each becomes a key in the response
 const QUERY = gql`
@@ -75,7 +75,7 @@ export default function DashboardAliasedQueries() {
   useEffect(() => {
     const fetchStats = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

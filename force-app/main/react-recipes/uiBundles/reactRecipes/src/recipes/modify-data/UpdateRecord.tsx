@@ -11,7 +11,7 @@
  * @see DeleteRecord — removing records with a confirmation pattern
  */
 import { useEffect, useState, type FormEvent } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -130,11 +130,11 @@ export default function UpdateRecord() {
     (async () => {
       try {
         const sdk = await createDataSDK();
-        const res = await sdk.graphql?.<LoadResponse>({ query: LOAD_QUERY });
+        const res = await sdk.graphql?.query<LoadResponse>({ query: LOAD_QUERY });
         if (res?.errors?.length) {
           throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
         }
-        const node = res?.data.uiapi?.query?.Account?.edges?.[0]?.node;
+        const node = res?.data?.uiapi?.query?.Account?.edges?.[0]?.node;
         if (node) {
           setAccountId(node.Id);
           setName(node.Name?.value ?? '');
@@ -158,8 +158,8 @@ export default function UpdateRecord() {
 
     try {
       const sdk = await createDataSDK();
-      const res = await sdk.graphql?.<UpdateResponse>({
-        query: UPDATE_MUTATION,
+      const res = await sdk.graphql?.mutate<UpdateResponse>({
+        mutation: UPDATE_MUTATION,
         variables: {
           // Id is a top-level field on the input, not nested inside Account
           input: { Id: accountId, Account: { Name: name, Industry: industry } },
@@ -170,7 +170,7 @@ export default function UpdateRecord() {
         throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
       }
 
-      const record = res?.data.uiapi?.AccountUpdate?.Record;
+      const record = res?.data?.uiapi?.AccountUpdate?.Record;
       if (!record) throw new Error('No record returned from AccountUpdate');
 
       // Sync local state with values returned from the server response

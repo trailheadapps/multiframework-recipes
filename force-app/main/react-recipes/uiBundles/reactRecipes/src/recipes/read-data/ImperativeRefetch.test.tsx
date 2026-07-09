@@ -7,11 +7,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { type Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import ImperativeRefetch from './ImperativeRefetch';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -41,7 +41,7 @@ describe('ImperativeRefetch', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {

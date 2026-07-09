@@ -13,7 +13,7 @@
  * @see ButtonSLDS — styling with SLDS blueprint CSS classes
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 // UI API list-ui response shape

@@ -13,7 +13,7 @@
  * @see ConditionalStatus — conditional rendering with picklist data
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 
 // Every scalar field in UIAPI GraphQL is wrapped in { value }.
 // This is different from standard GraphQL where fields are plain scalars.
@@ -55,7 +55,7 @@ export default function BindingAccountName() {
   useEffect(() => {
     const fetchName = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(
