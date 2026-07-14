@@ -1,13 +1,25 @@
 <template>
     <lightning-card title="MFE Send Event" icon-name="custom:custom59">
-        <div class="slds-p-around_medium">
+        <div class="slds-p-around_medium" lwc:ref="host">
             <p class="slds-text-body_regular slds-m-bottom_medium">
                 Click an action button in the MFE — the guest calls
-                <code>viewSDK.dispatchEvent(name, data)</code>. Surface-level
-                routing of those events to LWC code is host-runtime specific;
-                check your surface (MCPApps, OpenAI, etc.) for the listener
-                contract.
+                <code>view.dispatchEvent(new CustomEvent('mfe-action', &#123; detail &#125;))</code>.
+                The bridge forwards it over the wire and
+                <code>&lt;lightning-embedding&gt;</code> re-dispatches it as a
+                bubbling DOM event this LWC catches.
             </p>
+
+            <template lwc:if={lastAction}>
+                <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                    <p class="slds-text-title_caps">Last event</p>
+                    <p><strong>action:</strong> <code>{lastAction}</code></p>
+                    <p><strong>received:</strong> {lastReceivedAt}</p>
+                    <p class="slds-text-body_small">
+                        <strong>total received:</strong> {receivedCount}
+                    </p>
+                </div>
+            </template>
+
             <div class="shell-container" style="height: 400px">
                 <lightning-embedding
                     sandbox="allow-forms allow-modals"

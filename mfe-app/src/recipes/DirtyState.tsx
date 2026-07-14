@@ -36,10 +36,24 @@ export default function DirtyState() {
         const dirty = isDirtyCheck(form, saved);
         setIsDirty(dirty);
 
+        const hasMark = typeof view.markDirtyState === 'function';
+        const hasClear = typeof view.clearDirtyState === 'function';
+        console.log(
+            '[DirtyState] dirty ->', dirty,
+            '| markDirtyState:', hasMark,
+            '| clearDirtyState:', hasClear,
+        );
+
         if (dirty) {
-            void view.markDirtyState?.();
+            void view.markDirtyState?.().then(
+                () => console.log('[DirtyState] markDirtyState() resolved'),
+                (err) => console.error('[DirtyState] markDirtyState() rejected', err),
+            );
         } else {
-            void view.clearDirtyState?.();
+            void view.clearDirtyState?.().then(
+                () => console.log('[DirtyState] clearDirtyState() resolved'),
+                (err) => console.error('[DirtyState] clearDirtyState() rejected', err),
+            );
         }
     }, [form, saved, view]);
 

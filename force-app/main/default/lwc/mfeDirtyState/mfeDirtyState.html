@@ -1,6 +1,6 @@
 <template>
     <lightning-card title="MFE Dirty State" icon-name="custom:custom59">
-        <div class="slds-p-around_medium">
+        <div class="slds-p-around_medium" ontrackdirtystate={handleDirtyState}>
             <p class="slds-text-body_regular slds-m-bottom_medium">
                 Edit the MFE form — the guest calls
                 <code>viewSDK.markDirtyState()</code> on every change and
@@ -8,6 +8,17 @@
                 surface decides how to honour the dirty signal (e.g. block
                 navigation).
             </p>
+
+            <template lwc:if={hasSignal}>
+                <div if:true={isDirty} class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-bottom_medium">
+                    Host received <code>trackdirtystate</code> — MFE is dirty
+                    <template lwc:if={label}>&nbsp;({label})</template>.
+                </div>
+                <div if:false={isDirty} class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_success slds-m-bottom_medium">
+                    Host received <code>trackdirtystate</code> — MFE is clean.
+                </div>
+            </template>
+
             <div class="shell-container" style="height: 400px">
                 <lightning-embedding
                     sandbox="allow-forms allow-modals"

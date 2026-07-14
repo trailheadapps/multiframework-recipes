@@ -3,23 +3,24 @@
  *
  * Listens for UI props pushed from the Salesforce LWC host. The host LWC
  * sets properties on <lightning-embedding> (e.g. recordId, name) and the SDK
- * makes them available via viewSDK.getUiProps().
+ * makes them available via viewSDK.getUiState().
  *
- * Key concept: viewSDK.getUiProps() returns { props, subscribe }. The
- * props promise resolves with the initial snapshot; the subscribe callback
- * fires every time the host updates any prop. Always call the unsubscribe
- * function in cleanup so stale handlers don't leak after unmount.
+ * Key concept: viewSDK.getUiState() returns { state, subscribe } synchronously.
+ * `state` is the latest cached { props, styles } snapshot. `subscribe(handler)`
+ * fires on every subsequent host push and returns an unsubscribe function —
+ * always call it in cleanup so stale handlers don't leak after unmount.
  *
  * @see SendEvent — dispatching events back to the host
  */
 import { useEffect, useState } from 'react';
+import { isSfEmbeddingIframe } from '@salesforce/platform-sdk';
 import { useSdk } from '../sdk-context';
 
 export default function ReceiveData() {
-    const { view, chat } = useSdk();
+    const { view } = useSdk();
     const [hostData, setHostData] = useState<Record<string, unknown>>({});
     const [updateCount, setUpdateCount] = useState(0);
-    const connected = Object.keys(chat.getHostContext?.() ?? {}).length > 0;
+    const connected = isSfEmbeddingIframe();
 
     useEffect(() => {
         // Fallback for hosts that pass data via URL query params (e.g. the
@@ -31,27 +32,20 @@ export default function ReceiveData() {
             setUpdateCount(c => c + 1);
         }
 
-        const uiProps = view.getUiProps?.();
-        if (!uiProps) return;
+        const uiState = view.getUiState?.();
+        if (!uiState) return;
 
-        let unsubscribe: (() => void) | undefined;
+        if (Object.keys(uiState.state.props).length > 0) {
+            setHostData(uiState.state.props);
+            setUpdateCount(c => c + 1);
+        }
 
-        uiProps.props.then(initial => {
-            if (Object.keys(initial).length > 0) {
-                setHostData(initial);
-                setUpdateCount(c => c + 1);
-            }
+        const unsubscribe = uiState.subscribe(next => {
+            setHostData(next.props);
+            setUpdateCount(c => c + 1);
         });
 
-        // subscribe() fires on every host-side prop update. Capture the
-        // returned unsubscribe (when the SDK provides one) for cleanup.
-        const result = uiProps.subscribe(next => {
-            setHostData(next);
-            setUpdateCount(c => c + 1);
-        }) as unknown;
-        if (typeof result === 'function') unsubscribe = result as () => void;
-
-        return () => unsubscribe?.();
+        return () => unsubscribe();
     }, [view]);
 
     const hasData = Object.keys(hostData).length > 0;
@@ -62,7 +56,7 @@ export default function ReceiveData() {
             <p className="recipe-description">
                 Displays UI props pushed from the Salesforce host. The host LWC sets
                 properties on <code>&lt;lightning-embedding&gt;</code>; the SDK delivers
-                them via <code>viewSDK.getUiProps()</code>.
+                them via <code>viewSDK.getUiState()</code>.
             </p>
 
             {!connected && (

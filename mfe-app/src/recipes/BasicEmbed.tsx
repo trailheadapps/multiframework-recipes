@@ -13,14 +13,14 @@
  * instance. When running standalone (no iframe), the SDKs still resolve but
  * most methods are no-ops; surface detection drops to "WebApp".
  *
- * @see ReceiveData — receiving host data via viewSDK.getUiProps()
+ * @see ReceiveData — receiving host data via viewSDK.getUiState()
  */
+import { isSfEmbeddingIframe } from '@salesforce/platform-sdk';
 import { useSdk } from '../sdk-context';
 
 export default function BasicEmbed() {
-    const { chat } = useSdk();
-    const hostContext = chat.getHostContext?.() ?? {};
-    const connected = Object.keys(hostContext).length > 0;
+    useSdk();
+    const connected = isSfEmbeddingIframe();
 
     return (
         <div className="recipe-container">
@@ -37,14 +37,10 @@ export default function BasicEmbed() {
                     {connected ? 'Connected — running inside Salesforce' : 'Not connected — running standalone'}
                 </p>
 
-                <p className="recipe-label">Host context</p>
-                {connected ? (
-                    <pre style={{ margin: 0, fontSize: 12, fontFamily: 'monospace' }}>
-                        {JSON.stringify(hostContext, null, 2)}
-                    </pre>
-                ) : (
-                    <p className="recipe-value" style={{ color: '#9ca3af' }}>—</p>
-                )}
+                <p className="recipe-label">Embedding iframe?</p>
+                <p className="recipe-value" style={{ color: connected ? undefined : '#9ca3af' }}>
+                    {connected ? 'yes' : 'no'}
+                </p>
             </div>
         </div>
     );

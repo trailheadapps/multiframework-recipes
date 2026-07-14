@@ -5,14 +5,16 @@
  * The host listens on the embedding element:
  *   shell.addEventListener('mfe-action', handler)
  *
- * Key concept: viewSDK.dispatchEvent(name, data) sends the event through
- * <lightning-embedding> to the parent LWC. The host catches it as a DOM
- * event on the embedding element. The data argument is any serialisable
- * key/value bag and lands on event.detail.
+ * Key concept: viewSDK is a DOM EventTarget. Call
+ *   view.dispatchEvent(new CustomEvent(name, { detail: data }))
+ * to forward the event over the wire to the parent LWC. The host catches it
+ * as a DOM event on the embedding element, and event.detail carries the
+ * payload. Local listeners registered via view.addEventListener() also fire.
  *
  * @see ReceiveData — receiving data pushed from the host
  */
 import { useState } from 'react';
+import { isSfEmbeddingIframe } from '@salesforce/platform-sdk';
 import { useSdk } from '../sdk-context';
 
 const ACTIONS = ['approve', 'reject', 'request-docs', 'escalate'] as const;
@@ -24,14 +26,20 @@ interface EventLog {
 }
 
 export default function SendEvent() {
-    const { view, chat } = useSdk();
+    const { view } = useSdk();
     const [log, setLog] = useState<EventLog[]>([]);
-    const connected = Object.keys(chat.getHostContext?.() ?? {}).length > 0;
+    const connected = isSfEmbeddingIframe();
 
-    async function handleAction(action: Action) {
-        // dispatchEvent forwards (name, data) to the host LWC.
+    function handleAction(action: Action) {
+        // dispatchEvent forwards the CustomEvent's detail to the host LWC.
         // The host listens: shell.addEventListener('mfe-action', handler)
-        await view.dispatchEvent?.('mfe-action', { action, timestamp: Date.now() });
+        view.dispatchEvent?.(
+            new CustomEvent('mfe-action', {
+                detail: { action, timestamp: Date.now() },
+                bubbles: true,
+                composed: true,
+            }),
+        );
 
         setLog(prev => [
             { action, timestamp: new Date().toLocaleTimeString() },

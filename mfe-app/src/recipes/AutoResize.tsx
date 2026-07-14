@@ -5,11 +5,11 @@
  * embedding container. A ResizeObserver tracks document.body's height and
  * forwards the new size to the host on every change.
  *
- * Key concept: viewSDK.resize(width, height) accepts CSS-style strings
- * ("auto", "100%", "320px"). Pass "auto" for either axis to let the host
- * compute its own size, or a specific value to pin it. Unlike the legacy
- * bridge — which auto-pushed body height — the SDK is explicit: you decide
- * when (and what dimensions) to send.
+ * Key concept: viewSDK.resize(width, height) accepts pixel-only strings —
+ * "800", "800px", or "" to leave that axis untouched. Non-pixel values like
+ * "auto" or "100%" throw. Unlike the legacy bridge — which auto-pushed body
+ * height — the SDK is explicit: you decide when (and what dimensions) to
+ * send.
  *
  * @see ThemeTokens — receiving Salesforce design tokens
  */
@@ -33,13 +33,15 @@ export default function AutoResize() {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!view.resize || !containerRef.current) return;
+        if (!containerRef.current) return;
 
         const observer = new ResizeObserver(entries => {
             const height = entries[0]?.contentRect.height;
-            if (height != null) {
-                void view.resize?.('auto', `${Math.ceil(height)}px`);
-            }
+            if (height == null) return;
+            // Empty string on width means "leave the host's width untouched";
+            // only height flows. `resize` on the MFE surface accepts pixel-only
+            // values, so "auto"/"100%" would throw.
+            void view.resize?.('', `${Math.ceil(height)}px`);
         });
         observer.observe(document.body);
         return () => observer.disconnect();
