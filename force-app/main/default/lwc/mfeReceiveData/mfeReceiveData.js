@@ -1,14 +1,14 @@
 import { LightningElement, api, track } from 'lwc';
 
 export default class MfeReceiveData extends LightningElement {
-    @api baseUrl = 'http://localhost:4300';
+    @api baseUrl = 'http://localhost:5173';
     @track inputValue = 'Hello from Salesforce';
     @track payload = {};
     debug = true;
 
     get computedSrc() {
         const url = new URL(this.baseUrl);
-        url.pathname = '/receive-data';
+        url.pathname = '/embedding/receive-data';
         return url.toString();
     }
 

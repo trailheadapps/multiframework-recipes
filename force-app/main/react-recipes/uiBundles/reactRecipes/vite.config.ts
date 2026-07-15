@@ -34,8 +34,9 @@ export default defineConfig(({ mode }) => {
         : []),
     ] as import('vite').PluginOption[],
 
-    // Allow reading source files from mfe-app/ and force-app/main/default/lwc/
-    // for the MFE recipes ?shiki source imports.
+    // Allow reading source files from force-app/main/default/lwc/ for the
+    // MFE recipes ?shiki source imports (the LWC host JS/HTML live outside
+    // this UI bundle's src tree).
     server: {
       fs: {
         allow: [resolve(__dirname, '../../../../..')],

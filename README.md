@@ -44,7 +44,7 @@ The framework app runs on your own infrastructure (Vercel, AWS, anywhere) and is
 
 ```mermaid
 graph LR
-    A[External Framework App<br/>mfe-app/] -->|iframe src| B[lightning-embedding]
+    A[Guest recipes<br/>reactRecipes /embedding/*] -->|iframe src| B[lightning-embedding]
     B -->|embedded in| C[LWC Host Component]
     C -->|deployed to| D[Salesforce Org]
     A <-->|"@salesforce/platform-sdk"| B
@@ -52,7 +52,7 @@ graph LR
 
 **Use when:** you already have an externally hosted app, need your own build/release cadence, or want to reuse the same app across Salesforce and non-Salesforce surfaces.
 
-Today this mode lives in [`mfe-app/`](mfe-app/) (the external React app) plus [`force-app/main/default/lwc/mfe*`](force-app/main/default/lwc/) (the LWC host components).
+Today this mode lives in the React Recipes bundle under [`force-app/main/react-recipes/uiBundles/reactRecipes/src/mfe/`](force-app/main/react-recipes/uiBundles/reactRecipes/src/mfe/) (the guest recipes, served on `/embedding/*`) plus [`force-app/main/default/lwc/mfe*`](force-app/main/default/lwc/) (the LWC host components).
 
 ### The Platform SDK: one API, both modes
 
@@ -206,29 +206,24 @@ These recipes run as a Salesforce UI Bundle served directly from the org. Today 
 
 ## Install & Run Externally Hosted Recipes
 
-These recipes run an external framework app on your own server and embed it into Salesforce via the standard `<lightning-embedding>` base component. In development, "externally hosted" means `localhost:4300`; in production you would point the LWC host at your deployed URL. Today the only implementation is React; Vue and Angular are planned.
+These recipes serve the guest app on your own server and embed it into Salesforce via the standard `<lightning-embedding>` base component. The guest recipes live inside the React Recipes bundle (`src/mfe/recipes/`) and are served on the `/embedding/*` routes of its dev server. In development, "externally hosted" means `localhost:5173`; in production you would point the LWC host at your deployed URL. Today the only implementation is React; Vue and Angular are planned.
 
-> **Note:** The CSP trusted site for `localhost:4300` is included in the shared metadata deployed in the org setup steps above. No additional metadata deploy is needed.
+> **Note:** The CSP trusted site for `localhost:5173` is included in the shared metadata deployed in the org setup steps above. No additional metadata deploy is needed.
 
-1. Install dependencies for the external app:
+1. Install dependencies and start the React Recipes dev server:
 
    ```bash
-   cd mfe-app
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
    npm install
-   ```
-
-1. Start the external app's dev server:
-
-   ```bash
    npm run dev
    ```
 
-   The app starts at `http://localhost:4300`. Keep this running while using the externally hosted recipes in your org.
+   The server starts at `http://localhost:5173`; the guest recipes are served under `/embedding/*` (e.g. `http://localhost:5173/embedding/basic-embed`). Keep this running while using the externally hosted recipes in your org.
 
 1. Deploy the LWC host components:
 
    ```bash
-   cd ..
+   cd ../../../../..
    sf project deploy start -d force-app/main/default/lwc
    ```
 
@@ -236,18 +231,18 @@ These recipes run an external framework app on your own server and embed it into
 
 ### Available externally hosted recipes
 
-| LWC host component | External app route | What it demonstrates |
+| LWC host component | Guest route | What it demonstrates |
 |---|---|---|
-| `mfeBasicEmbed` | `/basic-embed` | Minimum viable embed using `<lightning-embedding>` — `chatSDK.getHostContext()` for connection detection |
-| `mfeReceiveData` | `/receive-data` | Host re-mounts `<lightning-embedding>` with new src carrying URL query params; guest reads via `URLSearchParams` and `viewSDK.getUiProps()` |
-| `mfeSendEvent` | `/send-event` | Guest calls `viewSDK.dispatchEvent(name, data)`; surface-level routing is host-runtime specific |
-| `mfeAutoResize` | `/auto-resize` | Guest tracks body height with ResizeObserver and calls `viewSDK.resize()` |
-| `mfeThemeTokens` | `/theme-tokens` | Guest reads host theme via `viewSDK.getTheme()` and the broader environment via `chatSDK.getHostContext()` |
-| `mfeDirtyState` | `/dirty-state` | Guest calls `viewSDK.markDirtyState()` / `clearDirtyState()` to signal unsaved changes |
+| `mfeBasicEmbed` | `/embedding/basic-embed` | Minimum viable embed using `<lightning-embedding>` — `chatSDK.getHostContext()` for connection detection |
+| `mfeReceiveData` | `/embedding/receive-data` | Host re-mounts `<lightning-embedding>` with new src carrying URL query params; guest reads via `URLSearchParams` and `viewSDK.getUiProps()` |
+| `mfeSendEvent` | `/embedding/send-event` | Guest calls `viewSDK.dispatchEvent(name, data)`; surface-level routing is host-runtime specific |
+| `mfeAutoResize` | `/embedding/auto-resize` | Guest tracks body height with ResizeObserver and calls `viewSDK.resize()` |
+| `mfeThemeTokens` | `/embedding/theme-tokens` | Guest reads host theme via `viewSDK.getTheme()` and the broader environment via `chatSDK.getHostContext()` |
+| `mfeDirtyState` | `/embedding/dirty-state` | Guest calls `viewSDK.markDirtyState()` / `clearDirtyState()` to signal unsaved changes |
 
 ### Pointing at a deployed external app
 
-For production or sandbox use, deploy the external app to a hosted URL and set the `baseUrl` property on each LWC host component to point at that URL instead of `localhost:4300`.
+For production or sandbox use, deploy the guest app to a hosted URL and set the `baseUrl` property on each LWC host component to point at that URL instead of `localhost:5173`.
 
 ## Local Development
 

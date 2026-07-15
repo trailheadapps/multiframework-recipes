@@ -6,7 +6,7 @@
  * Vue/Angular flavors are wired as disabled "(soon)" tabs so users can see
  * the IA without us hiding the future surface.
  *
- * Source files: Guest (in mfe-app/), LWC host JS, LWC host HTML — all imported
+ * Source files: Guest (in src/mfe/recipes/), LWC host JS, LWC host HTML — all imported
  * via ?shiki so the code shown is always current.
  */
 import { useState } from 'react';
@@ -35,13 +35,13 @@ import {
 } from '@/lib/framework';
 import type { Framework, Hosting } from '@/recipeRegistry';
 
-// MFE guest sources (mfe-app/src/recipes/)
-import basicEmbedMfe from '../../../../../../../mfe-app/src/recipes/BasicEmbed.tsx?shiki';
-import receiveDataMfe from '../../../../../../../mfe-app/src/recipes/ReceiveData.tsx?shiki';
-import sendEventMfe from '../../../../../../../mfe-app/src/recipes/SendEvent.tsx?shiki';
-import autoResizeMfe from '../../../../../../../mfe-app/src/recipes/AutoResize.tsx?shiki';
-import themeTokensMfe from '../../../../../../../mfe-app/src/recipes/ThemeTokens.tsx?shiki';
-import dirtyStateMfe from '../../../../../../../mfe-app/src/recipes/DirtyState.tsx?shiki';
+// MFE guest sources (src/mfe/recipes/)
+import basicEmbedMfe from '../mfe/recipes/BasicEmbed.tsx?shiki';
+import receiveDataMfe from '../mfe/recipes/ReceiveData.tsx?shiki';
+import sendEventMfe from '../mfe/recipes/SendEvent.tsx?shiki';
+import autoResizeMfe from '../mfe/recipes/AutoResize.tsx?shiki';
+import themeTokensMfe from '../mfe/recipes/ThemeTokens.tsx?shiki';
+import dirtyStateMfe from '../mfe/recipes/DirtyState.tsx?shiki';
 
 // LWC host JS sources (force-app/main/default/lwc/)
 import basicEmbedJs from '../../../../../default/lwc/mfeBasicEmbed/mfeBasicEmbed.js?shiki=js';

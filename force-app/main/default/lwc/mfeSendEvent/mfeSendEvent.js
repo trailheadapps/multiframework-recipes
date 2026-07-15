@@ -1,7 +1,7 @@
 import { LightningElement, api, track } from 'lwc';
 
 export default class MfeSendEvent extends LightningElement {
-    @api baseUrl = 'http://localhost:4300';
+    @api baseUrl = 'http://localhost:5173';
     debug = false;
 
     @track lastAction = '';
@@ -12,7 +12,7 @@ export default class MfeSendEvent extends LightningElement {
 
     get computedSrc() {
         const url = new URL(this.baseUrl);
-        url.pathname = '/send-event';
+        url.pathname = '/embedding/send-event';
         return url.toString();
     }
 

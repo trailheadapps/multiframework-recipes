@@ -19,6 +19,7 @@
   "dependencies": {
     "@salesforce-ux/design-system": "2.29.0",
     "@salesforce/design-system-react": "^0.10.65",
+    "@salesforce/platform-sdk": "^11.27.0",
     "@salesforce/sdk-data": "^1.119.4",
     "@salesforce/ui-bundle": "^1.119.4",
     "@tailwindcss/vite": "^4.1.17",

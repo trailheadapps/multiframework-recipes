@@ -16,7 +16,7 @@ Work through the categories in this order. Each builds on concepts from the prev
 6. **Routing** -- React Router in UI Bundles: Link, NavLink, route parameters, nested routes, programmatic navigation
 7. **Styling** -- CSS approaches: SLDS utility classes, shadcn/ui + Tailwind, Design System React components
 8. **Integration** -- End-to-end patterns combining multiple APIs and React features
-9. **MFE (Externally Hosted)** -- Embed an external React app into Salesforce Lightning via `<lightning-embedding>`. Covers the Platform SDK surface: connection detection (`chatSDK.getHostContext()`), reading host props (`viewSDK.getUiProps()`), dispatching events (`viewSDK.dispatchEvent()`), resize (`viewSDK.resize()`), theme (`viewSDK.getTheme()`), and dirty state (`viewSDK.markDirtyState()` / `clearDirtyState()`). Requires the `mfe-app/` dev server running at `localhost:4300` — see the repo README for setup steps.
+9. **MFE (Externally Hosted)** -- Embed an external React app into Salesforce Lightning via `<lightning-embedding>`. Covers the Platform SDK surface: connection detection (`chatSDK.getHostContext()`), reading host props (`viewSDK.getUiProps()`), dispatching events (`viewSDK.dispatchEvent()`), resize (`viewSDK.resize()`), theme (`viewSDK.getTheme()`), and dirty state (`viewSDK.markDirtyState()` / `clearDirtyState()`). The guest recipes now live in this bundle under `src/mfe/recipes/` and are served on the `/embedding/*` routes; the `mfe*` LWC hosts embed them from the dev server at `localhost:5173`.
 
 ## Full Recipe Table
 

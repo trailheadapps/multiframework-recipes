@@ -10,7 +10,7 @@ import { LightningElement, api, track } from 'lwc';
  * and re-applies them on its own root.
  */
 export default class ThemeTokenEmbed extends LightningElement {
-    @api baseUrl = 'http://localhost:4300';
+    @api baseUrl = 'http://localhost:5173';
     debug = true;
 
     @track brandPrimary = '#2563eb';
@@ -34,7 +34,7 @@ export default class ThemeTokenEmbed extends LightningElement {
 
     get computedSrc() {
         const url = new URL(this.baseUrl);
-        url.pathname = '/theme-tokens';
+        url.pathname = '/embedding/theme-tokens';
         return url.toString();
     }
 

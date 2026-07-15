@@ -17,6 +17,13 @@ import NestedRoutes, {
   NestedRoutesIndex,
   NestedRoutesDetail,
 } from './recipes/routing/NestedRoutes';
+import GuestLayout from './mfe/GuestLayout';
+import BasicEmbed from './mfe/recipes/BasicEmbed';
+import ReceiveData from './mfe/recipes/ReceiveData';
+import SendEvent from './mfe/recipes/SendEvent';
+import AutoResize from './mfe/recipes/AutoResize';
+import ThemeTokens from './mfe/recipes/ThemeTokens';
+import DirtyState from './mfe/recipes/DirtyState';
 
 export const routes: RouteObject[] = [
   {
@@ -101,6 +108,25 @@ export const routes: RouteObject[] = [
         path: '*',
         element: <NotFound />,
       },
+    ],
+  },
+  {
+    // Externally-hosted MFE recipe guests. Loaded by the mfe* LWC hosts via
+    // <lightning-embedding src=".../embedding/<recipe>">. This is a PATHLESS
+    // layout route (no `path`) so it sits OUTSIDE AppLayout — the iframe renders
+    // a clean recipe with no gallery navbar/footer — while its children carry
+    // the full `/embedding/<recipe>` paths. The bare `/embedding` route (the
+    // code-viewer gallery page) still lives under AppLayout, so there is no
+    // collision: `/embedding` -> gallery, `/embedding/<recipe>` -> guest.
+    // GuestLayout bootstraps the Platform SDK and provides it to each recipe.
+    element: <GuestLayout />,
+    children: [
+      { path: 'embedding/basic-embed', element: <BasicEmbed /> },
+      { path: 'embedding/receive-data', element: <ReceiveData /> },
+      { path: 'embedding/send-event', element: <SendEvent /> },
+      { path: 'embedding/auto-resize', element: <AutoResize /> },
+      { path: 'embedding/theme-tokens', element: <ThemeTokens /> },
+      { path: 'embedding/dirty-state', element: <DirtyState /> },
     ],
   },
 ];
