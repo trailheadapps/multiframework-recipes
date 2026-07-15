@@ -11,6 +11,12 @@ deploy-options.json
 # LWC VSCode autocomplete
 jsconfig.json
 
+#dist
+dist/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 # LWC Jest coverage reports
 coverage/
 

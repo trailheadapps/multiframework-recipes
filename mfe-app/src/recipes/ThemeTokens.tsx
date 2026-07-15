@@ -1,76 +1,159 @@
 /**
  * Theme Tokens
  *
- * Reads the host theme via viewSDK.getTheme() and the broader host UI state
- * via viewSDK.getUiState(). Applies the theme mode to a data attribute on
- * the document root so styles cascade through the whole MFE.
+ * Reads host-owned theme tokens over the bridge's ui-state channel and mirrors
+ * them onto this component's root as CSS custom properties.
  *
- * Key concept: getTheme() returns { mode: 'light' | 'dark' } or null when
- * the host hasn't supplied a theme. getUiState() returns { state, subscribe }
- * synchronously; state.styles carries the CSS variables and attributes the
- * host mirrors onto the surface, and subscribe() fires on every host push.
+ * The host LWC publishes tokens on two channels for version resilience:
+ *   - `state.styles.variables` — inline `--*` custom properties (newer base
+ *     components), keyed by CSS var name (e.g. "--brand-primary").
+ *   - `state.props` — the @api prop bag (every version), keyed camelCase
+ *     (e.g. "brandPrimary").
+ * We prefer `variables` and fall back to `props`.
  *
- * @see DirtyState — notifying the host about unsaved changes
+ * @see ReceiveData — receiving arbitrary state through `state.props`
  */
-import { useEffect, useState } from 'react';
-import { isSfEmbeddingIframe, type UiStyles } from '@salesforce/platform-sdk';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSdk } from '../sdk-context';
 
-export default function ThemeTokens() {
+// cssVar → prop-bag key. Both channels resolve to the same CSS custom property.
+const TOKEN_MAP: ReadonlyArray<{ cssVar: string; prop: string }> = [
+    { cssVar: '--brand-primary', prop: 'brandPrimary' },
+    { cssVar: '--brand-background', prop: 'brandBackground' },
+    { cssVar: '--brand-text', prop: 'brandText' },
+    { cssVar: '--brand-radius', prop: 'brandRadius' },
+    { cssVar: '--brand-spacing', prop: 'brandSpacing' },
+    { cssVar: '--brand-font-size', prop: 'brandFontSize' },
+];
+
+const TOKEN_VARS = TOKEN_MAP.map(t => t.cssVar);
+
+function ThemeTokens() {
     const { view } = useSdk();
-    const [mode, setMode] = useState<string | null>(null);
-    const [styles, setStyles] = useState<UiStyles>({});
-    const connected = isSfEmbeddingIframe();
+    const [tokens, setTokens] = useState<Record<string, string>>({});
+    const [hostDir, setHostDir] = useState<'ltr' | 'rtl'>('ltr');
+    const rootRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const theme = view.getTheme?.();
-        setMode(theme?.mode ?? null);
-        if (theme?.mode) {
-            document.documentElement.dataset.theme = theme.mode;
-        }
+        if (!view.getUiState) return;
 
-        const uiState = view.getUiState?.();
-        if (!uiState) return;
+        const apply = (state: {
+            props?: Record<string, unknown>;
+            styles?: { variables?: Record<string, string>; attributes?: Record<string, string> };
+        }) => {
+            const variables = state.styles?.variables ?? {};
+            const props = state.props ?? {};
+            const next: Record<string, string> = {};
+            for (const { cssVar, prop } of TOKEN_MAP) {
+                // Prefer the inline CSS variable; fall back to the prop bag.
+                const fromVar = variables[cssVar];
+                const fromProp = props[prop];
+                const v = typeof fromVar === 'string' && fromVar ? fromVar
+                    : typeof fromProp === 'string' && fromProp ? fromProp
+                    : undefined;
+                if (v) next[cssVar] = v;
+            }
+            setTokens(next);
+            const dir = state.styles?.attributes?.dir;
+            if (dir === 'ltr' || dir === 'rtl') setHostDir(dir);
+        };
 
-        setStyles(uiState.state.styles);
-        const unsubscribe = uiState.subscribe(next => setStyles(next.styles));
+        const { state, subscribe } = view.getUiState();
+        apply(state);
+        const unsubscribe = subscribe(next => apply(next));
         return () => unsubscribe();
     }, [view]);
 
-    const hasStyles =
-        Object.keys(styles.variables ?? {}).length > 0 ||
-        Object.keys(styles.attributes ?? {}).length > 0;
+    useEffect(() => {
+        const el = rootRef.current;
+        if (!el) return;
+        for (const name of TOKEN_VARS) {
+            const value = tokens[name];
+            if (value) el.style.setProperty(name, value);
+            else el.style.removeProperty(name);
+        }
+    }, [tokens]);
+
+    const rows = useMemo(
+        () => TOKEN_VARS.map(name => ({ key: name, value: tokens[name] ?? '(unset)' })),
+        [tokens],
+    );
 
     return (
-        <div className="recipe-container">
-            <h2 className="recipe-title">Theme Tokens</h2>
-            <p className="recipe-description">
-                Reads the host theme via <code>viewSDK.getTheme()</code> and mirrored
-                CSS variables/attributes via <code>viewSDK.getUiState().state.styles</code>.
-                Apply the result to your styles however you like.
+        <div
+            ref={rootRef}
+            dir={hostDir}
+            style={{
+                padding: 'var(--brand-spacing, 16px)',
+                borderRadius: 'var(--brand-radius, 8px)',
+                background: 'var(--brand-background, #ffffff)',
+                color: 'var(--brand-text, #111827)',
+                fontSize: 'var(--brand-font-size, 14px)',
+                border: '1px solid rgba(0,0,0,0.08)',
+                minHeight: '360px',
+            }}
+        >
+            <h2 style={{ margin: 0, color: 'var(--brand-primary, #2563eb)' }}>
+                React MicroFrontend - Theme Tokens (SDK)
+            </h2>
+            <p style={{ margin: '4px 0 0', opacity: 0.75, fontSize: '12px' }}>
+                Tokens flow host → iframe via UiState <code>styles.variables</code>.
             </p>
 
-            {!connected && (
-                <div className="recipe-alert alert-info">
-                    Running standalone — no theme data will arrive from a host.
-                </div>
-            )}
-
-            <div className="recipe-card">
-                <p className="recipe-label">Theme mode</p>
-                <p className="recipe-value" style={{ fontFamily: 'monospace' }}>
-                    {mode ?? '—'}
-                </p>
-
-                <p className="recipe-label">Host styles</p>
-                {!hasStyles ? (
-                    <p style={{ color: '#9ca3af', fontSize: 13 }}>No host styles yet.</p>
-                ) : (
-                    <pre style={{ margin: 0, fontSize: 12, fontFamily: 'monospace' }}>
-                        {JSON.stringify(styles, null, 2)}
-                    </pre>
-                )}
+            <div
+                style={{
+                    marginTop: 'var(--brand-spacing, 16px)',
+                    padding: 'var(--brand-spacing, 16px)',
+                    borderRadius: 'var(--brand-radius, 8px)',
+                    background: 'var(--brand-primary, #2563eb)',
+                    color: 'var(--brand-background, #ffffff)',
+                    fontWeight: 600,
+                }}
+            >
+                Primary surface — reflects host tokens live.
             </div>
+
+            <button
+                type="button"
+                style={{
+                    marginTop: 'var(--brand-spacing, 16px)',
+                    padding: '8px 16px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    borderRadius: 'var(--brand-radius, 8px)',
+                    background: 'var(--brand-primary, #2563eb)',
+                    color: 'var(--brand-background, #ffffff)',
+                    fontSize: 'var(--brand-font-size, 14px)',
+                }}
+            >
+                Themed action button
+            </button>
+
+            <table
+                style={{
+                    marginTop: 'var(--brand-spacing, 16px)',
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    fontSize: '12px',
+                }}
+            >
+                <thead>
+                    <tr style={{ textAlign: 'left', opacity: 0.7 }}>
+                        <th style={{ padding: '4px 8px' }}>Token</th>
+                        <th style={{ padding: '4px 8px' }}>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows.map(r => (
+                        <tr key={r.key} style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+                            <td style={{ padding: '4px 8px', fontFamily: 'monospace' }}>{r.key}</td>
+                            <td style={{ padding: '4px 8px', fontFamily: 'monospace' }}>{r.value}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }
+
+export default ThemeTokens;

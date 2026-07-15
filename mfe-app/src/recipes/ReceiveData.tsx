@@ -2,8 +2,9 @@
  * Receive Data
  *
  * Listens for UI props pushed from the Salesforce LWC host. The host LWC
- * sets properties on <lightning-embedding> (e.g. recordId, name) and the SDK
- * makes them available via viewSDK.getUiState().
+ * sets the `props` binding on <lightning-embedding>; the bridge flushes a
+ * `ui/notifications/ui-state` update, which the SDK exposes to the guest
+ * via viewSDK.getUiState().
  *
  * Key concept: viewSDK.getUiState() returns { state, subscribe } synchronously.
  * `state` is the latest cached { props, styles } snapshot. `subscribe(handler)`
@@ -23,15 +24,6 @@ export default function ReceiveData() {
     const connected = isSfEmbeddingIframe();
 
     useEffect(() => {
-        // Fallback for hosts that pass data via URL query params (e.g. the
-        // mfeReceiveData LWC re-mounts <lightning-embedding> with a new src
-        // since src is session-binding). URLSearchParams is read-once.
-        const params = new URLSearchParams(window.location.search);
-        if ([...params.keys()].length > 0) {
-            setHostData(Object.fromEntries(params.entries()));
-            setUpdateCount(c => c + 1);
-        }
-
         const uiState = view.getUiState?.();
         if (!uiState) return;
 
@@ -55,8 +47,8 @@ export default function ReceiveData() {
             <h2 className="recipe-title">Receive Data</h2>
             <p className="recipe-description">
                 Displays UI props pushed from the Salesforce host. The host LWC sets
-                properties on <code>&lt;lightning-embedding&gt;</code>; the SDK delivers
-                them via <code>viewSDK.getUiState()</code>.
+                the <code>props</code> binding on <code>&lt;lightning-embedding&gt;</code>;
+                the SDK delivers each change via <code>viewSDK.getUiState()</code>.
             </p>
 
             {!connected && (

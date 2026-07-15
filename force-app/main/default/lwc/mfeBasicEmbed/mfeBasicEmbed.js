@@ -2,7 +2,7 @@ import { LightningElement, api } from 'lwc';
 
 export default class MfeBasicEmbed extends LightningElement {
     @api baseUrl = 'http://localhost:4300';
-    debug = false;
+    debug = true;
 
     get computedSrc() {
         const url = new URL(this.baseUrl);

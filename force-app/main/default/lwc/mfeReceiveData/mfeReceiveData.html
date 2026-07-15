@@ -2,9 +2,9 @@
     <lightning-card title="MFE Receive Data" icon-name="custom:custom59">
         <div class="slds-p-around_medium">
             <p class="slds-text-body_regular slds-m-bottom_medium">
-                Type a message and click Send — the host re-mounts the embedding
-                with a new <code>src</code> carrying the value as a query
-                parameter. The MFE reads it via <code>URLSearchParams</code>.
+                Type a message and click Send — the host publishes it via the
+                <code>props</code> binding on <code>&lt;lightning-embedding&gt;</code>.
+                The guest reads it through <code>viewSDK.getUiState()</code>.
             </p>
             <div class="slds-form-element slds-m-bottom_small">
                 <lightning-input
@@ -19,16 +19,15 @@
                 onclick={handleSend}
                 class="slds-m-bottom_medium"
             ></lightning-button>
-            <template if:true={committedSrc}>
-                <div class="shell-container" style="height: 400px">
-                    <lightning-embedding
-                        sandbox="allow-forms allow-modals"
-                        shell-title="MFE Receive Data"
-                        debug={debug}
-                        src={committedSrc}
-                    ></lightning-embedding>
-                </div>
-            </template>
+            <div class="shell-container" style="height: 400px">
+                <lightning-embedding
+                    sandbox="allow-forms allow-modals"
+                    shell-title="MFE Receive Data"
+                    debug={debug}
+                    src={computedSrc}
+                    props={payload}
+                ></lightning-embedding>
+            </div>
         </div>
     </lightning-card>
 </template>

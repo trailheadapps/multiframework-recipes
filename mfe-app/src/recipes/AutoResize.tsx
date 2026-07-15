@@ -1,20 +1,19 @@
 /**
  * Auto-Resize
  *
- * Demonstrates calling viewSDK.resize() to ask the host to resize the
- * embedding container. A ResizeObserver tracks document.body's height and
- * forwards the new size to the host on every change.
+ * Add or remove items — the iframe grows/shrinks automatically to match its
+ * content. No SDK call is needed for the common case: `bootstrapSession`
+ * attaches an `EmbeddingResizer` on `document.body` that RAF-coalesces height
+ * changes and sends `ui/notifications/resize` for each one. The host
+ * `<lightning-embedding>` applies the height.
  *
- * Key concept: viewSDK.resize(width, height) accepts pixel-only strings —
- * "800", "800px", or "" to leave that axis untouched. Non-pixel values like
- * "auto" or "100%" throw. Unlike the legacy bridge — which auto-pushed body
- * height — the SDK is explicit: you decide when (and what dimensions) to
- * send.
+ * `viewSDK.resize(width, height)` is available for surfaces that need width
+ * control or want to override the bootstrap observer. It accepts pixel-only
+ * strings ("800", "800px", ""); non-pixel values like "auto" or "100%" throw.
  *
  * @see ThemeTokens — receiving Salesforce design tokens
  */
-import { useEffect, useRef, useState } from 'react';
-import { useSdk } from '../sdk-context';
+import { useState } from 'react';
 
 interface Item {
     id: number;
@@ -28,24 +27,7 @@ function makeItem(): Item {
 }
 
 export default function AutoResize() {
-    const { view } = useSdk();
     const [items, setItems] = useState<Item[]>([makeItem(), makeItem()]);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!containerRef.current) return;
-
-        const observer = new ResizeObserver(entries => {
-            const height = entries[0]?.contentRect.height;
-            if (height == null) return;
-            // Empty string on width means "leave the host's width untouched";
-            // only height flows. `resize` on the MFE surface accepts pixel-only
-            // values, so "auto"/"100%" would throw.
-            void view.resize?.('', `${Math.ceil(height)}px`);
-        });
-        observer.observe(document.body);
-        return () => observer.disconnect();
-    }, [view]);
 
     function addItem() {
         setItems(prev => [...prev, makeItem()]);
@@ -56,11 +38,12 @@ export default function AutoResize() {
     }
 
     return (
-        <div className="recipe-container" ref={containerRef}>
+        <div className="recipe-container">
             <h2 className="recipe-title">Auto-Resize</h2>
             <p className="recipe-description">
-                Add or remove items — a ResizeObserver tracks body height and calls{' '}
-                <code>viewSDK.resize()</code> so the host iframe matches the content.
+                Add or remove items — the bridge's bootstrap-attached resizer observes
+                <code> document.body</code> and sends <code>ui/notifications/resize</code> to
+                the host on every height change.
             </p>
 
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
