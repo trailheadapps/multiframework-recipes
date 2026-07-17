@@ -25,7 +25,7 @@
     {
       "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/modify-data/CreateRecord.tsx",
       "line": 17,
-      "description": "## Mutation Variables\n\nThe `$input` variable is typed as `AccountCreateInput!`. When calling the mutation, you pass the variable as:\n\n```ts\nsdk.graphql(CREATE_ACCOUNT, {\n  variables: {\n    input: { Account: { Name: 'Acme Corp' } }\n  }\n})\n```\n\nThe input wraps the object name again (`{ Account: { ...fields } }`) -- this is a UIAPI convention."
+      "description": "## Mutation Variables\n\nThe `$input` variable is typed as `AccountCreateInput!`. When calling the mutation, you pass the variable as:\n\n```ts\nsdk.graphql({\n  query: CREATE_ACCOUNT,\n  variables: {\n    input: { Account: { Name: 'Acme Corp' } }\n  }\n})\n```\n\nThe input wraps the object name again (`{ Account: { ...fields } }`) -- this is a UIAPI convention."
     },
     {
       "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/recipes/error-handling/GraphqlErrors.tsx",

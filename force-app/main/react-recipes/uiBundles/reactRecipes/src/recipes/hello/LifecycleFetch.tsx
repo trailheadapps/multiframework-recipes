@@ -14,7 +14,7 @@
  * @see SingleRecord — querying a single record with GraphQL
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 
 const QUERY = gql`
@@ -84,7 +84,7 @@ function ContactFetcher() {
 
     const fetchContact = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>(QUERY);
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (stale) return; // component was unmounted while fetching
 

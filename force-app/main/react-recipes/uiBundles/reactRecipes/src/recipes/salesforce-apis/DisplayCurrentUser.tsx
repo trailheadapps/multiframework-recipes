@@ -11,7 +11,7 @@
  * @see ConnectApi — fetching Chatter feed data via Connect API
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 
 interface ChatterUser {
   displayName: string;

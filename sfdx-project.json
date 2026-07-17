@@ -4,12 +4,12 @@
       "path": "force-app",
       "default": true,
       "package": "ReactRecipes",
-      "versionName": "Spring '26",
-      "versionNumber": "66.0.0.NEXT"
+      "versionName": "Summer '26",
+      "versionNumber": "67.0.0.NEXT"
     }
   ],
   "name": "multiframework-recipes",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "66.0"
+  "sourceApiVersion": "67.0"
 }

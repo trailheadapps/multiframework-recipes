@@ -7,11 +7,11 @@
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import PaginatedList from './PaginatedList';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -100,7 +100,7 @@ describe('PaginatedList', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {
@@ -151,8 +151,9 @@ describe('PaginatedList', () => {
     await screen.findByRole('button', { name: 'Load More' });
     await user.click(screen.getByRole('button', { name: 'Load More' }));
     await screen.findByText('Carol');
-    expect(mockGraphql).toHaveBeenLastCalledWith(expect.any(String), {
-      after: 'cursor1',
+    expect(mockGraphql).toHaveBeenLastCalledWith({
+      query: expect.any(String),
+      variables: { after: 'cursor1' },
     });
   });
 

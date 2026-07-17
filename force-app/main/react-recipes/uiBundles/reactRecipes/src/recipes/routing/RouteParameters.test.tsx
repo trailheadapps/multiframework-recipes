@@ -5,14 +5,14 @@
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import {
   RouteParametersList,
   RouteParametersDetail,
 } from './RouteParameters';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -72,7 +72,7 @@ describe('RouteParametersList', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {
@@ -122,7 +122,7 @@ describe('RouteParametersDetail', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {
@@ -157,10 +157,10 @@ describe('RouteParametersDetail', () => {
     await screen.findByText('Acme Corp');
     // Verify the route param was forwarded to the query — the equivalent of
     // confirming @wire(getRecord, { recordId: '$recordId' }) received the right id.
-    expect(mockGraphql).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({ id: '001' })
-    );
+    expect(mockGraphql).toHaveBeenCalledWith({
+      query: expect.any(String),
+      variables: expect.objectContaining({ id: '001' }),
+    });
   });
 
   it('renders a back link pointing to /routing', async () => {

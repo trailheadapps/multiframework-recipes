@@ -19,7 +19,7 @@
  * @see DashboardAliasedQueries — combining aliased queries for dashboards
  */
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Input } from '@/components/ui/input';
 
 // The $name variable drives the `like` filter. Passing "%%" matches all.
@@ -85,8 +85,9 @@ export default function SearchableAccountList() {
     try {
       const sdk = await createDataSDK();
       // Wrap the search term in wildcards for the `like` operator
-      const result = await sdk.graphql?.<QueryResponse>(QUERY, {
-        name: term ? `%${term}%` : '%%',
+      const result = await sdk.graphql?.query<QueryResponse>({
+        query: QUERY,
+        variables: { name: term ? `%${term}%` : '%%' },
       });
 
       if (result?.errors?.length) {

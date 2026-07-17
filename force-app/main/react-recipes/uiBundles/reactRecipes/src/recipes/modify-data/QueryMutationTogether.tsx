@@ -16,7 +16,7 @@
  * @see ServerErrorHandling — handling mutation errors from the server
  */
 import { useEffect, useState, type FormEvent } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -143,11 +143,11 @@ export default function QueryMutationTogether() {
     (async () => {
       try {
         const sdk = await createDataSDK();
-        const res = await sdk.graphql?.<ListResponse>(LIST_QUERY);
+        const res = await sdk.graphql?.query<ListResponse>({ query: LIST_QUERY });
         if (res?.errors?.length) {
           throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
         }
-        const nodes = (res?.data.uiapi?.query?.Account?.edges ?? [])
+        const nodes = (res?.data?.uiapi?.query?.Account?.edges ?? [])
           .map(edge => edge?.node)
           .filter((n): n is Account => n != null);
         setAccounts(nodes);
@@ -180,10 +180,13 @@ export default function QueryMutationTogether() {
 
     try {
       const sdk = await createDataSDK();
-      const res = await sdk.graphql?.<UpdateResponse>(UPDATE_MUTATION, {
-        input: {
-          Id: editId,
-          Account: { Name: editName, Industry: editIndustry },
+      const res = await sdk.graphql?.mutate<UpdateResponse>({
+        mutation: UPDATE_MUTATION,
+        variables: {
+          input: {
+            Id: editId,
+            Account: { Name: editName, Industry: editIndustry },
+          },
         },
       });
 
@@ -191,7 +194,7 @@ export default function QueryMutationTogether() {
         throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
       }
 
-      const record = res?.data.uiapi?.AccountUpdate?.Record;
+      const record = res?.data?.uiapi?.AccountUpdate?.Record;
       if (!record) throw new Error('No record returned from AccountUpdate');
 
       // Update the single row in local state using the server response —

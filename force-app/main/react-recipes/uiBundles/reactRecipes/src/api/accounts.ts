@@ -1,4 +1,4 @@
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { GetAccountsWithContactsQuery } from './graphql-operations-types';
 
 const GET_ACCOUNTS_WITH_CONTACTS = gql`
@@ -56,15 +56,15 @@ export async function getAccountsWithContacts(): Promise<
   AccountWithContacts[]
 > {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql?.<GetAccountsWithContactsQuery>(
-    GET_ACCOUNTS_WITH_CONTACTS
-  );
+  const result = await sdk.graphql?.query<GetAccountsWithContactsQuery>({
+    query: GET_ACCOUNTS_WITH_CONTACTS,
+  });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map(e => e.message).join('; '));
   }
 
-  return (result?.data.uiapi?.query?.Account?.edges ?? [])
+  return (result?.data?.uiapi?.query?.Account?.edges ?? [])
     .map(edge => edge?.node)
     .filter((node): node is AccountWithContacts => node != null);
 }

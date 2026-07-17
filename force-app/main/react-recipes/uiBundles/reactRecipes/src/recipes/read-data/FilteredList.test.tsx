@@ -6,11 +6,11 @@
  */
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { type Mock } from 'vitest';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import FilteredList from './FilteredList';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -42,7 +42,7 @@ describe('FilteredList', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
     vi.useFakeTimers();
   });
 
@@ -108,8 +108,9 @@ describe('FilteredList', () => {
       await vi.advanceTimersByTimeAsync(350);
     });
     expect(screen.getByText('Alice')).toBeInTheDocument();
-    expect(mockGraphql).toHaveBeenCalledWith(expect.any(String), {
-      name: '%Alice%',
+    expect(mockGraphql).toHaveBeenCalledWith({
+      query: expect.any(String),
+      variables: { name: '%Alice%' },
     });
   });
 

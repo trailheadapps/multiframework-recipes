@@ -11,7 +11,7 @@
  * @see ListOfAccounts — rendering a list of records with .map()
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Badge } from '@/components/ui/badge';
 
 const QUERY = gql`
@@ -64,7 +64,7 @@ export default function ConditionalStatus() {
   useEffect(() => {
     const fetchAccount = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>(QUERY);
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

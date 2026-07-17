@@ -6,11 +6,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { type Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import CreateRecord from './CreateRecord';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -30,7 +30,7 @@ describe('CreateRecord', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {
@@ -79,12 +79,12 @@ describe('CreateRecord', () => {
     // In LWC you'd assert createRecord was called with { apiName, fields };
     // here you assert the graphql function was called with a variables object.
     await screen.findByRole('status');
-    expect(mockGraphql).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({
+    expect(mockGraphql).toHaveBeenCalledWith({
+      mutation: expect.any(String),
+      variables: expect.objectContaining({
         input: { Account: { Name: 'New Account' } },
-      })
-    );
+      }),
+    });
   });
 
   it('shows a "Create Another" button after success that resets the form', async () => {

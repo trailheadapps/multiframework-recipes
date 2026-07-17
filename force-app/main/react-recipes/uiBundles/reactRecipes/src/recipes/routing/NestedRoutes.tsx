@@ -18,7 +18,7 @@
  */
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useOutletContext, useParams } from 'react-router';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 
 const QUERY = gql`
   query AccountsForNesting {
@@ -71,7 +71,7 @@ export default function NestedRoutes() {
   useEffect(() => {
     const fetchAccounts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>(QUERY);
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

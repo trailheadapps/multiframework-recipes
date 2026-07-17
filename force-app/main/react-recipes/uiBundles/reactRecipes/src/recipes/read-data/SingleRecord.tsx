@@ -12,7 +12,7 @@
  * @see ListOfRecords — querying multiple records
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 // UIAPI GraphQL wraps every query under uiapi.query.<Object>.
@@ -88,7 +88,7 @@ export default function SingleRecord() {
   useEffect(() => {
     const fetchContact = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<SingleContactResponse>(QUERY);
+      const result = await sdk.graphql?.query<SingleContactResponse>({ query: QUERY });
 
       // GraphQL errors don't throw — they're returned in the errors array
       // alongside partial data. Always check before reading data.

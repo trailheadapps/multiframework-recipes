@@ -79,11 +79,7 @@ Both hosting modes use the **Platform SDK** as the unifying contract — it's ho
 
 1. Make sure you have **Node.js v22+** and **npm** installed.
 
-1. Install the ui-bundle-dev plugin:
-
-   ```bash
-   sf plugins install @salesforce/plugin-ui-bundle-dev
-   ```
+1. Make sure you have **Salesforce CLI v2.130.7+** installed. This version includes the UI Bundle plugin. Check your version with `sf --version` and update with `sf update` if needed.
 
 1. If you haven't already done so, authorize your hub org and provide it with an alias (**myhuborg** in the command below):
 
@@ -104,10 +100,19 @@ Both hosting modes use the **Platform SDK** as the unifying contract — it's ho
    sf org create scratch -d -f config/project-scratch-def.json -a recipes
    ```
 
-1. Deploy shared metadata:
+1. Install dependencies and build React Recipes:
 
    ```bash
-   sf project deploy start -d force-app/main/default/objects -d force-app/main/default/classes -d force-app/main/default/permissionsets -d force-app/main/default/cspTrustedSites
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
+   npm install
+   npm run build
+   cd ../../../../..
+   ```
+
+1. Deploy metadata and the UI bundle:
+
+   ```bash
+   sf project deploy start
    ```
 
 1. Assign the **recipes** permission set to the default user:
@@ -116,13 +121,28 @@ Both hosting modes use the **Platform SDK** as the unifying contract — it's ho
    sf org assign permset -n recipes
    ```
 
+1. Fetch the GraphQL schema and run codegen:
+
+   ```bash
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
+   npm run graphql:schema
+   npm run graphql:codegen
+   cd ../../../../..
+   ```
+
 1. Import sample data:
 
    ```bash
    sf data tree import -p ./data/data-plan.json
    ```
 
-## Setting up a Sandbox
+1. Open the org and select the **React Recipes** app in App Launcher:
+
+   ```bash
+   sf org open
+   ```
+
+## Setting up a Developer Edition Org
 
 1. Set up your environment. Follow the steps in the [Quick Start: Lightning Web Components](https://trailhead.salesforce.com/content/learn/projects/quick-start-lightning-web-components/) Trailhead project. The steps include:
    - Install Salesforce CLI
@@ -131,16 +151,12 @@ Both hosting modes use the **Platform SDK** as the unifying contract — it's ho
 
 1. Make sure you have **Node.js v22+** and **npm** installed.
 
-1. Install the ui-bundle-dev plugin:
+1. Make sure you have **Salesforce CLI v2.130.7+** installed. This version includes the UI Bundle plugin. Check your version with `sf --version` and update with `sf update` if needed.
+
+1. Authorize your Developer Edition org and provide it with an alias (**mydevorg** in the command below):
 
    ```bash
-   sf plugins install @salesforce/plugin-ui-bundle-dev
-   ```
-
-1. Authorize your sandbox org and provide it with an alias (**mysandbox** in the command below):
-
-   ```bash
-   sf org login web -a mysandbox
+   sf org login web -a mydevorg
    ```
 
 1. Clone this repository:
@@ -150,16 +166,34 @@ Both hosting modes use the **Platform SDK** as the unifying contract — it's ho
    cd multiframework-recipes
    ```
 
-1. Deploy shared metadata:
+1. Install dependencies and build React Recipes:
 
    ```bash
-   sf project deploy start -d force-app/main/default/objects -d force-app/main/default/classes -d force-app/main/default/permissionsets -d force-app/main/default/cspTrustedSites
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
+   npm install
+   npm run build
+   cd ../../../../..
+   ```
+
+1. Deploy metadata and the UI bundle:
+
+   ```bash
+   sf project deploy start
    ```
 
 1. Assign the **recipes** permission set to the default user:
 
    ```bash
    sf org assign permset -n recipes
+   ```
+
+1. Fetch the GraphQL schema and run codegen:
+
+   ```bash
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
+   npm run graphql:schema
+   npm run graphql:codegen
+   cd ../../../../..
    ```
 
 1. Import sample data:

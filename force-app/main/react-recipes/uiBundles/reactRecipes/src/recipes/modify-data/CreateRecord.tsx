@@ -11,7 +11,7 @@
  * @see UpdateRecord — editing an existing record
  */
 import { useState, type FormEvent } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -57,15 +57,16 @@ export default function CreateRecord() {
 
     try {
       const sdk = await createDataSDK();
-      const res = await sdk.graphql?.<CreateAccountResponse>(CREATE_ACCOUNT, {
-        input: { Account: { Name: name.trim() } },
+      const res = await sdk.graphql?.mutate<CreateAccountResponse>({
+        mutation: CREATE_ACCOUNT,
+        variables: { input: { Account: { Name: name.trim() } } },
       });
 
       if (res?.errors?.length) {
         throw new Error(res.errors.map((e: { message: string }) => e.message).join('; '));
       }
 
-      const record = res?.data.uiapi?.AccountCreate?.Record;
+      const record = res?.data?.uiapi?.AccountCreate?.Record;
       if (!record) throw new Error('No record returned from AccountCreate');
 
       setResult({ Id: record.Id, Name: record.Name?.value });

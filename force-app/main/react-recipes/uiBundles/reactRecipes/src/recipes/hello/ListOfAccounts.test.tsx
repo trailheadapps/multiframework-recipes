@@ -1,5 +1,5 @@
 /**
- * The vi.mock() call below intercepts the @salesforce/sdk-data module for the
+ * The vi.mock() call below intercepts the @salesforce/platform-sdk module for the
  * entire test file. In LWC Jest the equivalent is registering a wire adapter
  * mock — here there is no wire adapter, so a plain module mock is enough.
  * The mock data objects mirror the real UIAPI GraphQL response shape so the
@@ -7,11 +7,11 @@
  */
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import ListOfAccounts from './ListOfAccounts';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -48,7 +48,7 @@ describe('ListOfAccounts', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {

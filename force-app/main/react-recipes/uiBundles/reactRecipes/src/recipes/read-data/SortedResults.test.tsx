@@ -7,11 +7,11 @@
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { createDataSDK } from '@salesforce/sdk-data';
+import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import SortedResults from './SortedResults';
 
-vi.mock('@salesforce/sdk-data', () => ({
+vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
@@ -48,7 +48,7 @@ describe('SortedResults', () => {
   const mockGraphql = vi.fn();
 
   beforeEach(() => {
-    (createDataSDK as Mock).mockResolvedValue({ graphql: mockGraphql });
+    (createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockGraphql, mutate: mockGraphql } });
   });
 
   afterEach(() => {
@@ -72,7 +72,7 @@ describe('SortedResults', () => {
 
     await screen.findByText('Alice');
     expect(mockGraphql).toHaveBeenLastCalledWith(
-      expect.stringContaining('Title')
+      expect.objectContaining({ query: expect.stringContaining('Title') })
     );
   });
 
@@ -86,7 +86,7 @@ describe('SortedResults', () => {
 
     await screen.findByText('Alice');
     expect(mockGraphql).toHaveBeenLastCalledWith(
-      expect.stringContaining('DESC')
+      expect.objectContaining({ query: expect.stringContaining('DESC') })
     );
   });
 

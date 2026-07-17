@@ -17,7 +17,7 @@
  * @see RelatedRecords — traversing parent-child relationships
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 
 // The $after variable is a cursor string returned by pageInfo.endCursor.
@@ -87,10 +87,10 @@ export default function PaginatedList() {
     const sdk = await createDataSDK();
     // Pass the cursor as a GraphQL variable — omit for the first page
     const variables = after ? { after } : {};
-    const result = await sdk.graphql?.<PaginatedContactsResponse>(
-      QUERY,
-      variables
-    );
+    const result = await sdk.graphql?.query<PaginatedContactsResponse>({
+      query: QUERY,
+      variables,
+    });
 
     if (result?.errors?.length) {
       throw new Error(
