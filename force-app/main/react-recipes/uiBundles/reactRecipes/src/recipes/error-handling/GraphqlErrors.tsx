@@ -12,7 +12,7 @@
  * @see ErrorBoundaryRecipe — catching render-time JavaScript errors
  */
 import { useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 
 // This query intentionally asks for a field that doesn't exist on Account.
@@ -71,7 +71,7 @@ export default function GraphqlErrors() {
 
     try {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.({ query });
+      const result = await sdk.graphql?.query({ query });
 
       // Layer 1: result.errors[] — query-level errors (bad fields, auth, etc.)
       if (result?.errors?.length) {

@@ -2,7 +2,7 @@
 
 Self-contained, single-file examples that teach one concept at a time. Every recipe inlines its GraphQL queries, mutations, types, and SDK calls so you can read the entire pattern without jumping between files. Open any `.tsx` file in `src/recipes/` and everything you need is right there.
 
-Each recipe is tagged by **hosting mode** (Salesforce-Hosted or Externally Hosted) and **framework** (React today; Vue/Angular planned). Categories 1–8 are Salesforce-Hosted React recipes. Category 9 (MFE) is Externally Hosted React — the framework app runs on its own server and embeds into Salesforce via `lwc-shell`.
+Each recipe is tagged by **hosting mode** (Salesforce-Hosted or Externally Hosted) and **framework** (React today; Vue/Angular planned). Categories 1–8 are Salesforce-Hosted React recipes. Category 9 (MFE) is Externally Hosted React — the framework app runs on its own server and embeds into Salesforce via the standard `<lightning-embedding>` base component.
 
 ## Recommended Learning Path
 
@@ -16,7 +16,7 @@ Work through the categories in this order. Each builds on concepts from the prev
 6. **Routing** -- React Router in UI Bundles: Link, NavLink, route parameters, nested routes, programmatic navigation
 7. **Styling** -- CSS approaches: SLDS utility classes, shadcn/ui + Tailwind, Design System React components
 8. **Integration** -- End-to-end patterns combining multiple APIs and React features
-9. **MFE (Externally Hosted)** -- Embed an external React app into Salesforce Lightning via `lwc-shell`. Covers the postMessage bridge (`@salesforce/experimental-mfe-bridge`): connection detection, receiving host data, dispatching events, auto-resize, theme tokens, and dirty state. Requires the `mfe-app/` dev server running at `localhost:4300` — see the repo README for setup steps.
+9. **MFE (Externally Hosted)** -- Embed an external React app into Salesforce Lightning via `<lightning-embedding>`. Covers the Platform SDK surface: connection detection (`chatSDK.getHostContext()`), reading host props (`viewSDK.getUiProps()`), dispatching events (`viewSDK.dispatchEvent()`), resize (`viewSDK.resize()`), theme (`viewSDK.getTheme()`), and dirty state (`viewSDK.markDirtyState()` / `clearDirtyState()`). The guest recipes now live in this bundle under `src/mfe/recipes/` and are served on the `/embedding/*` routes; the `mfe*` LWC hosts embed them from the dev server at `localhost:5173`.
 
 ## Full Recipe Table
 
@@ -66,9 +66,9 @@ Work through the categories in this order. Each builds on concepts from the prev
 | Styling | IconsDSR | Same icons as IconsSLDS via the Icon component from design-system-react. |
 | Integration | SearchableAccountList | A controlled search input drives a GraphQL variable that filters Accounts by name with debounce. |
 | Integration | DashboardAliasedQueries | Fetches Accounts, Contacts, and Opportunities in a single GraphQL request using aliases. |
-| MFE | BasicEmbed | Minimum viable lwc-shell embed. The MFE uses `bridge.isConnected()` to detect the embedding context. |
-| MFE | ReceiveData | Host pushes data into the MFE via `shell.updateData()`. MFE receives it with `bridge.addEventListener('data', handler)`. |
-| MFE | SendEvent | MFE dispatches custom events to the host via `bridge.dispatchEvent()`. Host catches them on the shell element. |
-| MFE | AutoResize | iframe height adjusts automatically as MFE content grows or shrinks via a ResizeObserver inside the iframe. |
-| MFE | ThemeTokens | Salesforce CSS custom properties sent to the MFE on connect and re-synced on demand via `shell.refreshTheme()`. |
-| MFE | DirtyState | MFE notifies the host of unsaved changes via `trackdirtystate` events so the host can block navigation. |
+| MFE | BasicEmbed | Minimum viable embed using the standard `<lightning-embedding>` base component. MFE uses `chatSDK.getHostContext()` to detect the embedding context. |
+| MFE | ReceiveData | Host re-mounts `<lightning-embedding>` with new src carrying URL query params. MFE reads them via `URLSearchParams` and `viewSDK.getUiProps()`. |
+| MFE | SendEvent | MFE dispatches custom events via `viewSDK.dispatchEvent(name, data)`. Surface-level routing is host-runtime specific. |
+| MFE | AutoResize | A ResizeObserver inside the MFE tracks body height; the guest calls `viewSDK.resize()` to ask the host to adjust the embedding container. |
+| MFE | ThemeTokens | MFE reads the host theme via `viewSDK.getTheme()` and the broader environment via `chatSDK.getHostContext()`. |
+| MFE | DirtyState | MFE calls `viewSDK.markDirtyState()` / `clearDirtyState()` to signal unsaved changes to the host surface. |

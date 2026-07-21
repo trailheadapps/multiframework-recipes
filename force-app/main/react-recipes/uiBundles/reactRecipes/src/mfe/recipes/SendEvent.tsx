@@ -2,16 +2,20 @@
  * Send Event
  *
  * Dispatches a custom event from the MFE back to the Salesforce LWC host.
- * The host listens on the shell element: shell.addEventListener('mfe-action', handler).
+ * The host listens on the embedding element:
+ *   shell.addEventListener('mfe-action', handler)
  *
- * Key concept: bridge.dispatchEvent(new CustomEvent(type, { detail })) sends the
- * event through lwc-shell to the parent LWC. The host catches it as a DOM event
- * on the shell element. Any serialisable object is valid as the detail payload.
+ * Key concept: viewSDK is a DOM EventTarget. Call
+ *   view.dispatchEvent(new CustomEvent(name, { detail: data }))
+ * to forward the event over the wire to the parent LWC. The host catches it
+ * as a DOM event on the embedding element, and event.detail carries the
+ * payload. Local listeners registered via view.addEventListener() also fire.
  *
  * @see ReceiveData — receiving data pushed from the host
  */
-import { useEffect, useState } from 'react';
-import bridge from '@salesforce/experimental-mfe-bridge';
+import { useState } from 'react';
+import { isSfEmbeddingIframe } from '@salesforce/platform-sdk';
+import { useSdk } from '../sdk-context';
 
 const ACTIONS = ['approve', 'reject', 'request-docs', 'escalate'] as const;
 type Action = (typeof ACTIONS)[number];
@@ -22,22 +26,18 @@ interface EventLog {
 }
 
 export default function SendEvent() {
+    const { view } = useSdk();
     const [log, setLog] = useState<EventLog[]>([]);
-    const [connected, setConnected] = useState(bridge.isConnected());
-
-    useEffect(() => {
-        const sync = () => setConnected(bridge.isConnected());
-        sync();
-        bridge.addEventListener('connected', sync);
-        return () => bridge.removeEventListener('connected', sync);
-    }, []);
+    const connected = isSfEmbeddingIframe();
 
     function handleAction(action: Action) {
-        // Dispatch a custom event that bubbles up to the LWC host.
+        // dispatchEvent forwards the CustomEvent's detail to the host LWC.
         // The host listens: shell.addEventListener('mfe-action', handler)
-        bridge.dispatchEvent(
+        view.dispatchEvent?.(
             new CustomEvent('mfe-action', {
                 detail: { action, timestamp: Date.now() },
+                bubbles: true,
+                composed: true,
             }),
         );
 
@@ -49,19 +49,18 @@ export default function SendEvent() {
 
     return (
         <div className="recipe-container">
-            <h2 className="recipe-title">
-                Send Event
-                <span
-                    className={`status-dot ${connected ? 'dot-green' : 'dot-gray'}`}
-                    title={connected ? 'Connected to Salesforce host' : 'Running standalone'}
-                    style={{ marginLeft: 8 }}
-                />
-            </h2>
+            <h2 className="recipe-title">Send Event</h2>
             <p className="recipe-description">
                 Dispatches custom events to the Salesforce LWC host via{' '}
-                <code>bridge.dispatchEvent()</code>. The host receives them on the shell
-                element.
+                <code>viewSDK.dispatchEvent()</code>. The host receives them on the
+                embedding element.
             </p>
+
+            {!connected && (
+                <div className="recipe-alert alert-info">
+                    Running standalone — events are dispatched but no host is listening.
+                </div>
+            )}
 
             <div className="recipe-card" style={{ marginBottom: 12 }}>
                 <p className="recipe-label">Actions</p>

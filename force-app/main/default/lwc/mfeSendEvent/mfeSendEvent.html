@@ -1,16 +1,33 @@
 <template>
     <lightning-card title="MFE Send Event" icon-name="custom:custom59">
-        <div class="slds-p-around_medium">
+        <div class="slds-p-around_medium" lwc:ref="host">
             <p class="slds-text-body_regular slds-m-bottom_medium">
-                Click an action button in the MFE — the event arrives here via
-                <code>shell.addEventListener('mfe-action', handler)</code>.
+                Click an action button in the MFE — the guest calls
+                <code>view.dispatchEvent(new CustomEvent('mfe-action', &#123; detail &#125;))</code>.
+                The bridge forwards it over the wire and
+                <code>&lt;lightning-ui-embedding&gt;</code> re-dispatches it as a
+                bubbling DOM event this LWC catches.
             </p>
-            <template if:true={lastAction}>
-                <div class="slds-notify slds-notify_alert slds-theme_info slds-m-bottom_small" role="status">
-                    <span>Last action from MFE: <strong>{lastAction}</strong></span>
+
+            <template lwc:if={lastAction}>
+                <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                    <p class="slds-text-title_caps">Last event</p>
+                    <p><strong>action:</strong> <code>{lastAction}</code></p>
+                    <p><strong>received:</strong> {lastReceivedAt}</p>
+                    <p class="slds-text-body_small">
+                        <strong>total received:</strong> {receivedCount}
+                    </p>
                 </div>
             </template>
-            <div class="shell-container" lwc:dom="manual"></div>
+
+            <div class="shell-container" style="height: 400px">
+                <lightning-ui-embedding
+                    sandbox="allow-forms allow-modals"
+                    shell-title="MFE Send Event"
+                    debug={debug}
+                    src={computedSrc}
+                ></lightning-ui-embedding>
+            </div>
         </div>
     </lightning-card>
 </template>

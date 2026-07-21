@@ -6,7 +6,7 @@
  * Vue/Angular flavors are wired as disabled "(soon)" tabs so users can see
  * the IA without us hiding the future surface.
  *
- * Source files: Guest (in mfe-app/), LWC host JS, LWC host HTML — all imported
+ * Source files: Guest (in src/mfe/recipes/), LWC host JS, LWC host HTML — all imported
  * via ?shiki so the code shown is always current.
  */
 import { useState } from 'react';
@@ -35,13 +35,13 @@ import {
 } from '@/lib/framework';
 import type { Framework, Hosting } from '@/recipeRegistry';
 
-// MFE bridge sources (mfe-app/src/recipes/)
-import basicEmbedMfe from '../../../../../../../mfe-app/src/recipes/BasicEmbed.tsx?shiki';
-import receiveDataMfe from '../../../../../../../mfe-app/src/recipes/ReceiveData.tsx?shiki';
-import sendEventMfe from '../../../../../../../mfe-app/src/recipes/SendEvent.tsx?shiki';
-import autoResizeMfe from '../../../../../../../mfe-app/src/recipes/AutoResize.tsx?shiki';
-import themeTokensMfe from '../../../../../../../mfe-app/src/recipes/ThemeTokens.tsx?shiki';
-import dirtyStateMfe from '../../../../../../../mfe-app/src/recipes/DirtyState.tsx?shiki';
+// MFE guest sources (src/mfe/recipes/)
+import basicEmbedMfe from '../mfe/recipes/BasicEmbed.tsx?shiki';
+import receiveDataMfe from '../mfe/recipes/ReceiveData.tsx?shiki';
+import sendEventMfe from '../mfe/recipes/SendEvent.tsx?shiki';
+import autoResizeMfe from '../mfe/recipes/AutoResize.tsx?shiki';
+import themeTokensMfe from '../mfe/recipes/ThemeTokens.tsx?shiki';
+import dirtyStateMfe from '../mfe/recipes/DirtyState.tsx?shiki';
 
 // LWC host JS sources (force-app/main/default/lwc/)
 import basicEmbedJs from '../../../../../default/lwc/mfeBasicEmbed/mfeBasicEmbed.js?shiki=js';
@@ -80,7 +80,7 @@ const recipes: MfeRecipe[] = [
   {
     name: 'Basic Embed',
     description:
-      'Minimum viable lwc-shell embed. The host creates the shell, sets src and sandbox, and listens for widget-ready. The MFE uses bridge.isConnected() to detect the embedding context.',
+      'Minimum viable embed using the standard <lightning-embedding> base component. The MFE resolves the Platform SDK on startup and reads chatSDK.getHostContext() to detect the embedding context.',
     flavors: [
       {
         hosting: 'externally-hosted',
@@ -94,7 +94,7 @@ const recipes: MfeRecipe[] = [
   {
     name: 'Receive Data',
     description:
-      "Host pushes data into the MFE via shell.updateData(). The MFE receives it with bridge.addEventListener('data', handler).",
+      'Host re-mounts <lightning-embedding> with new src carrying URL query params. The MFE reads them via URLSearchParams and viewSDK.getUiProps().',
     flavors: [
       {
         hosting: 'externally-hosted',
@@ -108,7 +108,7 @@ const recipes: MfeRecipe[] = [
   {
     name: 'Send Event',
     description:
-      'MFE dispatches custom events to the host via bridge.dispatchEvent(). The host catches them as DOM events on the shell element.',
+      'MFE dispatches custom events via viewSDK.dispatchEvent(name, data). Surface-level routing of those events to LWC code is host-runtime specific.',
     flavors: [
       {
         hosting: 'externally-hosted',
@@ -122,7 +122,7 @@ const recipes: MfeRecipe[] = [
   {
     name: 'Auto-Resize',
     description:
-      'Iframe height follows MFE content via a ResizeObserver inside the iframe. No fixed height on the shell. Cancel the resize event to opt out.',
+      'A ResizeObserver inside the MFE tracks body height; the guest calls viewSDK.resize() to ask the host to adjust the embedding container.',
     flavors: [
       {
         hosting: 'externally-hosted',
@@ -136,7 +136,7 @@ const recipes: MfeRecipe[] = [
   {
     name: 'Theme Tokens',
     description:
-      'Salesforce CSS custom properties are sent to the MFE on connect. The MFE applies them to document.documentElement. Call shell.refreshTheme() to re-sync.',
+      'MFE reads the host theme via viewSDK.getTheme() and the broader environment via chatSDK.getHostContext() (locale, displayMode, host styles).',
     flavors: [
       {
         hosting: 'externally-hosted',
@@ -150,7 +150,7 @@ const recipes: MfeRecipe[] = [
   {
     name: 'Dirty State',
     description:
-      'MFE notifies the host of unsaved changes via trackdirtystate events. The host can show a warning and block navigation.',
+      'MFE calls viewSDK.markDirtyState() / clearDirtyState() to signal unsaved changes. The host surface decides how to surface the dirty signal.',
     flavors: [
       {
         hosting: 'externally-hosted',
@@ -224,9 +224,9 @@ export default function Mfe() {
         </div>
         <p className="mt-1 text-sm text-muted-foreground">
           An external framework app embedded into Salesforce via{' '}
-          <code className="text-xs">lwc-shell</code>. The postMessage bridge (
-          <code className="text-xs">@salesforce/experimental-mfe-bridge</code>)
-          is the contract between the embedded app and the host LWC.
+          <code className="text-xs">&lt;lightning-embedding&gt;</code>. The
+          Platform SDK is the shared contract; a Salesforce-Hosted flavor is
+          planned.
         </p>
         <div className="mt-1.5 h-0.5 w-12 rounded-full bg-primary" />
       </div>

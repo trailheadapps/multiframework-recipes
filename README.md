@@ -40,27 +40,23 @@ Today this mode lives in [`force-app/main/react-recipes/uiBundles/reactRecipes/`
 
 ### Externally Hosted
 
-The framework app runs on your own infrastructure (Vercel, AWS, anywhere) and is embedded into a Salesforce Lightning page via `lwc-shell`. A postMessage bridge proxies data, events, and GraphQL between the two sides.
+The framework app runs on your own infrastructure (Vercel, AWS, anywhere) and is embedded into a Salesforce Lightning page via the standard `<lightning-embedding>` base component. The Platform SDK is the contract on the guest side; the sf-embedding protocol is the wire format underneath.
 
 ```mermaid
 graph LR
-    A[External Framework App<br/>mfe-app/] -->|iframe src| B[lwc-shell]
+    A[Guest recipes<br/>reactRecipes /embedding/*] -->|iframe src| B[lightning-embedding]
     B -->|embedded in| C[LWC Host Component]
     C -->|deployed to| D[Salesforce Org]
-    B <-->|postMessage bridge| A
-    D -->|updateData / events| B
+    A <-->|"@salesforce/platform-sdk"| B
 ```
 
 **Use when:** you already have an externally hosted app, need your own build/release cadence, or want to reuse the same app across Salesforce and non-Salesforce surfaces.
 
-Today this mode lives in [`mfe-app/`](mfe-app/) (the external React app) plus [`force-app/main/default/lwc/mfe*`](force-app/main/default/lwc/) (the LWC host components).
+Today this mode lives in the React Recipes bundle under [`force-app/main/react-recipes/uiBundles/reactRecipes/src/mfe/`](force-app/main/react-recipes/uiBundles/reactRecipes/src/mfe/) (the guest recipes, served on `/embedding/*`) plus [`force-app/main/default/lwc/mfe*`](force-app/main/default/lwc/) (the LWC host components).
 
-### How the framework app talks to Salesforce
+### The Platform SDK: one API, both modes
 
-The two hosting modes use different APIs because they run in different security contexts:
-
-- **Salesforce-hosted** recipes call native Lightning modules directly — `lightning/uiRecordApi`, `lightning/navigation`, `lightning/graphql`, `@salesforce/apex` — same as any LWC.
-- **Externally hosted** recipes use the postMessage bridge ([`@salesforce/experimental-mfe-bridge`](https://www.npmjs.com/package/@salesforce/experimental-mfe-bridge)) to talk to the host LWC, which then calls Lightning modules on the MFE's behalf. The bridge surface (`bridge.isConnected()`, `bridge.dispatchEvent()`, `bridge.addEventListener('data', …)`, etc.) is the contract between the embedded app and the host shell.
+Both hosting modes use the **Platform SDK** as the unifying contract — it's how the framework app reads Salesforce data, dispatches events to the host, and stays in sync with org-level theme tokens. The SDK surface is the same whether the app is Salesforce-hosted or externally hosted; only the transport underneath differs. Learning the SDK is the portable skill this repo teaches.
 
 ## Table of Contents
 
@@ -244,56 +240,43 @@ These recipes run as a Salesforce UI Bundle served directly from the org. Today 
 
 ## Install & Run Externally Hosted Recipes
 
-These recipes run an external framework app on your own server and embed it into Salesforce via `lwc-shell`. In development, "externally hosted" means `localhost:4300`; in production you would point the LWC host at your deployed URL. Today the only implementation is React; Vue and Angular are planned.
+These recipes serve the guest app on your own server and embed it into Salesforce via the standard `<lightning-embedding>` base component. The guest recipes live inside the React Recipes bundle (`src/mfe/recipes/`) and are served on the `/embedding/*` routes of its dev server. In development, "externally hosted" means `localhost:5173`; in production you would point the LWC host at your deployed URL. Today the only implementation is React; Vue and Angular are planned.
 
-> **Before you start:** complete the [Scratch Org](#setting-up-a-scratch-org) or [Sandbox](#setting-up-a-sandbox) setup first. Those steps deploy the shared metadata (objects, classes, **CSP Trusted Site for `localhost:4300`**), assign the `recipes` permission set, and import the sample Contact data the recipes display. Without them the iframe is blocked or shows empty data.
+> **Note:** The CSP trusted site for `localhost:5173` is included in the shared metadata deployed in the org setup steps above. No additional metadata deploy is needed.
 
-1. Install dependencies for the external app:
+1. Install dependencies and start the React Recipes dev server:
 
    ```bash
-   cd mfe-app
+   cd force-app/main/react-recipes/uiBundles/reactRecipes
    npm install
-   ```
-
-1. Start the external app's dev server:
-
-   ```bash
    npm run dev
    ```
 
-   The app starts at `http://localhost:4300`. Keep this running while using the externally hosted recipes in your org.
+   The server starts at `http://localhost:5173`; the guest recipes are served under `/embedding/*` (e.g. `http://localhost:5173/embedding/basic-embed`). Keep this running while using the externally hosted recipes in your org.
 
 1. Deploy the LWC host components:
 
    ```bash
-   cd ..
-   sf project deploy start --source-dir force-app/main/default/lwc
+   cd ../../../../..
+   sf project deploy start -d force-app/main/default/lwc
    ```
 
-   This deploys both the `mfe*` recipe wrappers and `vendorLwcShell`, which registers the `<lwc-shell>` custom element they all rely on. `vendorLwcShell` is a vendored bundle of [`@salesforce/experimental-mfe-lwc-shell`](https://www.npmjs.com/package/@salesforce/experimental-mfe-lwc-shell) — it's checked into the repo, so you don't need to build it yourself. Refresh from npm when a new version ships.
-
-1. Add a host component to a Lightning page:
-
-   ```bash
-   sf org open
-   ```
-
-   In the org, go to **Setup → Lightning App Builder → New → App Page**, drag a *Custom* component (e.g. `mfeBasicEmbed`, `mfeReceiveData`) from the left panel onto the canvas, then **Save → Activate** and pick the apps where it should appear. Open the page from App Launcher to use the recipe.
+1. Open the scratch org, go to App Launcher, and search for any of the host components (`mfeBasicEmbed`, `mfeReceiveData`, etc.) to add them to a Lightning page.
 
 ### Available externally hosted recipes
 
-| LWC host component | External app route | What it demonstrates |
+| LWC host component | Guest route | What it demonstrates |
 |---|---|---|
-| `mfeBasicEmbed` | `/basic-embed` | Minimum viable embed — bridge connection detection |
-| `mfeReceiveData` | `/receive-data` | Host pushes data into guest via `shell.updateData()` |
-| `mfeSendEvent` | `/send-event` | Guest dispatches events to host via `bridge.dispatchEvent()` |
-| `mfeAutoResize` | `/auto-resize` | iframe height follows guest content via ResizeObserver |
-| `mfeThemeTokens` | `/theme-tokens` | Salesforce CSS custom properties synced to guest |
-| `mfeDirtyState` | `/dirty-state` | Guest notifies host of unsaved changes |
+| `mfeBasicEmbed` | `/embedding/basic-embed` | Minimum viable embed using `<lightning-embedding>` — `chatSDK.getHostContext()` for connection detection |
+| `mfeReceiveData` | `/embedding/receive-data` | Host re-mounts `<lightning-embedding>` with new src carrying URL query params; guest reads via `URLSearchParams` and `viewSDK.getUiProps()` |
+| `mfeSendEvent` | `/embedding/send-event` | Guest calls `viewSDK.dispatchEvent(name, data)`; surface-level routing is host-runtime specific |
+| `mfeAutoResize` | `/embedding/auto-resize` | Guest tracks body height with ResizeObserver and calls `viewSDK.resize()` |
+| `mfeThemeTokens` | `/embedding/theme-tokens` | Guest reads host theme via `viewSDK.getTheme()` and the broader environment via `chatSDK.getHostContext()` |
+| `mfeDirtyState` | `/embedding/dirty-state` | Guest calls `viewSDK.markDirtyState()` / `clearDirtyState()` to signal unsaved changes |
 
 ### Pointing at a deployed external app
 
-For production or sandbox use, deploy the external app to a hosted URL and set the `baseUrl` property on each LWC host component to point at that URL instead of `localhost:4300`.
+For production or sandbox use, deploy the guest app to a hosted URL and set the `baseUrl` property on each LWC host component to point at that URL instead of `localhost:5173`.
 
 ## Local Development
 

@@ -12,7 +12,7 @@
  * @see FilteredList — adding a search filter with GraphQL variables
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 
 // Relay connection pattern: the response wraps records in edges[].node.
 const QUERY = gql`
@@ -82,7 +82,7 @@ export default function ListOfRecords() {
   useEffect(() => {
     const fetchContacts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<ListContactsResponse>({ query: QUERY });
+      const result = await sdk.graphql?.query<ListContactsResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

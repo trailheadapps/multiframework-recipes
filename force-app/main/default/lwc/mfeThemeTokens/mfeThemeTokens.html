@@ -1,16 +1,48 @@
 <template>
-    <lightning-card title="MFE Theme Tokens" icon-name="custom:custom59">
-        <div class="slds-p-around_medium">
-            <p class="slds-text-body_regular slds-m-bottom_medium">
-                Salesforce CSS custom properties are sent to the MFE automatically on connect.
-                Click Refresh to re-sync after a theme change.
-            </p>
-            <lightning-button
-                label="Refresh theme"
-                onclick={handleRefreshTheme}
-                class="slds-m-bottom_medium"
-            ></lightning-button>
-            <div class="shell-container" lwc:dom="manual"></div>
-        </div>
-    </lightning-card>
+    <div class="shell-container" style="height: 520px; display: flex; flex-direction: column; gap: 12px;">
+        <fieldset style="border: 1px solid #d1d5db; padding: 12px; border-radius: 6px;">
+            <legend style="font-weight: 600;">Host theme tokens</legend>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;">
+                <label style="display: flex; flex-direction: column; font-size: 12px;">
+                    Primary color
+                    <input type="color" value={brandPrimary} onchange={onPrimary} />
+                </label>
+                <label style="display: flex; flex-direction: column; font-size: 12px;">
+                    Background
+                    <input type="color" value={brandBackground} onchange={onBackground} />
+                </label>
+                <label style="display: flex; flex-direction: column; font-size: 12px;">
+                    Text color
+                    <input type="color" value={brandText} onchange={onText} />
+                </label>
+                <label style="display: flex; flex-direction: column; font-size: 12px;">
+                    Radius: {brandRadius}
+                    <input type="range" min="0" max="24" value={brandRadiusValue} onchange={onRadius} />
+                </label>
+                <label style="display: flex; flex-direction: column; font-size: 12px;">
+                    Spacing: {brandSpacing}
+                    <input type="range" min="4" max="32" value={brandSpacingValue} onchange={onSpacing} />
+                </label>
+                <label style="display: flex; flex-direction: column; font-size: 12px;">
+                    Font size: {brandFontSize}
+                    <input type="range" min="12" max="24" value={brandFontSizeValue} onchange={onFontSize} />
+                </label>
+            </div>
+            <div style="margin-top: 8px; display: flex; gap: 8px;">
+                <button type="button" onclick={applyLightPreset}>Light preset</button>
+                <button type="button" onclick={applyDarkPreset}>Dark preset</button>
+                <button type="button" onclick={applyBrandPreset}>Brand preset</button>
+            </div>
+        </fieldset>
+
+        <lightning-ui-embedding
+            lwc:ref="shell"
+            sandbox="allow-forms allow-modals"
+            shell-title="Theme Token Demo"
+            debug={debug}
+            src={computedSrc}
+            style={themeStyle}
+            props={themeProps}
+        ></lightning-ui-embedding>
+    </div>
 </template>

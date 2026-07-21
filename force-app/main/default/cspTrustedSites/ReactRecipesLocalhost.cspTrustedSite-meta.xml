@@ -3,8 +3,8 @@
     <canAccessCamera>false</canAccessCamera>
     <canAccessMicrophone>false</canAccessMicrophone>
     <context>All</context>
-    <description>Local MFE app dev server — allows the lwc-shell iframe to load from localhost:4300</description>
-    <endpointUrl>http://localhost:4300</endpointUrl>
+    <description>React Recipes dev server — allows the lightning-embedding iframe to load externally-hosted MFE recipe routes from localhost:5173</description>
+    <endpointUrl>http://localhost:5173</endpointUrl>
     <isActive>true</isActive>
     <isApplicableToConnectSrc>false</isApplicableToConnectSrc>
     <isApplicableToFontSrc>false</isApplicableToFontSrc>

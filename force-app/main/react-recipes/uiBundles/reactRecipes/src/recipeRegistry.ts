@@ -421,7 +421,7 @@ const rawRecipes: RawRecipeEntry[] = [
     recipeIndex: 0,
     name: 'Basic Embed',
     description:
-      'Minimum viable lwc-shell embed. Creates the shell imperatively, sets src and sandbox, and handles widget-ready.',
+      'Minimum viable embed using the standard <lightning-embedding> base component. The MFE detects the embedding context via chatSDK.getHostContext().',
   },
   {
     category: 'Embedding',
@@ -429,7 +429,7 @@ const rawRecipes: RawRecipeEntry[] = [
     recipeIndex: 1,
     name: 'Receive Data',
     description:
-      'Pushes data from the LWC host into the MFE via shell.updateData(). The MFE receives it with bridge.addEventListener(\'data\', handler).',
+      'Host re-mounts <lightning-embedding> with new src carrying URL query params. The MFE reads them via URLSearchParams and viewSDK.getUiProps().',
   },
   {
     category: 'Embedding',
@@ -437,7 +437,7 @@ const rawRecipes: RawRecipeEntry[] = [
     recipeIndex: 2,
     name: 'Send Event',
     description:
-      'The MFE dispatches custom events to the LWC host via bridge.dispatchEvent(). The host catches them on the shell element.',
+      'The MFE dispatches custom events to the host via viewSDK.dispatchEvent(name, data). Surface-level routing is host-runtime specific.',
   },
   {
     category: 'Embedding',
@@ -445,7 +445,7 @@ const rawRecipes: RawRecipeEntry[] = [
     recipeIndex: 3,
     name: 'Auto-Resize',
     description:
-      'The iframe height adjusts automatically as MFE content grows or shrinks via a ResizeObserver inside the iframe.',
+      'A ResizeObserver inside the MFE tracks body height; the guest calls viewSDK.resize() to ask the host to adjust the embedding container.',
   },
   {
     category: 'Embedding',
@@ -453,7 +453,7 @@ const rawRecipes: RawRecipeEntry[] = [
     recipeIndex: 4,
     name: 'Theme Tokens',
     description:
-      'Salesforce CSS custom properties are sent to the MFE on connect and re-synced on demand via shell.refreshTheme().',
+      'The MFE reads the host theme via viewSDK.getTheme() and the broader environment via chatSDK.getHostContext().',
   },
   {
     category: 'Embedding',
@@ -461,7 +461,7 @@ const rawRecipes: RawRecipeEntry[] = [
     recipeIndex: 5,
     name: 'Dirty State',
     description:
-      'The MFE notifies the host of unsaved changes via trackdirtystate events so the host can block navigation.',
+      'The MFE calls viewSDK.markDirtyState() / clearDirtyState() to signal unsaved changes to the host surface.',
   },
 ];
 

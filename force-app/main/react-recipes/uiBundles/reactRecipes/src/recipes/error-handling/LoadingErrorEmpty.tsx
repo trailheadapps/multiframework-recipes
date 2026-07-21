@@ -13,7 +13,7 @@
  * @see GraphqlErrors — inspecting GraphQL error objects
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import Skeleton from '@/components/recipe/Skeleton';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
@@ -89,7 +89,7 @@ export default function LoadingErrorEmpty() {
   function fetchContacts() {
     const run = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

@@ -17,7 +17,7 @@
  * @see ImperativeRefetch — re-fetching data on demand
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 
 // Aliases (accounts: Account, contacts: Contact) let us query two objects
 // in one round-trip. Each alias becomes a key in the response data.
@@ -68,7 +68,7 @@ export default function AliasedMultiObjectQuery() {
   useEffect(() => {
     const fetchCounts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

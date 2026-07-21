@@ -76,7 +76,7 @@ const categories = [
     to: '/embedding',
     name: 'Embedding',
     description:
-      'Embed an external framework app into Salesforce Lightning via lwc-shell. Covers the postMessage bridge: basic embed, receiving host data, dispatching events, auto-resize, theme tokens, and dirty state.',
+      'Embed an external framework app into Salesforce Lightning via <lightning-embedding>. Covers the Platform SDK: basic embed, receiving host props, dispatching events, auto-resize, theme tokens, and dirty state.',
   },
 ];
 
@@ -237,7 +237,7 @@ export default function Home() {
             icon={<Globe className="h-5 w-5 text-primary" />}
             title={HOSTING_LABEL['externally-hosted']}
             blurb={
-              'Host on AWS, Heroku, or your own infra; embed via lwc-shell. Best for existing apps and SaaS vendors.'
+              'Host on AWS, Heroku, or your own infra; embed via <lightning-embedding>. Best for existing apps and SaaS vendors.'
             }
             onClick={() => activate('externally-hosted')}
           />

@@ -11,7 +11,7 @@
  * @see ParentToChild — passing data from parent to child components via props
  */
 import { useEffect, useState } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 
 const QUERY = gql`
   query AccountList {
@@ -64,7 +64,7 @@ export default function ListOfAccounts() {
   useEffect(() => {
     const fetchAccounts = async () => {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

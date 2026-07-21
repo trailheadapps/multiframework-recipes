@@ -13,7 +13,7 @@
  * @see CreateRecord — creating new records with GraphQL mutations
  */
 import { useEffect, useState, useCallback } from 'react';
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Button } from '@/components/ui/button';
 
 const QUERY = gql`
@@ -73,7 +73,7 @@ export default function ImperativeRefetch() {
 
     try {
       const sdk = await createDataSDK();
-      const result = await sdk.graphql?.<QueryResponse>({ query: QUERY });
+      const result = await sdk.graphql?.query<QueryResponse>({ query: QUERY });
 
       if (result?.errors?.length) {
         throw new Error(

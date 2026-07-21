@@ -1,17 +1,32 @@
 <template>
     <lightning-card title="MFE Dirty State" icon-name="custom:custom59">
-        <div class="slds-p-around_medium">
+        <div class="slds-p-around_medium" ontrackdirtystate={handleDirtyState}>
             <p class="slds-text-body_regular slds-m-bottom_medium">
-                Type into any field in the MFE form. This component receives a
-                <code>trackdirtystate</code> event, re-dispatches it to Lightning
-                Experience (which blocks tab navigation), and attaches a
-                <code>beforeunload</code> handler so the browser also warns on
-                close or reload.
+                Edit the MFE form — the guest calls
+                <code>viewSDK.markDirtyState()</code> on every change and
+                <code>viewSDK.clearDirtyState()</code> after save. The host
+                surface decides how to honour the dirty signal (e.g. block
+                navigation).
             </p>
-            <div class={warningClass} role="alert">
-                <span>&#9888; {dirtyLabel} — save or discard before leaving.</span>
+
+            <template lwc:if={hasSignal}>
+                <div if:true={isDirty} class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-bottom_medium">
+                    Host received <code>trackdirtystate</code> — MFE is dirty
+                    <template lwc:if={label}>&nbsp;({label})</template>.
+                </div>
+                <div if:false={isDirty} class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_success slds-m-bottom_medium">
+                    Host received <code>trackdirtystate</code> — MFE is clean.
+                </div>
+            </template>
+
+            <div class="shell-container" style="height: 400px">
+                <lightning-ui-embedding
+                    sandbox="allow-forms allow-modals"
+                    shell-title="MFE Dirty State"
+                    debug={debug}
+                    src={computedSrc}
+                ></lightning-ui-embedding>
             </div>
-            <div class="shell-container" lwc:dom="manual"></div>
         </div>
     </lightning-card>
 </template>

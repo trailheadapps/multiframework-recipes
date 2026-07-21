@@ -1,4 +1,4 @@
-import { createDataSDK, gql } from '@salesforce/sdk-data';
+import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { GetContactsQuery } from './graphql-operations-types';
 
 const GET_CONTACTS = gql`
@@ -45,13 +45,13 @@ export type Contact = ContactNode;
 
 export async function getContacts(): Promise<(ContactNode | undefined)[]> {
   const sdk = await createDataSDK();
-  const result = await sdk.graphql?.<GetContactsQuery>({ query: GET_CONTACTS });
+  const result = await sdk.graphql?.query<GetContactsQuery>({ query: GET_CONTACTS });
 
   if (result?.errors?.length) {
     throw new Error(result.errors.map(e => e.message).join('; '));
   }
 
-  const connection = result?.data.uiapi?.query?.Contact;
+  const connection = result?.data?.uiapi?.query?.Contact;
 
   return (connection?.edges ?? [])
     .map(edge => edge?.node)

@@ -1,23 +1,15 @@
 import { LightningElement, api, track } from 'lwc';
-import 'c/vendorLwcShell';
 
 export default class MfeReceiveData extends LightningElement {
-    @api baseUrl = 'http://localhost:4300';
+    @api baseUrl = 'http://localhost:5173';
     @track inputValue = 'Hello from Salesforce';
-    _shellElement;
+    @track payload = {};
+    debug = true;
 
     get computedSrc() {
         const url = new URL(this.baseUrl);
-        url.pathname = '/receive-data';
+        url.pathname = '/embedding/receive-data';
         return url.toString();
-    }
-
-    renderedCallback() {
-        this._initializeShell();
-    }
-
-    disconnectedCallback() {
-        this._shellElement = null;
     }
 
     handleInputChange(evt) {
@@ -25,30 +17,12 @@ export default class MfeReceiveData extends LightningElement {
     }
 
     handleSend() {
-        if (!this._shellElement) {
-            return;
-        }
-        // updateData() sends a postMessage into the MFE iframe.
-        // The MFE receives it via bridge.addEventListener('data', handler).
-        this._shellElement.updateData({ message: this.inputValue, timestamp: Date.now() });
-    }
-
-    _initializeShell() {
-        if (this._shellElement) {
-            return;
-        }
-        const container = this.template.querySelector('.shell-container');
-        if (!container) {
-            return;
-        }
-        const shell = document.createElement('lwc-shell');
-        shell.sandbox = 'allow-forms allow-modals';
-        shell.title = 'MFE Receive Data';
-        shell.src = this.computedSrc;
-        shell.addEventListener('widget-ready', () => {
-            this._shellElement.updateData({ message: this.inputValue, timestamp: Date.now() });
-        });
-        container.appendChild(shell);
-        this._shellElement = shell;
+        // `props` on <lightning-ui-embedding> is the canonical host → guest channel
+        // (ui/notifications/ui-state). Each new object identity schedules a
+        // ui-state-changed flush; the guest sees it as `state.props`.
+        this.payload = {
+            message: this.inputValue,
+            timestamp: Date.now(),
+        };
     }
 }

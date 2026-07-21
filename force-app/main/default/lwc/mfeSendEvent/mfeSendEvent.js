@@ -1,50 +1,46 @@
 import { LightningElement, api, track } from 'lwc';
-import 'c/vendorLwcShell';
 
 export default class MfeSendEvent extends LightningElement {
-    @api baseUrl = 'http://localhost:4300';
+    @api baseUrl = 'http://localhost:5173';
+    debug = false;
+
     @track lastAction = '';
-    _shellElement;
+    @track lastReceivedAt = '';
+    @track receivedCount = 0;
+
+    _handler;
 
     get computedSrc() {
         const url = new URL(this.baseUrl);
-        url.pathname = '/send-event';
+        url.pathname = '/embedding/send-event';
         return url.toString();
     }
 
     renderedCallback() {
-        this._initializeShell();
+        if (this._handler) return;
+        // 'mfe-action' contains a hyphen, which LWC's template `on<eventname>`
+        // binding does not accept. Register imperatively instead — the event
+        // bubbles + composes out of <lightning-ui-embedding>, so any ancestor
+        // element inside this template catches it.
+        const host = this.refs?.host;
+        if (!host) return;
+        this._handler = (evt) => this.handleMfeAction(evt);
+        host.addEventListener('mfe-action', this._handler);
     }
 
     disconnectedCallback() {
-        this._shellElement = null;
+        if (this._handler) {
+            this.refs?.host?.removeEventListener('mfe-action', this._handler);
+            this._handler = undefined;
+        }
     }
 
-    _initializeShell() {
-        if (this._shellElement) {
-            return;
-        }
-        const container = this.template.querySelector('.shell-container');
-        if (!container) {
-            return;
-        }
-        const shell = document.createElement('lwc-shell');
-        shell.sandbox = 'allow-forms allow-modals';
-        shell.title = 'MFE Send Event';
-        shell.src = this.computedSrc;
-
-        // MFE dispatches bridge.dispatchEvent(new CustomEvent('mfe-action', { detail }))
-        // lwc-shell re-dispatches it here as a DOM event on the shell element.
-        shell.addEventListener('mfe-action', (evt) => {
-            this.lastAction = `${evt.detail.action} at ${new Date(evt.detail.timestamp).toLocaleTimeString()}`;
-        });
-
-        shell.addEventListener('widget-ready', () => {
-            // eslint-disable-next-line no-console
-            console.log('[MfeSendEvent] widget-ready');
-        });
-
-        container.appendChild(shell);
-        this._shellElement = shell;
+    handleMfeAction(evt) {
+        const { action, timestamp } = evt.detail ?? {};
+        this.lastAction = typeof action === 'string' ? action : '';
+        this.lastReceivedAt = timestamp
+            ? new Date(timestamp).toLocaleTimeString()
+            : new Date().toLocaleTimeString();
+        this.receivedCount += 1;
     }
 }
