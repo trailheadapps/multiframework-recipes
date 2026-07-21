@@ -20,7 +20,7 @@ export default class MfeSendEvent extends LightningElement {
         if (this._handler) return;
         // 'mfe-action' contains a hyphen, which LWC's template `on<eventname>`
         // binding does not accept. Register imperatively instead — the event
-        // bubbles + composes out of <lightning-embedding>, so any ancestor
+        // bubbles + composes out of <lightning-ui-embedding>, so any ancestor
         // element inside this template catches it.
         const host = this.refs?.host;
         if (!host) return;

@@ -5,17 +5,17 @@
                 Add or remove items in the MFE — the guest's bootstrap-attached
                 <code>EmbeddingResizer</code> sends
                 <code>ui/notifications/resize</code> and
-                <code>&lt;lightning-embedding&gt;</code> applies the height to
+                <code>&lt;lightning-ui-embedding&gt;</code> applies the height to
                 its inner iframe.
             </p>
             <div class="shell-container">
-                <lightning-embedding
+                <lightning-ui-embedding
                     class="auto-resize-embed"
                     sandbox="allow-forms allow-modals"
                     shell-title="MFE Auto-Resize"
                     debug={debug}
                     src={computedSrc}
-                ></lightning-embedding>
+                ></lightning-ui-embedding>
             </div>
         </div>
     </lightning-card>

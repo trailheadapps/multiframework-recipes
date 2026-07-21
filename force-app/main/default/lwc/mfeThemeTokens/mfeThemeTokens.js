@@ -2,7 +2,7 @@ import { LightningElement, api, track } from 'lwc';
 
 /**
  * Demo host LWC that pushes host-owned theme tokens into an embedded iframe
- * via CSS custom properties on <lightning-embedding>.
+ * via CSS custom properties on <lightning-ui-embedding>.
  *
  * The bridge's `ui-state.styles.variables` channel mirrors CSS custom
  * properties (`--*`) from the host element's inline style down to the guest.
@@ -39,7 +39,7 @@ export default class ThemeTokenEmbed extends LightningElement {
     }
 
     // Tokens are published on TWO bridge channels so the guest reflects
-    // changes regardless of the deployed <lightning-embedding> version:
+    // changes regardless of the deployed <lightning-ui-embedding> version:
     //
     //   1. `style={themeStyle}` — inline CSS custom properties. Newer base
     //      components forward these as `state.styles.variables`.

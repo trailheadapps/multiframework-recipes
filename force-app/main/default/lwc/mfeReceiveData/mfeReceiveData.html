@@ -3,7 +3,7 @@
         <div class="slds-p-around_medium">
             <p class="slds-text-body_regular slds-m-bottom_medium">
                 Type a message and click Send — the host publishes it via the
-                <code>props</code> binding on <code>&lt;lightning-embedding&gt;</code>.
+                <code>props</code> binding on <code>&lt;lightning-ui-embedding&gt;</code>.
                 The guest reads it through <code>viewSDK.getUiState()</code>.
             </p>
             <div class="slds-form-element slds-m-bottom_small">
@@ -20,13 +20,13 @@
                 class="slds-m-bottom_medium"
             ></lightning-button>
             <div class="shell-container" style="height: 400px">
-                <lightning-embedding
+                <lightning-ui-embedding
                     sandbox="allow-forms allow-modals"
                     shell-title="MFE Receive Data"
                     debug={debug}
                     src={computedSrc}
                     props={payload}
-                ></lightning-embedding>
+                ></lightning-ui-embedding>
             </div>
         </div>
     </lightning-card>

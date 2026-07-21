@@ -14,7 +14,7 @@ export default class MfeDirtyState extends LightningElement {
         return url.toString();
     }
 
-    // Fires when <lightning-embedding> re-dispatches the wire event on the LWC.
+    // Fires when <lightning-ui-embedding> re-dispatches the wire event on the LWC.
     // The event bubbles + composes, so any ancestor of the embedding can listen.
     handleDirtyState(evt) {
         const { isDirty, label } = evt.detail ?? {};

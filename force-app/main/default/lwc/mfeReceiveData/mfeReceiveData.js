@@ -17,7 +17,7 @@ export default class MfeReceiveData extends LightningElement {
     }
 
     handleSend() {
-        // `props` on <lightning-embedding> is the canonical host → guest channel
+        // `props` on <lightning-ui-embedding> is the canonical host → guest channel
         // (ui/notifications/ui-state). Each new object identity schedules a
         // ui-state-changed flush; the guest sees it as `state.props`.
         this.payload = {

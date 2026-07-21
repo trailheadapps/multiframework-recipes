@@ -5,7 +5,7 @@
                 Click an action button in the MFE — the guest calls
                 <code>view.dispatchEvent(new CustomEvent('mfe-action', &#123; detail &#125;))</code>.
                 The bridge forwards it over the wire and
-                <code>&lt;lightning-embedding&gt;</code> re-dispatches it as a
+                <code>&lt;lightning-ui-embedding&gt;</code> re-dispatches it as a
                 bubbling DOM event this LWC catches.
             </p>
 
@@ -21,12 +21,12 @@
             </template>
 
             <div class="shell-container" style="height: 400px">
-                <lightning-embedding
+                <lightning-ui-embedding
                     sandbox="allow-forms allow-modals"
                     shell-title="MFE Send Event"
                     debug={debug}
                     src={computedSrc}
-                ></lightning-embedding>
+                ></lightning-ui-embedding>
             </div>
         </div>
     </lightning-card>

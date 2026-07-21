@@ -1,4 +1,4 @@
-/* Override lightning-embedding's default :host { height: 100% }. The bridge
+/* Override lightning-ui-embedding's default :host { height: 100% }. The bridge
  * sets an explicit height in px on the inner iframe when the guest sends
  * ui/notifications/resize; letting the host element flow means the LWC
  * grows/shrinks to that height instead of clipping/scrolling inside a
