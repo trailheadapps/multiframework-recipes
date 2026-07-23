@@ -8,10 +8,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: "Checkout source code"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.0
 
       - name: "Setup Node"
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4.0.0
         with:
           node-version-file: "package.json"
           cache: npm
@@ -19,7 +19,7 @@ jobs:
 
       - name: "Restore React app node_modules cache"
         id: cache-react-npm
-        uses: actions/cache@v4
+        uses: actions/cache@v6.0.0
         with:
           path: force-app/main/react-recipes/uiBundles/reactRecipes/node_modules
           key: windows-react-npm-${{ hashFiles('force-app/main/react-recipes/uiBundles/reactRecipes/package-lock.json') }}

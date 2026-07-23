@@ -35,16 +35,16 @@ jobs:
     steps:
       # Checkout the source code
       - name: "Checkout source code"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.0
 
       # Install Volta to enforce proper node and package manager versions
       - name: "Install Volta"
-        uses: volta-cli/action@v4
+        uses: volta-cli/action@v5.0.0
 
       # Cache node_modules to speed up the process
       - name: "Restore node_modules cache"
         id: cache-npm
-        uses: actions/cache@v4
+        uses: actions/cache@v6.0.0
         with:
           path: node_modules
           key: npm-${{ hashFiles('**/package-lock.json') }}
@@ -60,7 +60,7 @@ jobs:
       # Cache React app node_modules
       - name: "Restore React app node_modules cache"
         id: cache-react-npm
-        uses: actions/cache@v4
+        uses: actions/cache@v6.0.0
         with:
           path: force-app/main/react-recipes/uiBundles/reactRecipes/node_modules
           key: react-npm-${{ hashFiles('force-app/main/react-recipes/uiBundles/reactRecipes/package-lock.json') }}
@@ -80,7 +80,7 @@ jobs:
 
       # Upload code coverage data
       - name: "Upload code coverage for React to Codecov.io"
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: multiframework-recipes
@@ -92,7 +92,7 @@ jobs:
       # Cache Playwright browsers
       - name: "Restore Playwright browser cache"
         id: cache-playwright
-        uses: actions/cache@v4
+        uses: actions/cache@v6.0.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ hashFiles('force-app/main/react-recipes/uiBundles/reactRecipes/package-lock.json') }}
@@ -139,7 +139,7 @@ jobs:
       # Run Code Analyzer
       - name: "Run Code Analyzer"
         id: run-code-analyzer
-        uses: forcedotcom/run-code-analyzer@v2
+        uses: forcedotcom/run-code-analyzer@v2.12.0
         with:
           run-arguments: --workspace "force-app/main" --view detail --output-file "sca-results.csv" --config-file "code-analyzer.yml"
           results-artifact-name: code-analyzer-results
@@ -165,7 +165,7 @@ jobs:
     steps:
       # Checkout the source code
       - name: "Checkout source code"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.0
 
       # Install Salesforce CLI
       - name: "Install Salesforce CLI"
@@ -234,7 +234,7 @@ jobs:
 
       # Upload code coverage data
       - name: "Upload code coverage for Apex to Codecov.io"
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: Apex
@@ -258,7 +258,7 @@ jobs:
     steps:
       - name: "Fetch Dependabot metadata"
         id: dependabot
-        uses: dependabot/fetch-metadata@v2
+        uses: dependabot/fetch-metadata@v3.1.0
 
       - name: "Check auto merge conditions"
         id: auto-merge
