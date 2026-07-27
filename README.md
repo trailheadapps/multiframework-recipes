@@ -11,7 +11,7 @@ This sample application is designed to run on the Salesforce Platform. It covers
 
 > Multi-Framework currently supports **React**, with additional frameworks coming over time.
 
-**Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/reactdev-overview.html) for a comprehensive overview.
+**Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/multiframework/guide) for a comprehensive overview.
 
 ## Architecture
 
