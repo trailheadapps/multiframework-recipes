@@ -1,0 +1,83 @@
+<template>
+  <div class="recipe-body">
+    <div class="controls">
+      <lightning-button
+        label={toggleLabel}
+        icon-name="utility:refresh"
+        onclick={handleToggle}
+      ></lightning-button>
+    </div>
+    <!-- When the embedding reports an error we show the detail instead of the
+         empty iframe. The guest URL never loads on a same-origin src, so
+         there is nothing useful to display underneath. -->
+    <template lwc:if={hasError}>
+      <div class="error-panel slds-box slds-theme_error">
+        <p class="error-headline">
+          <lightning-icon
+            icon-name="utility:error"
+            size="x-small"
+            variant="inverse"
+            alternative-text="Error"
+            class="slds-m-right_x-small"
+          ></lightning-icon>
+          The guest failed to load
+        </p>
+        <dl class="error-detail">
+          <dt>Phase</dt>
+          <dd>{error.phase}</dd>
+          <dt>Code</dt>
+          <dd><code>{error.code}</code></dd>
+          <dt>Message</dt>
+          <dd>{error.message}</dd>
+          <dt>Retryable</dt>
+          <dd>{error.retryable}</dd>
+        </dl>
+      </div>
+    </template>
+    <div class="shell-container">
+      <!-- src is session-binding: it can't be reassigned on a live element.
+           lwc:if mounts one embedding or the other, so switching between them
+           remounts a fresh component with the new src. -->
+      <template lwc:if={forceError}>
+        <lightning-ui-embedding
+          sandbox="allow-popups"
+          shell-title="Error State"
+          src={brokenSrc}
+        ></lightning-ui-embedding>
+      </template>
+      <template lwc:else>
+        <lightning-ui-embedding
+          sandbox="allow-popups"
+          shell-title="Error State"
+          src={guestSrc}
+          props={account}
+        ></lightning-ui-embedding>
+      </template>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        This embed points src at the host's own origin, which the SDK rejects
+        because embeddings must load cross-origin. Instead of a blank frame,
+        &lt;lightning-ui-embedding&gt; fires sf-embedding.component.error and
+        the host shows what failed. Use the button to reload with the real guest
+        URL.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingErrorState"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingErrorState)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>

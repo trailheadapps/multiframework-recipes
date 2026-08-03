@@ -1,0 +1,59 @@
+<template>
+  <div class="recipe-body">
+    <div class="shell-container">
+      <!-- The spinner overlays the embed until the guest's SDK handshake
+           completes. lwc:if swaps it out the moment `ready` flips true. -->
+      <template lwc:if={ready}>
+        <lightning-badge
+          label="Guest ready"
+          icon-name="utility:success"
+          class="slds-m-bottom_x-small status-badge status-badge_ready"
+        ></lightning-badge>
+      </template>
+      <template lwc:else>
+        <div class="waiting">
+          <div class="spinner-box">
+            <lightning-spinner
+              alternative-text="Waiting for the guest to become ready"
+              size="small"
+            ></lightning-spinner>
+          </div>
+          <span class="waiting-label"
+            >Waiting for the guest SDK handshake…</span
+          >
+        </div>
+      </template>
+      <lightning-ui-embedding
+        lwc:ref="embedding"
+        sandbox="allow-popups"
+        shell-title="Ready State"
+        src={computedSrc}
+        props={account}
+      ></lightning-ui-embedding>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        The host waits for sf-embedding.component.ready before it trusts the
+        guest. That event fires when the guest's Platform SDK handshake
+        completes — the real "guest is interactive" signal, unlike the native
+        iframe load event, which only means the document parsed.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingReadyState"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingReadyState)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
