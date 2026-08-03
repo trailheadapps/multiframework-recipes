@@ -1,5 +1,7 @@
 # React Recipes
 
+![React Recipes](uiBundles/reactRecipes/react-recipes.webp)
+
 A Salesforce UI Bundle demonstrating how to build a React app that runs directly on the Salesforce platform. The bundle is built with Vite + TypeScript and deployed to the org as a single artifact; Salesforce serves the static assets.
 
 ```mermaid

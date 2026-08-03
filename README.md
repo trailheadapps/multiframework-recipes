@@ -3,7 +3,7 @@
 [![CI](https://github.com/trailheadapps/multiframework-recipes/actions/workflows/ci.yml/badge.svg)](https://github.com/trailheadapps/multiframework-recipes/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/trailheadapps/multiframework-recipes/branch/main/graph/badge.svg)](https://codecov.io/gh/trailheadapps/multiframework-recipes)
 
-![React Recipes](force-app/main/react-recipes/uiBundles/reactRecipes/react-recipes.png)
+![Multiframework Recipes](multiframework-recipes.webp)
 
 A collection of easy-to-digest code examples for building apps on the Salesforce platform using modern frontend frameworks. Each recipe teaches one concept in the fewest lines of code possible while following best practices, with an inline source viewer so you can see exactly how it works.
 

@@ -1,5 +1,7 @@
 # Microfrontend Recipes
 
+![Microfrontend Recipes](../../../microfrontend-recipes.webp)
+
 Recipes that show how to embed an externally hosted framework app into Salesforce via the standard `<lightning-embedding>` base component. Each recipe is a pair: an LWC host component deployed to the org, and a small React guest served by a Vite dev server on an `/embedding/*` route.
 
 ## How the pieces fit together
