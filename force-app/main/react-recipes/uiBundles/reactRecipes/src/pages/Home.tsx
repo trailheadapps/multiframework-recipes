@@ -84,7 +84,7 @@ export default function Home() {
             Get Started
           </button>
           <a
-            href="https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/reactdev-overview.html"
+            href="https://developer.salesforce.com/docs/platform/multiframework/guide"
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2.5 rounded-lg border border-border text-sm font-medium text-foreground hover:bg-accent transition-colors"
