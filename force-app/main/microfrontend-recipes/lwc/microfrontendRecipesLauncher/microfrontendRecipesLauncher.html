@@ -1,0 +1,22 @@
+<template>
+  <div class="hero">
+    <div class="content">
+      <h1>Microfrontend Recipes</h1>
+      <p class="lead">
+        Each recipe lives on the Account record page. Open any Account to see
+        all six embedding demos as expandable accordion sections — Basic Render,
+        Read Host Data, Send To Host, Auto-Resize, Theme Tokens, and Unsaved
+        Changes.
+      </p>
+      <template lwc:if={error}>
+        <p class="slds-text-color_error">{error}</p>
+      </template>
+      <lightning-button
+        variant="brand"
+        label="Open a demo Account"
+        onclick={handleOpen}
+        disabled={disabled}
+      ></lightning-button>
+    </div>
+  </div>
+</template>

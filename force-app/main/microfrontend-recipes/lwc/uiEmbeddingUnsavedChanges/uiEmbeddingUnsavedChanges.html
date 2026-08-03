@@ -1,0 +1,51 @@
+<template>
+  <div
+    class="recipe-body"
+    ontrackdirtystate={handleTrackDirtyState}
+    onguestsave={handleSave}
+  >
+    <div class="badge-row">
+      <template lwc:if={isDirty}>
+        <lightning-badge
+          label="Unsaved changes"
+          class="slds-theme_warning"
+        ></lightning-badge>
+      </template>
+      <template lwc:else>
+        <lightning-badge label="Saved"></lightning-badge>
+      </template>
+    </div>
+    <div class="shell-container">
+      <lightning-embedding
+        sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox"
+        shell-title="Unsaved Changes"
+        src={computedSrc}
+        props={account}
+      ></lightning-embedding>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        Edit the guest form. The React app calls
+        <code>viewSDK.markDirtyState()</code> when values change; this LWC
+        listens for <code>trackdirtystate</code> and updates the badge.
+        Salesforce also warns before navigating away while dirty.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingUnsavedChanges"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingUnsavedChanges)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>

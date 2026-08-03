@@ -1,0 +1,44 @@
+<template>
+  <div class="recipe-body">
+    <div class="shell-container">
+      <!-- <lightning-embedding> is the base component that mounts the guest
+           iframe and runs the SDK bridge on top of it.
+             sandbox     — standard HTML iframe sandbox tokens; MDN reference:
+                           https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe#sandbox
+             shell-title — accessible title applied to the iframe element
+             src         — the guest URL (baseUrl + a per-recipe route)
+             props       — object shipped to the guest through ui-state; the
+                           guest reads it via viewSDK.getUiState()
+           Every recipe uses the same shape; only shell-title, src, and props change. -->
+      <lightning-embedding
+        sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox"
+        shell-title="Basic Render"
+        src={computedSrc}
+        props={account}
+      ></lightning-embedding>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        This card is served from an external URL and embedded in the Lightning
+        page as an iframe via <code>&lt;lightning-embedding&gt;</code>. It reads
+        Account fields the host pushes via <code>viewSDK.getUiState()</code>.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingBasicRender"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingBasicRender)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>

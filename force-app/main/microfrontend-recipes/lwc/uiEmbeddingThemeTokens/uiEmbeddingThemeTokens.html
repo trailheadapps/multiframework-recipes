@@ -1,0 +1,56 @@
+<template>
+  <div class="recipe-body">
+    <div class="controls">
+      <lightning-button-group>
+        <lightning-button
+          label="Light"
+          variant={lightVariant}
+          onclick={setLight}
+        ></lightning-button>
+        <lightning-button
+          label="Dark"
+          variant={darkVariant}
+          onclick={setDark}
+        ></lightning-button>
+        <lightning-button
+          label="Salesforce"
+          variant={salesforceVariant}
+          onclick={setSalesforce}
+        ></lightning-button>
+      </lightning-button-group>
+    </div>
+    <div class="shell-container">
+      <lightning-embedding
+        sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox"
+        shell-title="Theme Tokens"
+        src={computedSrc}
+        props={payload}
+      ></lightning-embedding>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        The host sends a theme <em>name</em> (<code
+          >light | dark | salesforce</code
+        >) as <code>props.theme</code>. The guest owns what each name means — it
+        toggles a class on its root and its CSS variables flip. No token values
+        cross the wire.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingThemeTokens"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingThemeTokens)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>

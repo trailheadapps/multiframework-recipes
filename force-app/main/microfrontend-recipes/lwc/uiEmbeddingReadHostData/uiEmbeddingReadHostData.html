@@ -1,0 +1,55 @@
+<template>
+  <div class="recipe-body">
+    <div class="split">
+      <template lwc:if={recordId}>
+        <lightning-record-edit-form
+          record-id={recordId}
+          object-api-name="Account"
+          class="edit-panel"
+        >
+          <lightning-input-field field-name="Name"></lightning-input-field>
+          <lightning-input-field field-name="Rating"></lightning-input-field>
+          <lightning-input-field field-name="Type"></lightning-input-field>
+          <lightning-button
+            class="slds-m-top_small"
+            type="submit"
+            label="Save"
+            variant="brand"
+          ></lightning-button>
+        </lightning-record-edit-form>
+      </template>
+      <div class="shell-container">
+        <lightning-embedding
+          sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox"
+          shell-title="Read Host Data"
+          src={computedSrc}
+          props={account}
+        ></lightning-embedding>
+      </div>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        Edit any field and save. The <code>@wire(getRecord)</code> re-fires with
+        fresh data, this LWC rebuilds <code>account</code> with a new object
+        identity, and the guest sees the change via
+        <code>viewSDK.getUiState()</code>.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingReadHostData"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingReadHostData)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>

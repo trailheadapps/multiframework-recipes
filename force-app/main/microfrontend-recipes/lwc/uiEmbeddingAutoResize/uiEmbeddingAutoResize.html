@@ -1,0 +1,43 @@
+<template>
+  <div class="recipe-body">
+    <div class="shell-container">
+      <lightning-embedding
+        class="auto-resize-embed"
+        sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox"
+        shell-title="Auto Resize"
+        src={computedSrc}
+      ></lightning-embedding>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        Add or remove items in the React app. No SDK call is needed: the guest's
+        bundled <code>EmbeddingResizer</code> observes
+        <code>document.body</code>, sends a
+        <code>ui/notifications/resize</code> message on every change, and
+        <code>&lt;lightning-embedding&gt;</code> applies the new height. Use
+        <code>viewSDK.resize(width, height)</code> to override manually.
+      </p>
+      <p class="recipe-description">
+        The <code>auto-resize-embed</code> CSS class overrides
+        <code>lightning-embedding</code>'s default <code>height: 100%</code> so
+        the LWC flows to the iframe's pixel height instead of clipping.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingAutoResize"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingAutoResize)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>

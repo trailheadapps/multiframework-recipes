@@ -1,0 +1,37 @@
+<template>
+  <div class="recipe-body">
+    <div class="shell-container">
+      <lightning-embedding
+        sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox"
+        shell-title="Send To Host"
+        src={computedSrc}
+        props={account}
+        onscore={handleScore}
+      ></lightning-embedding>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        Click a cell in the scoring matrix. The guest fires a
+        <code>score</code> event with <code>rating</code> and <code>type</code>
+        via <code>viewSDK.dispatchEvent()</code>. This LWC writes them to
+        Salesforce with <code>updateRecord</code>.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingSendToHost"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingSendToHost)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
