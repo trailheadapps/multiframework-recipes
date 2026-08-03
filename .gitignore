@@ -7,9 +7,16 @@
 .sfdx/
 .localdevserver/
 deploy-options.json
+*/dist
 
 # LWC VSCode autocomplete
 jsconfig.json
+
+#dist
+dist/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
 
 # LWC Jest coverage reports
 coverage/
@@ -54,6 +61,12 @@ sfca_results.json
 schema.graphql
 
 # Playwright e2e test results:
-playwright-report/                                                                                            
-test-results/                                                                                                 
-  
+playwright-report/
+test-results/
+
+# Local E2E org scratch (auth, node_modules, reports, .env)
+e2e-org/
+
+# GUS audit artifacts (Salesforce-internal)
+.gus/
+

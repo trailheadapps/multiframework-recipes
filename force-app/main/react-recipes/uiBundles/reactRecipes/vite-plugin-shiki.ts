@@ -3,9 +3,11 @@
  *
  * Import any file with `?shiki` to get pre-highlighted HTML:
  *
- *   import html from './MyComponent.tsx?shiki';
+ *   import html from './MyComponent.tsx?shiki';       // tsx + twoslash
+ *   import html from './Component.js?shiki=js';       // js, no twoslash
+ *   import html from './Component.html?shiki=html';   // html
  *
- * Uses shiki with material-theme-darker and twoslash for hover types.
+ * Uses shiki with material-theme-darker. Only tsx uses twoslash for hover types.
  */
 import { readFile } from 'node:fs/promises';
 import { createHighlighter, type Highlighter } from 'shiki';
@@ -15,8 +17,6 @@ import {
 } from '@shikijs/twoslash';
 import type { Plugin } from 'vite';
 import baseTheme from 'shiki/themes/material-theme-darker.mjs';
-
-const SHIKI_QUERY = 'shiki';
 
 // Brighten comments (#545454 is too dim on the dark background)
 const theme = {
@@ -58,7 +58,7 @@ function getHighlighter() {
   if (!highlighterPromise) {
     highlighterPromise = createHighlighter({
       themes: [theme],
-      langs: ['tsx', 'graphql', gqlInjection as any],
+      langs: ['tsx', 'javascript', 'html', 'graphql', gqlInjection as any],
     });
   }
   return highlighterPromise;
@@ -87,22 +87,32 @@ export default function shikiPlugin(): Plugin {
 
     async load(id) {
       const [filePath, query] = id.split('?');
-      if (query !== SHIKI_QUERY) return;
+      if (!query?.startsWith('shiki')) return;
 
+      // ?shiki → tsx (default, uses twoslash)
+      // ?shiki=js → javascript
+      // ?shiki=html → html
+      const lang = query === 'shiki' ? 'tsx' : query.slice('shiki='.length);
       const source = await readFile(filePath, 'utf-8');
       const highlighter = await getHighlighter();
 
       let html: string;
-      try {
-        html = highlighter.codeToHtml(`// @noErrors\n${source}`, {
-          lang: 'tsx',
-          theme: 'material-theme-darker',
-          transformers: [twoslash],
-        });
-      } catch {
-        // Fall back to plain highlighting if twoslash fails
+      if (lang === 'tsx') {
+        try {
+          html = highlighter.codeToHtml(`// @noErrors\n${source}`, {
+            lang: 'tsx',
+            theme: 'material-theme-darker',
+            transformers: [twoslash],
+          });
+        } catch {
+          html = highlighter.codeToHtml(source, {
+            lang: 'tsx',
+            theme: 'material-theme-darker',
+          });
+        }
+      } else {
         html = highlighter.codeToHtml(source, {
-          lang: 'tsx',
+          lang,
           theme: 'material-theme-darker',
         });
       }
