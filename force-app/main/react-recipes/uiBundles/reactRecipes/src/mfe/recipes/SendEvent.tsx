@@ -35,6 +35,7 @@ export default function SendEvent() {
         // The host listens: shell.addEventListener('mfe-action', handler)
         view.dispatchEvent?.(
             new CustomEvent('mfe-action', {
+                // eslint-disable-next-line react-hooks/purity -- runs in an event handler, not render
                 detail: { action, timestamp: Date.now() },
                 bubbles: true,
                 composed: true,
