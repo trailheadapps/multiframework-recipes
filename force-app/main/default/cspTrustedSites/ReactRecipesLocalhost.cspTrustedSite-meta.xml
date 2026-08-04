@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <CspTrustedSite xmlns="http://soap.sforce.com/2006/04/metadata">
     <canAccessCamera>false</canAccessCamera>
     <canAccessMicrophone>false</canAccessMicrophone>
     <context>All</context>
-    <description>React Recipes dev server — allows the lightning-embedding iframe to load externally-hosted MFE recipe routes from localhost:5173</description>
+    <description
+  >React Recipes dev server — allows the lightning-embedding iframe to load externally-hosted MFE recipe routes from localhost:5173</description>
     <endpointUrl>http://localhost:5173</endpointUrl>
     <isActive>true</isActive>
     <isApplicableToConnectSrc>false</isApplicableToConnectSrc>
