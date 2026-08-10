@@ -1,0 +1,39 @@
+<template>
+    <lightning-card title="MFE Receive Event" icon-name="custom:custom59">
+        <div class="slds-p-around_medium">
+            <p class="slds-text-body_regular slds-m-bottom_medium">
+                Click Notify — the host calls
+                <code>embedding.dispatchEvent(new CustomEvent('host-notify', &#123; detail &#125;))</code>.
+                The bridge forwards it to the guest, which hears it via
+                <code>viewSDK.addEventListener('host-notify', ...)</code>.
+            </p>
+
+            <lightning-button
+                label="Notify MFE"
+                variant="brand"
+                onclick={handleNotify}
+                class="slds-m-bottom_medium"
+            ></lightning-button>
+
+            <template lwc:if={sentCount}>
+                <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                    <p class="slds-text-title_caps">Last push</p>
+                    <p><strong>sent:</strong> {lastSentAt}</p>
+                    <p class="slds-text-body_small">
+                        <strong>total sent:</strong> {sentCount}
+                    </p>
+                </div>
+            </template>
+
+            <div class="shell-container" style="height: 400px">
+                <lightning-ui-embedding
+                    lwc:ref="embedding"
+                    sandbox="allow-forms allow-modals"
+                    shell-title="MFE Receive Event"
+                    debug={debug}
+                    src={computedSrc}
+                ></lightning-ui-embedding>
+            </div>
+        </div>
+    </lightning-card>
+</template>

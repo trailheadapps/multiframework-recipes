@@ -39,6 +39,8 @@ import type { Framework, Hosting } from '@/recipeRegistry';
 import basicEmbedMfe from '../mfe/recipes/BasicEmbed.tsx?shiki';
 import receiveDataMfe from '../mfe/recipes/ReceiveData.tsx?shiki';
 import sendEventMfe from '../mfe/recipes/SendEvent.tsx?shiki';
+import receiveEventMfe from '../mfe/recipes/ReceiveEvent.tsx?shiki';
+import cancelableEventMfe from '../mfe/recipes/CancelableEvent.tsx?shiki';
 import autoResizeMfe from '../mfe/recipes/AutoResize.tsx?shiki';
 import themeTokensMfe from '../mfe/recipes/ThemeTokens.tsx?shiki';
 import dirtyStateMfe from '../mfe/recipes/DirtyState.tsx?shiki';
@@ -47,6 +49,8 @@ import dirtyStateMfe from '../mfe/recipes/DirtyState.tsx?shiki';
 import basicEmbedJs from '../../../../../default/lwc/mfeBasicEmbed/mfeBasicEmbed.js?shiki=js';
 import receiveDataJs from '../../../../../default/lwc/mfeReceiveData/mfeReceiveData.js?shiki=js';
 import sendEventJs from '../../../../../default/lwc/mfeSendEvent/mfeSendEvent.js?shiki=js';
+import receiveEventJs from '../../../../../default/lwc/mfeReceiveEvent/mfeReceiveEvent.js?shiki=js';
+import cancelableEventJs from '../../../../../default/lwc/mfeCancelableEvent/mfeCancelableEvent.js?shiki=js';
 import autoResizeJs from '../../../../../default/lwc/mfeAutoResize/mfeAutoResize.js?shiki=js';
 import themeTokensJs from '../../../../../default/lwc/mfeThemeTokens/mfeThemeTokens.js?shiki=js';
 import dirtyStateJs from '../../../../../default/lwc/mfeDirtyState/mfeDirtyState.js?shiki=js';
@@ -55,6 +59,8 @@ import dirtyStateJs from '../../../../../default/lwc/mfeDirtyState/mfeDirtyState
 import basicEmbedHtml from '../../../../../default/lwc/mfeBasicEmbed/mfeBasicEmbed.html?shiki=html';
 import receiveDataHtml from '../../../../../default/lwc/mfeReceiveData/mfeReceiveData.html?shiki=html';
 import sendEventHtml from '../../../../../default/lwc/mfeSendEvent/mfeSendEvent.html?shiki=html';
+import receiveEventHtml from '../../../../../default/lwc/mfeReceiveEvent/mfeReceiveEvent.html?shiki=html';
+import cancelableEventHtml from '../../../../../default/lwc/mfeCancelableEvent/mfeCancelableEvent.html?shiki=html';
 import autoResizeHtml from '../../../../../default/lwc/mfeAutoResize/mfeAutoResize.html?shiki=html';
 import themeTokensHtml from '../../../../../default/lwc/mfeThemeTokens/mfeThemeTokens.html?shiki=html';
 import dirtyStateHtml from '../../../../../default/lwc/mfeDirtyState/mfeDirtyState.html?shiki=html';
@@ -116,6 +122,34 @@ const recipes: MfeRecipe[] = [
         mfeSource: sendEventMfe,
         lwcJsSource: sendEventJs,
         lwcHtmlSource: sendEventHtml,
+      },
+    ],
+  },
+  {
+    name: 'Receive Event',
+    description:
+      'The host dispatches a CustomEvent on <lightning-ui-embedding>; the MFE hears it via viewSDK.addEventListener(name, handler) with the payload on event.detail. Mirror of Send Event.',
+    flavors: [
+      {
+        hosting: 'externally-hosted',
+        framework: 'react',
+        mfeSource: receiveEventMfe,
+        lwcJsSource: receiveEventJs,
+        lwcHtmlSource: receiveEventHtml,
+      },
+    ],
+  },
+  {
+    name: 'Cancelable Event',
+    description:
+      'The host dispatches a cancelable event; the MFE vetoes locally with event.preventDefault() and reports the decision back with viewSDK.dispatchEvent(), since a fire-and-forget event’s preventDefault() does not round-trip to the host.',
+    flavors: [
+      {
+        hosting: 'externally-hosted',
+        framework: 'react',
+        mfeSource: cancelableEventMfe,
+        lwcJsSource: cancelableEventJs,
+        lwcHtmlSource: cancelableEventHtml,
       },
     ],
   },
