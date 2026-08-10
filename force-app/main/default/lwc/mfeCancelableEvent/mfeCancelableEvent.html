@@ -1,0 +1,37 @@
+<template>
+    <lightning-card title="MFE Cancelable Event" icon-name="custom:custom59">
+        <div class="slds-p-around_medium">
+            <p class="slds-text-body_regular slds-m-bottom_medium">
+                Click Check submit — the host dispatches a cancelable
+                <code>submit-check</code> event. The guest vetoes locally with
+                <code>preventDefault()</code> when its form is empty, then reports the
+                outcome back via a <code>submit-decision</code> event this LWC catches.
+            </p>
+
+            <lightning-button
+                label="Check submit"
+                variant="brand"
+                onclick={handleCheck}
+                class="slds-m-bottom_medium"
+            ></lightning-button>
+
+            <template lwc:if={lastDecision}>
+                <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                    <p class="slds-text-title_caps">Guest decision</p>
+                    <p><strong>result:</strong> <code>{lastDecision}</code></p>
+                    <p class="slds-text-body_small"><strong>checked:</strong> {lastCheckedAt}</p>
+                </div>
+            </template>
+
+            <div class="shell-container" style="height: 400px">
+                <lightning-ui-embedding
+                    lwc:ref="embedding"
+                    sandbox="allow-forms allow-modals"
+                    shell-title="MFE Cancelable Event"
+                    debug={debug}
+                    src={computedSrc}
+                ></lightning-ui-embedding>
+            </div>
+        </div>
+    </lightning-card>
+</template>

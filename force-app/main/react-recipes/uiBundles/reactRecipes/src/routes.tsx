@@ -21,6 +21,8 @@ import GuestLayout from './mfe/GuestLayout';
 import BasicEmbed from './mfe/recipes/BasicEmbed';
 import ReceiveData from './mfe/recipes/ReceiveData';
 import SendEvent from './mfe/recipes/SendEvent';
+import ReceiveEvent from './mfe/recipes/ReceiveEvent';
+import CancelableEvent from './mfe/recipes/CancelableEvent';
 import AutoResize from './mfe/recipes/AutoResize';
 import ThemeTokens from './mfe/recipes/ThemeTokens';
 import DirtyState from './mfe/recipes/DirtyState';
@@ -124,6 +126,8 @@ export const routes: RouteObject[] = [
       { path: 'embedding/basic-embed', element: <BasicEmbed /> },
       { path: 'embedding/receive-data', element: <ReceiveData /> },
       { path: 'embedding/send-event', element: <SendEvent /> },
+      { path: 'embedding/receive-event', element: <ReceiveEvent /> },
+      { path: 'embedding/cancelable-event', element: <CancelableEvent /> },
       { path: 'embedding/auto-resize', element: <AutoResize /> },
       { path: 'embedding/theme-tokens', element: <ThemeTokens /> },
       { path: 'embedding/dirty-state', element: <DirtyState /> },

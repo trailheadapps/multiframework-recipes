@@ -443,6 +443,22 @@ const rawRecipes: RawRecipeEntry[] = [
     category: 'Embedding',
     categoryRoute: '/embedding',
     recipeIndex: 3,
+    name: 'Receive Event',
+    description:
+      'The host dispatches a CustomEvent on <lightning-ui-embedding>; the MFE hears it via viewSDK.addEventListener(name, handler) with the payload on event.detail. Mirror of Send Event.',
+  },
+  {
+    category: 'Embedding',
+    categoryRoute: '/embedding',
+    recipeIndex: 4,
+    name: 'Cancelable Event',
+    description:
+      'The host dispatches a cancelable event; the MFE vetoes locally with event.preventDefault() and reports the decision back with viewSDK.dispatchEvent(), since a fire-and-forget event’s preventDefault() does not round-trip to the host.',
+  },
+  {
+    category: 'Embedding',
+    categoryRoute: '/embedding',
+    recipeIndex: 5,
     name: 'Auto-Resize',
     description:
       'A ResizeObserver inside the MFE tracks body height; the guest calls viewSDK.resize() to ask the host to adjust the embedding container.',
@@ -450,7 +466,7 @@ const rawRecipes: RawRecipeEntry[] = [
   {
     category: 'Embedding',
     categoryRoute: '/embedding',
-    recipeIndex: 4,
+    recipeIndex: 6,
     name: 'Theme Tokens',
     description:
       'The MFE reads the host theme via viewSDK.getTheme() and the broader environment via chatSDK.getHostContext().',
@@ -458,7 +474,7 @@ const rawRecipes: RawRecipeEntry[] = [
   {
     category: 'Embedding',
     categoryRoute: '/embedding',
-    recipeIndex: 5,
+    recipeIndex: 7,
     name: 'Dirty State',
     description:
       'The MFE calls viewSDK.markDirtyState() / clearDirtyState() to signal unsaved changes to the host surface.',
