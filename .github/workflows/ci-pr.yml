@@ -91,6 +91,10 @@ jobs:
       - name: "Test React"
         run: npm run test:react -- --run --coverage
 
+      # Run LWC Jest tests (microfrontend host components)
+      - name: "Test LWC"
+        run: npm run test:unit
+
       # Upload code coverage data
       - name: "Upload code coverage for React to Codecov.io"
         uses: codecov/codecov-action@v7.0.0

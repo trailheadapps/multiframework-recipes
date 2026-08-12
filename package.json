@@ -31,6 +31,8 @@
     "install:react": "npm install --prefix force-app/main/react-recipes/uiBundles/reactRecipes",
     "install:angular": "npm install --prefix force-app/main/angular-recipes/uiBundles/angularRecipes",
     "install:all": "npm run install:react && npm run install:angular",
+    "test:unit": "sfdx-lwc-jest",
+    "test:unit:coverage": "sfdx-lwc-jest --coverage",
     "prettier": "prettier --write \"**/*.{cls,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --check \"**/*.{cls,trigger,xml,yaml,yml}\"",
     "precommit": "lint-staged"
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "@prettier/plugin-xml": "^3.4.2",
+    "@salesforce/sfdx-lwc-jest": "^7.9.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.4.1",
     "prettier": "^3.9.6",
