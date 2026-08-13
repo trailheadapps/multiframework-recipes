@@ -26,7 +26,7 @@ export default function Styling() {
     {
       name: 'Account Card — shadcn/ui',
       description:
-        "Account card built with shadcn/ui Card + Tailwind CSS. This is the approach used by the app shell itself. Best for custom UIs that don't need to match the Salesforce visual style. Contrast with the SLDS Blueprint and DSR variants.",
+        "Account card built with shadcn/ui Card + Tailwind CSS. This is the approach used by the app shell itself. Best for custom UIs that don't need to match the Salesforce visual style. Contrast with the SLDS Blueprint variant.",
       component: <AccountCardShadcn />,
       source: accountCardShadcnSource,
     },

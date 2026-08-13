@@ -25,7 +25,7 @@
     {
       "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/app.tsx",
       "line": 1,
-      "description": "## Router Setup\n\nThe app module creates the React Router instance and renders it into the DOM:\n\n1. `createBrowserRouter(routes, { basename })` -- creates a router with all routes defined in `routes.tsx`. The `basename` comes from Salesforce's runtime environment so routes work under the platform's URL prefix.\n2. `createRoot(document.getElementById('root')!)` -- mounts React to the `#root` div from `index.html`.\n3. `IconSettings` wraps the app to configure SLDS icon sprite paths.\n\nThis is the bridge between a standard React app and the Salesforce platform."
+      "description": "## Router Setup\n\nThe app module creates the React Router instance and renders it into the DOM:\n\n1. `createBrowserRouter(routes, { basename })` -- creates a router with all routes defined in `routes.tsx`. The `basename` comes from Salesforce's runtime environment so routes work under the platform's URL prefix.\n2. `createRoot(document.getElementById('root')!)` -- mounts React to the `#root` div from `index.html`.\n\nThis is the bridge between a standard React app and the Salesforce platform."
     },
     {
       "file": "force-app/main/react-recipes/uiBundles/reactRecipes/src/routes.tsx",
