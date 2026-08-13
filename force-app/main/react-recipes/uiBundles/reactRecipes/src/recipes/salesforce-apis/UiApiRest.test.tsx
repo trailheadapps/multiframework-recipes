@@ -12,10 +12,6 @@ vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
 }));
 
-vi.mock('@salesforce/design-system-react', () => ({
-  Card: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-}));
-
 // Radix Avatar defers <img> rendering until onLoad fires (no-op in jsdom)
 vi.mock('@/components/ui/avatar', () => ({
   Avatar: ({ children, ...props }: Record<string, unknown> & { children?: React.ReactNode }) => <span {...props}>{children}</span>,

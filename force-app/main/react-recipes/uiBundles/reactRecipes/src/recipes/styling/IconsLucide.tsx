@@ -5,7 +5,7 @@
  * tree-shaken, stroke-based, and sized via className. Great for custom UIs
  * that don't need to match the Salesforce visual system.
  *
- * @see IconsDSR — same icons with design-system-react Icon component
+ * @see IconsSLDS — same icons via SLDS SVG sprite references
  */
 import {
   Home,

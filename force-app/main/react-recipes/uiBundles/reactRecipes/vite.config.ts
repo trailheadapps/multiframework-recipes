@@ -34,11 +34,6 @@ export default defineConfig(({ mode }) => {
         : []),
     ] as import('vite').PluginOption[],
 
-    // design-system-react ships CJS — pre-bundle for Vite's ESM dev server
-    optimizeDeps: {
-      include: ['@salesforce/design-system-react'],
-    },
-
     // Build configuration for MPA
     build: {
       outDir: resolve(__dirname, 'dist'),
