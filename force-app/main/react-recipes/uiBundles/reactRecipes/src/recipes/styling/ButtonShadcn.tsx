@@ -5,7 +5,7 @@
  * Ideal for custom UIs that don't need to match the Salesforce look and feel.
  * This is the button system used throughout this app's own shell.
  *
- * @see ButtonDSR — same buttons with design-system-react components
+ * @see ButtonSLDS — same buttons with SLDS blueprint CSS classes
  */
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2, ChevronDown, Upload } from 'lucide-react';

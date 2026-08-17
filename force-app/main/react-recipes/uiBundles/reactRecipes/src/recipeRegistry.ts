@@ -253,14 +253,6 @@ export const recipeRegistry: RecipeEntry[] = [
     category: 'Styling',
     categoryRoute: '/styling',
     recipeIndex: 1,
-    name: 'Account Card — SLDS React',
-    description:
-      'Account data rendered with the Card component from design-system-react.',
-  },
-  {
-    category: 'Styling',
-    categoryRoute: '/styling',
-    recipeIndex: 2,
     name: 'Account Card — shadcn/ui',
     description:
       'Account card built with shadcn/ui Card + Tailwind CSS.',
@@ -268,7 +260,7 @@ export const recipeRegistry: RecipeEntry[] = [
   {
     category: 'Styling',
     categoryRoute: '/styling',
-    recipeIndex: 3,
+    recipeIndex: 2,
     name: 'Icons — SLDS Blueprint',
     description:
       'SLDS icons via SVG sprite references — utility, standard, and action categories.',
@@ -276,15 +268,7 @@ export const recipeRegistry: RecipeEntry[] = [
   {
     category: 'Styling',
     categoryRoute: '/styling',
-    recipeIndex: 4,
-    name: 'Icons — SLDS React',
-    description:
-      'SLDS icons rendered via the Icon component from design-system-react.',
-  },
-  {
-    category: 'Styling',
-    categoryRoute: '/styling',
-    recipeIndex: 5,
+    recipeIndex: 3,
     name: 'Icons — Lucide',
     description:
       'Lucide icons as individual React components — stroke-based, tree-shakeable, and fully typed.',
@@ -292,7 +276,7 @@ export const recipeRegistry: RecipeEntry[] = [
   {
     category: 'Styling',
     categoryRoute: '/styling',
-    recipeIndex: 6,
+    recipeIndex: 4,
     name: 'Button — SLDS Blueprint',
     description:
       'All standard SLDS button variants using slds-button classes.',
@@ -300,15 +284,7 @@ export const recipeRegistry: RecipeEntry[] = [
   {
     category: 'Styling',
     categoryRoute: '/styling',
-    recipeIndex: 7,
-    name: 'Button — SLDS React',
-    description:
-      'Button variants via the Button component from design-system-react.',
-  },
-  {
-    category: 'Styling',
-    categoryRoute: '/styling',
-    recipeIndex: 8,
+    recipeIndex: 5,
     name: 'Button — shadcn/ui',
     description:
       'shadcn/ui Button with all six variants, three sizes, and icon composition.',

@@ -44,7 +44,7 @@ const categories = [
     to: '/styling',
     name: 'Styling',
     description:
-      'Style components using SLDS utility classes, SLDS React (Design System React) components, and shadcn/ui with Tailwind CSS.',
+      'Style components using SLDS blueprint classes, shadcn/ui with Tailwind CSS, and Lucide icons.',
   },
   {
     to: '/routing',

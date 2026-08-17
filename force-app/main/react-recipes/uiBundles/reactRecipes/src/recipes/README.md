@@ -54,12 +54,9 @@ Work through the categories in this order. Each builds on concepts from the prev
 | Routing | UseNavigate | useNavigate() returns an imperative navigate function for programmatic navigation. |
 | Styling | ButtonSLDS | All standard SLDS button variants using slds-button classes applied directly to button elements. |
 | Styling | ButtonShadcn | Button variants from shadcn/ui using Tailwind CSS and class-variance-authority. |
-| Styling | ButtonDSR | Same variants as ButtonSLDS using the Button component from design-system-react. |
 | Styling | AccountCardSLDS | Displays Account data using SLDS blueprint CSS classes on plain JSX markup. |
 | Styling | AccountCardShadcn | Same Account data displayed using shadcn/ui Card components and Tailwind. |
-| Styling | AccountCardDSR | Same Account data rendered with the Card component from design-system-react. |
 | Styling | IconsSLDS | SLDS icons via SVG sprite sheet references. |
 | Styling | IconsLucide | Lucide icons as individual React components, tree-shaken and stroke-based. |
-| Styling | IconsDSR | Same icons as IconsSLDS via the Icon component from design-system-react. |
 | Integration | SearchableAccountList | A controlled search input drives a GraphQL variable that filters Accounts by name with debounce. |
 | Integration | DashboardAliasedQueries | Fetches Accounts, Contacts, and Opportunities in a single GraphQL request using aliases. |

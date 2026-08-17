@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import { routes } from '@/routes';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { IconSettings } from '@salesforce/design-system-react';
 import './styles/global.css';
 import './styles/slds.css';
 
@@ -14,8 +13,6 @@ const router = createBrowserRouter(routes, { basename });
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <IconSettings iconPath="/assets/icons">
-      <RouterProvider router={router} />
-    </IconSettings>
+    <RouterProvider router={router} />
   </StrictMode>
 );

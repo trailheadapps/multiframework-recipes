@@ -18,10 +18,6 @@ vi.mock('@salesforce/platform-sdk', () => ({
   gql: (strings: TemplateStringsArray) => strings.join(''),
 }));
 
-vi.mock('@salesforce/design-system-react', () => ({
-  Card: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-}));
-
 const CONTACTS_SUCCESS = {
   data: {
     uiapi: {

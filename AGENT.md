@@ -309,11 +309,10 @@ Current routes: `/hello`, `/read-data`, `/modify-data`, `/authentication`, `/err
 
 ## Styling
 
-The app uses **three styling approaches** (recipes demonstrate all three):
+The app uses **two styling approaches** (recipes demonstrate both):
 
 1. **Tailwind + shadcn/ui** -- Used for the app shell. Import from `@/components/ui/...`.
 2. **SLDS CSS blueprints** -- `@salesforce-ux/design-system` classes applied to JSX (`slds-card`, `slds-table`, etc.)
-3. **SLDS React Components** -- From [design-system-react](https://github.com/salesforce/design-system-react). Note: pins an older SLDS CSS version.
 
 Global styles: `src/styles/global.css` (Tailwind + CSS variables), `src/styles/slds.css` (SLDS imports).
 

@@ -5,7 +5,7 @@
  * Uses a neutral design system built on Radix UI primitives — best for
  * custom UIs that don't need to match the Salesforce look and feel.
  *
- * @see AccountCardDSR — same card with design-system-react components
+ * @see AccountCardSLDS — same card with SLDS blueprint CSS classes
  */
 import {
   Card,
