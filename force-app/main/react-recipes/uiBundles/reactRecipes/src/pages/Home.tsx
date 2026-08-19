@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { Code2 } from 'lucide-react';
+import { ArrowRight, Code2, Lightbulb } from 'lucide-react';
 import {
   Card,
   CardHeader,
@@ -91,6 +91,25 @@ export default function Home() {
           >
             View Developer Guide
           </a>
+        </div>
+
+        {/* Aside pointing to the microfrontend guests. Placed in the hero (with
+            a clear gap from the CTA above) so it's seen without scrolling, but
+            kept as an obvious muted tip so it doesn't compete with Get Started.
+            The persistent nav link reinforces it; the full story lives on the
+            page it links to. */}
+        <div className="border-border/70 bg-muted/40 mt-8 flex w-fit max-w-full items-center gap-3 rounded-xl border px-4 py-3">
+          <Lightbulb className="text-primary size-5 shrink-0" aria-hidden />
+          <p className="text-muted-foreground text-sm">
+            This app also serves guest views for embedding in Salesforce.{' '}
+            <button
+              onClick={() => navigate('/embedding')}
+              className="text-primary inline-flex items-center gap-1 font-medium hover:underline"
+            >
+              Browse the guest recipes
+              <ArrowRight className="size-3.5" aria-hidden />
+            </button>
+          </p>
         </div>
       </div>
 

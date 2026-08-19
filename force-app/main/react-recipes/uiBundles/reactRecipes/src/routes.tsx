@@ -14,6 +14,7 @@ import Routing, {
   NestedRoutesPage,
 } from './pages/Routing';
 import Integration from './pages/Integration';
+import Embedding from './pages/Embedding';
 import { RouteParametersDetail } from './recipes/routing/RouteParameters';
 import NestedRoutes, {
   NestedRoutesIndex,
@@ -101,6 +102,13 @@ export const routes: RouteObject[] = [
         path: 'integration',
         element: <Integration />,
         handle: { showInNavigation: true, label: 'Integration' },
+      },
+      {
+        // Index of the embedding guests. Reached from the Home callout, not
+        // the navbar — it lists the guest routes below and links out to their
+        // source. The guest routes themselves live under GuestLayout (below).
+        path: 'embedding',
+        element: <Embedding />,
       },
       {
         path: '*',
