@@ -62,19 +62,17 @@ graph LR
    sf org create scratch -d -f config/project-scratch-def.json -a recipes
    ```
 
-1. Install dependencies and build React Recipes:
+1. Install dependencies and build the app:
 
    ```bash
-   cd force-app/main/react-recipes/uiBundles/reactRecipes
-   npm install
+   npm run install:all
    npm run build
-   cd ../../../../..
    ```
 
 1. Deploy metadata and the UI bundle:
 
    ```bash
-   sf project deploy start
+   sf project deploy start --source-dir force-app
    ```
 
 1. Assign the **recipes** permission set to the default user:
@@ -128,19 +126,17 @@ graph LR
    cd multiframework-recipes
    ```
 
-1. Install dependencies and build React Recipes:
+1. Install dependencies and build the app:
 
    ```bash
-   cd force-app/main/react-recipes/uiBundles/reactRecipes
-   npm install
+   npm run install:all
    npm run build
-   cd ../../../../..
    ```
 
 1. Deploy metadata and the UI bundle:
 
    ```bash
-   sf project deploy start
+   sf project deploy start --source-dir force-app
    ```
 
 1. Assign the **recipes** permission set to the default user:
@@ -172,22 +168,16 @@ graph LR
 
 ## Local Development
 
-Start the Vite development server with hot module replacement:
+Start the development server with hot reload:
 
 ```bash
 npm run dev
 ```
 
-Build the app for production:
+Build for production:
 
 ```bash
 npm run build
-```
-
-Preview the production build locally:
-
-```bash
-npm run preview
 ```
 
 ## Testing

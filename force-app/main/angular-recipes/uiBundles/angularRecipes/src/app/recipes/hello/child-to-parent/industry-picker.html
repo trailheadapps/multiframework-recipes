@@ -1,0 +1,13 @@
+<div class="space-y-1">
+	<label class="text-sm font-medium" for="industry-picker">Pick an Industry</label>
+	<select
+		id="industry-picker"
+		class="w-full rounded-md border border-input px-3 py-2 text-sm"
+		(change)="industrySelected.emit($any($event.target).value)"
+	>
+		<option value="" disabled selected>— Select —</option>
+		@for (industry of industries; track industry) {
+			<option [value]="industry">{{ industry }}</option>
+		}
+	</select>
+</div>

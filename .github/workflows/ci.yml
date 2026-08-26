@@ -53,13 +53,26 @@ jobs:
         if: steps.cache-react-npm.outputs.cache-hit != 'true'
         run: npm ci --prefix force-app/main/react-recipes/uiBundles/reactRecipes
 
-      # Lint React app
+      # Cache Angular app node_modules
+      - name: "Restore Angular app node_modules cache"
+        id: cache-angular-npm
+        uses: actions/cache@v6.0.0
+        with:
+          path: force-app/main/angular-recipes/uiBundles/angularRecipes/node_modules
+          key: angular-npm-${{ hashFiles('force-app/main/angular-recipes/uiBundles/angularRecipes/package-lock.json') }}
+
+      # Install Angular app dependencies
+      - name: "Install Angular app dependencies"
+        if: steps.cache-angular-npm.outputs.cache-hit != 'true'
+        run: npm ci --prefix force-app/main/angular-recipes/uiBundles/angularRecipes
+
+      # Lint both apps
       - name: "Lint"
         run: npm run lint
 
       # Run React tests with coverage
-      - name: "Test"
-        run: npm run test -- --run --coverage
+      - name: "Test React"
+        run: npm run test:react -- --run --coverage
 
       # Upload code coverage data
       - name: "Upload code coverage for React to Codecov.io"
@@ -68,7 +81,12 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: multiframework-recipes
 
-      # Build React app
+      # Run Angular tests
+      - name: "Test Angular"
+        run: npm test -- --watch=false
+        working-directory: force-app/main/angular-recipes/uiBundles/angularRecipes
+
+      # Build both apps
       - name: "Build"
         run: npm run build
 
@@ -185,9 +203,9 @@ jobs:
         run: npm run build
         working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
 
-      # Deploy to scratch org
+      # Deploy to scratch org (Angular Recipes is excluded via .forceignore)
       - name: "Deploy source to scratch org"
-        run: sf project deploy start
+        run: sf project deploy start --source-dir force-app
 
       # Assign permissionset
       - name: "Assign permissionset to default user"

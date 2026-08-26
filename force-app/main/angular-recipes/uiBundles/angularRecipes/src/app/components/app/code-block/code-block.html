@@ -1,0 +1,55 @@
+<div class="w-full h-full flex flex-col rounded-lg overflow-hidden shadow-sm text-xs bg-[#212121]">
+	<!-- Title bar: window controls (green toggles code width) + copy. -->
+	<div
+		class="flex items-center justify-between gap-1.5 px-3 py-2 bg-[#2b2b2b] border-b border-[#383838] shrink-0"
+	>
+		<div class="flex items-center gap-1.5">
+			<span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span>
+			<span class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></span>
+			<button
+				type="button"
+				(click)="toggleExpand.emit()"
+				class="w-2.5 h-2.5 rounded-full bg-green-400/80 hover:bg-green-300 transition-colors cursor-pointer"
+				[title]="expanded() ? 'Collapse code' : 'Expand code'"
+				[attr.aria-label]="expanded() ? 'Collapse code' : 'Expand code'"
+			></button>
+		</div>
+
+		<button
+			type="button"
+			(click)="copy()"
+			class="flex items-center gap-1 text-[10px] text-indigo-300/60 hover:text-indigo-300 transition-colors cursor-pointer"
+			title="Copy source code"
+			aria-label="Copy source code"
+		>
+			<ng-icon [name]="copied() ? 'lucideCheck' : 'lucideCopy'" size="0.75rem" />
+			<span class="font-mono">{{ copied() ? 'Copied' : 'Copy' }}</span>
+		</button>
+	</div>
+
+	<!-- File tabs: one per recipe file, labelled with the file name. -->
+	<div class="flex items-stretch bg-[#252525] border-b border-[#383838] shrink-0" role="tablist">
+		@for (source of sources(); track source.label; let i = $index) {
+			<button
+				type="button"
+				role="tab"
+				[attr.aria-selected]="i === activeIndex()"
+				(click)="select(i)"
+				class="px-3 py-1.5 font-mono text-[11px] border-r border-[#383838] transition-colors"
+				[class]="
+					i === activeIndex()
+						? 'bg-[#212121] text-indigo-200'
+						: 'text-indigo-300/50 hover:text-indigo-300 hover:bg-[#2b2b2b]'
+				"
+			>
+				{{ source.label }}
+			</button>
+		}
+	</div>
+
+	<div
+		role="tabpanel"
+		class="flex-1 overflow-auto [&_pre]:!m-0 [&_pre]:!rounded-none [&_pre]:!text-[inherit] [&_pre]:!bg-[#212121] [&_pre]:!p-3 [&_pre]:!min-h-full [&_pre]:box-border [&_pre]:[tab-size:2]"
+		[innerHTML]="activeHtml()"
+	></div>
+</div>

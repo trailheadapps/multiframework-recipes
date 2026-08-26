@@ -1,0 +1,12 @@
+@if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (accounts(); as accounts) {
+	<div class="flex gap-4">
+		<!-- Each Account is passed to a child via inputs — not fetched again. -->
+		@for (account of accounts; track account.id) {
+			<app-account-card [name]="account.name" [industry]="account.industry" />
+		}
+	</div>
+} @else {
+	<p class="text-sm">Loading…</p>
+}

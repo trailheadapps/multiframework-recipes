@@ -1,0 +1,33 @@
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { AppLayoutComponent } from './app-layout';
+
+describe('AppLayoutComponent', () => {
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [AppLayoutComponent],
+			providers: [provideRouter([])],
+		}).compileComponents();
+	});
+
+	it('should create the component', () => {
+		const fixture = TestBed.createComponent(AppLayoutComponent);
+		expect(fixture.componentInstance).toBeTruthy();
+	});
+
+	it('should expose category navigation items', () => {
+		const fixture = TestBed.createComponent(AppLayoutComponent);
+		const items = fixture.componentInstance.navigationItems;
+		expect(items.length).toBeGreaterThan(0);
+		expect(items[0].path).toBe('/hello');
+	});
+
+	it('should render the header, nav, and search bar', async () => {
+		const fixture = TestBed.createComponent(AppLayoutComponent);
+		await fixture.whenStable();
+		const compiled = fixture.nativeElement as HTMLElement;
+		expect(compiled.querySelector('header')).toBeTruthy();
+		expect(compiled.querySelector('nav')).toBeTruthy();
+		expect(compiled.querySelector('app-search-bar')).toBeTruthy();
+	});
+});

@@ -1,0 +1,5 @@
+@if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else {
+	<p class="text-lg font-semibold">{{ name() ?? 'Loading…' }}</p>
+}

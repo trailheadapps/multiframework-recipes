@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/@spartan-ng/cli/src/generators/ui/schema.json",
+  "componentsPath": "src/app/shared",
+  "importAlias": "@spartan-ng/styles",
+  "style": "nova"
+}

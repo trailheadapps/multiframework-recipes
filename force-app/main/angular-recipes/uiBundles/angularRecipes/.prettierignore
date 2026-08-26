@@ -1,0 +1,8 @@
+node_modules
+dist
+.angular
+coverage
+*.min.js
+*.min.css
+*.map
+package-lock.json

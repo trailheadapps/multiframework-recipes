@@ -1,0 +1,46 @@
+<main class="py-10">
+	<div class="mb-12">
+		<div class="flex items-center gap-3 mb-4">
+			<ng-icon name="lucideCode" size="2.5rem" class="text-[#dd0031]" />
+			<h1 class="text-4xl font-bold tracking-tight text-foreground">Angular Recipes</h1>
+		</div>
+		<p class="text-xl text-muted-foreground mb-6 max-w-xl">
+			Sample patterns for building Angular web apps on Salesforce
+		</p>
+		<div class="flex gap-3">
+			<a
+				routerLink="/hello"
+				class="px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity"
+			>
+				Get Started
+			</a>
+		</div>
+	</div>
+
+	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+		@for (cat of categories; track cat.to) {
+			<a
+				[routerLink]="cat.to"
+				class="text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
+			>
+				<app-card
+					class="h-full border-border/70 shadow-none hover:border-primary/50 hover:shadow-sm transition-all cursor-pointer"
+				>
+					<app-card-header>
+						<div class="flex items-center justify-between gap-2">
+							<app-card-title class="text-base text-primary">{{ cat.name }}</app-card-title>
+							<span
+								class="shrink-0 rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground"
+							>
+								{{ cat.count }} recipes
+							</span>
+						</div>
+						<app-card-description class="text-sm leading-relaxed">
+							{{ cat.description }}
+						</app-card-description>
+					</app-card-header>
+				</app-card>
+			</a>
+		}
+	</div>
+</main>

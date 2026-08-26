@@ -1,0 +1,65 @@
+<app-recipe-gallery header="Hello">
+	<ng-template
+		appRecipe="Hello World"
+		description="The simplest possible Salesforce web application component. An Angular component renders inside a Salesforce web app exactly like any other Angular app — no special wiring required."
+		[sources]="helloWorldSources"
+	>
+		<app-hello-world />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Binding to an Account Name"
+		description="Fetches an Account via UIAPI GraphQL and binds the Name field to the template. Introduces the { value } wrapper that Salesforce GraphQL uses for all scalar fields."
+		[sources]="bindingSources"
+	>
+		<app-binding-account-name />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Conditional Rendering"
+		description="Fetches an Account and conditionally renders different UI based on the Industry picklist value, using the @if / @else control-flow blocks with real Salesforce data."
+		[sources]="conditionalSources"
+	>
+		<app-conditional-status />
+	</ng-template>
+
+	<ng-template
+		appRecipe="List Rendering (For Each)"
+		description="Fetches Accounts via GraphQL and renders them with the @for block. Each item tracks the record Id — the Angular equivalent of LWC's for:each key."
+		[sources]="listSources"
+	>
+		<app-list-of-accounts />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Lifecycle (Fetch on Mount)"
+		description="Fetches a Contact in ngOnInit. A destroyed flag checked in ngOnDestroy prevents state updates after the component is removed — the Angular equivalent of disconnectedCallback."
+		[sources]="lifecycleSources"
+	>
+		<app-lifecycle-fetch />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Parent-to-Child (Inputs)"
+		description="The parent fetches Accounts via GraphQL and passes each one to a child component as inputs. The child is a pure display component — the Angular equivalent of LWC's @api properties."
+		[sources]="parentSources"
+	>
+		<app-parent-to-child />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Child-to-Parent (Outputs)"
+		description="A child component presents an Industry selector and emits an output when the user picks a value. The parent fetches matching Accounts. Angular equivalent of LWC's CustomEvent."
+		[sources]="childSources"
+	>
+		<app-child-to-parent />
+	</ng-template>
+
+	<ng-template
+		appRecipe="State Management (Shared State)"
+		description="Two sibling components share a selected Account by lifting state to their common parent. In LWC you'd reach for the Lightning Message Service; in Angular the idiomatic answer is lifting it to the nearest common ancestor."
+		[sources]="stateSources"
+	>
+		<app-state-management />
+	</ng-template>
+</app-recipe-gallery>

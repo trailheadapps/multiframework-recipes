@@ -19,3 +19,6 @@ package.xml
 
 node_modules/
 .DS_Store
+
+# Angular Recipes — not ready to ship yet; excluded from deploy until then
+force-app/main/angular-recipes/**

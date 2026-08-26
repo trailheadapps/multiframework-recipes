@@ -1,0 +1,13 @@
+<ul class="list-none">
+	@for (account of accounts(); track account.id) {
+		<li class="py-1">
+			<app-button
+				class="w-full"
+				[appearance]="account.id === selectedId() ? 'filled' : 'outlined'"
+				(clicked)="accountSelected.emit(account.id)"
+			>
+				{{ account.name }}
+			</app-button>
+		</li>
+	}
+</ul>

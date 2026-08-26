@@ -1,0 +1,20 @@
+@if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (accounts().length === 0) {
+	<p class="text-sm">Loading…</p>
+} @else {
+	<div class="flex gap-4">
+		<!-- Sibling 1: selects an Account -->
+		<div class="w-1/2">
+			<app-account-selector
+				[accounts]="accounts()"
+				[selectedId]="selectedId()"
+				(accountSelected)="selectedId.set($event)"
+			/>
+		</div>
+		<!-- Sibling 2: displays the selection -->
+		<div class="w-1/2">
+			<app-account-detail [account]="selected()" />
+		</div>
+	</div>
+}

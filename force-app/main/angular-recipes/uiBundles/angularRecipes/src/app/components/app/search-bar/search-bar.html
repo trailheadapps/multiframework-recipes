@@ -1,0 +1,74 @@
+<button
+	type="button"
+	(click)="openSearch()"
+	class="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+>
+	<app-icon name="search" size="0.875rem" />
+	<span class="hidden sm:inline">Search recipes...</span>
+	<kbd
+		class="pointer-events-none hidden sm:inline-flex h-5 items-center gap-0.5 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground"
+	>
+		{{ isMac ? '⌘' : 'Ctrl+' }}K
+	</kbd>
+</button>
+
+@if (open()) {
+	<button
+		type="button"
+		class="fixed inset-0 z-40 cursor-default"
+		aria-label="Close search"
+		(click)="close()"
+	></button>
+
+	<div
+		class="absolute right-0 top-full mt-2 z-50 w-[420px] rounded-xl border border-border bg-background shadow-lg"
+	>
+		<div class="flex items-center gap-2 border-b border-border px-3">
+			<app-icon name="search" size="1rem" class="text-muted-foreground shrink-0" />
+			<input
+				#searchInput
+				[value]="query()"
+				(input)="updateQuery(searchInput.value)"
+				(keydown)="onInputKey($event)"
+				placeholder="Search all recipes..."
+				aria-label="Search all recipes"
+				class="h-10 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+			/>
+		</div>
+
+		<div class="max-h-80 overflow-y-auto p-2">
+			@if (!query().trim()) {
+				<p class="py-6 text-center text-sm text-muted-foreground">
+					Type to search across all recipes...
+				</p>
+			} @else if (flatResults().length === 0) {
+				<p class="py-6 text-center text-sm text-muted-foreground">No recipes found.</p>
+			} @else {
+				@for (group of groups(); track group.category) {
+					<div class="mb-1 last:mb-0">
+						<div class="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+							{{ group.category }}
+						</div>
+						@for (entry of group.entries; track entry.name) {
+							<button
+								type="button"
+								(click)="navigateTo(entry)"
+								class="w-full text-left rounded-md px-2 py-1.5 text-sm transition-colors"
+								[class]="
+									flatIndexOf(entry) === selectedIndex()
+										? 'bg-accent text-foreground'
+										: 'text-foreground/80 hover:bg-accent/50'
+								"
+							>
+								<div class="font-medium">{{ entry.name }}</div>
+								<div class="text-xs text-muted-foreground line-clamp-1">
+									{{ entry.description }}
+								</div>
+							</button>
+						}
+					</div>
+				}
+			}
+		</div>
+	</div>
+}

@@ -1,0 +1,17 @@
+@if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (accounts(); as accounts) {
+	<ul class="list-none">
+		<!-- @for replaces LWC's for:each. The track expression must be stable — the record Id is ideal. -->
+		@for (account of accounts; track account.id) {
+			<li class="py-2 -mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+				<p class="text-sm">{{ account.name }}</p>
+				@if (account.industry) {
+					<p class="text-xs text-muted-foreground">{{ account.industry }}</p>
+				}
+			</li>
+		}
+	</ul>
+} @else {
+	<p class="text-sm">Loading…</p>
+}
