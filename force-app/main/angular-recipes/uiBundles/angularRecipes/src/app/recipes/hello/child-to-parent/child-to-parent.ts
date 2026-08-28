@@ -73,10 +73,12 @@ export class IndustryPickerComponent {
 export class ChildToParentComponent {
 	protected readonly industry = signal<string | undefined>(undefined);
 	protected readonly accounts = signal<string[]>([]);
+	protected readonly error = signal<string | undefined>(undefined);
 	protected readonly loading = signal(false);
 
 	async onIndustry(industry: string): Promise<void> {
 		this.industry.set(industry);
+		this.error.set(undefined);
 		this.loading.set(true);
 		try {
 			const sdk = await createDataSDK();
@@ -97,8 +99,9 @@ export class ChildToParentComponent {
 					.map((edge) => edge.node.Name?.value)
 					.filter((name): name is string => name != null),
 			);
-		} catch {
+		} catch (err) {
 			this.accounts.set([]);
+			this.error.set(err instanceof Error ? err.message : 'Request failed');
 		} finally {
 			this.loading.set(false);
 		}

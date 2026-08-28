@@ -4,6 +4,8 @@
 
 	@if (loading()) {
 		<p class="text-sm mt-2">Loading…</p>
+	} @else if (error(); as error) {
+		<p class="text-destructive mt-2">{{ error }}</p>
 	} @else if (industry(); as industry) {
 		<div class="mt-2">
 			@if (accounts().length > 0) {
