@@ -7,7 +7,8 @@ A collection of easy-to-digest code examples for building apps on the Salesforce
 
 This sample application is designed to run on the Salesforce Platform. It covers what a frontend developer needs to know about Salesforce, and what a Salesforce developer needs to know about modern frameworks — taught at the intersection.
 
-> Multi-Framework ships **React Recipes** today, with **Angular Recipes** available in preview. Salesforce UI Bundles are currently a Beta feature.
+> [!NOTE]
+> Multi-Framework ships **React Recipes** today, with **Angular Recipes** available in preview.
 
 **Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/multiframework/guide) for a comprehensive overview.
 

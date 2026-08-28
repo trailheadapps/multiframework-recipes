@@ -9,9 +9,9 @@ The root README covers shared setup and links to individual app READMEs. It must
 1. **Title** (`# Multiframework Recipes`)
 2. **CI Badges** — CI and codecov badges
 3. **Description** — 1-2 paragraphs explaining the project
-4. **Note** — Blockquote with current framework support and Beta availability
+4. **Note** — Blockquote noting which frameworks are available today vs. in preview. The UI Bundles hosting platform that serves these apps is generally available; individual frameworks roll out over time.
 5. **Table of Contents** (`## Table of Contents`)
-6. **Setting up a Scratch Org** (`## Setting up a Scratch Org`) — Shared steps: environment setup, CLI install, scratch org creation, Beta feature toggle, metadata deployment, permset assignment, data import. Ends with a callout to follow per-app READMEs.
+6. **Setting up a Scratch Org** (`## Setting up a Scratch Org`) — Shared steps: environment setup, CLI install, scratch org creation, metadata deployment, permset assignment, data import. Ends with a callout to follow per-app READMEs.
 7. **Recipe Apps** (`## Recipe Apps`) — Table with columns: App, Framework, README (link to per-app README)
 8. **Optional Installation Instructions** (`## Optional Installation Instructions`) — Shared tooling: Prettier, ESLint, pre-commit hooks
 
