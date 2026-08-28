@@ -5,8 +5,9 @@
  *   npm run graphql:schema
  *   node scripts/get-graphql-schema.mjs [output-path]
  *
- * The default output path matches the schema location expected by codegen.yml
- * and .graphqlrc.yml so that codegen and IDE tooling resolve it automatically.
+ * The default output path matches the schema location that @graphql-eslint
+ * (see eslint.config.js) and IDE tooling resolve automatically, so inline `gql`
+ * queries in the recipes are validated against the real org schema.
  */
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';

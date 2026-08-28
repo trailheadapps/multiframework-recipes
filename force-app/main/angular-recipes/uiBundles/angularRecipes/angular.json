@@ -60,7 +60,7 @@
               }
             },
             "development": {
-              "plugins": ["./esbuild/shiki.mjs", "./esbuild/graphql-codegen.mjs"],
+              "plugins": ["./esbuild/shiki.mjs"],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true

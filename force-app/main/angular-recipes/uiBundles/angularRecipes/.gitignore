@@ -9,9 +9,8 @@ out-tsc/
 # TypeScript incremental build info
 *.tsbuildinfo
 
-# Generated from org -- regenerate with npm run graphql:schema / graphql:codegen
+# Generated from org -- regenerate with npm run graphql:schema
 schema.graphql
-src/app/api/graphql-operations-types.ts
 
 # Test coverage
 coverage/
