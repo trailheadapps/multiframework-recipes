@@ -2,6 +2,9 @@
 
 A Salesforce UI Bundle demonstrating how to build an Angular app that runs directly on the Salesforce platform. The bundle is built with the Angular CLI (esbuild) + TypeScript and deployed to the org as a single artifact; Salesforce serves the static assets.
 
+> [!IMPORTANT]
+> **Preview — in active development.** Angular Recipes is being built toward feature parity with React Recipes and currently includes only a subset of the recipes, with more categories added over time. Because it's still a work in progress, it's excluded from the standard deploy via the root [`.forceignore`](../../../.forceignore), so `sf project deploy start` ships **React Recipes only**. To try Angular Recipes in an org, follow the steps below — they include temporarily removing the force-ignore entry.
+
 ```mermaid
 graph LR
     A[Framework App<br/>Angular CLI + TypeScript] -->|Build| B[UI Bundle]
@@ -60,15 +63,13 @@ Developer Edition support is coming soon.
 
 ## Install & Deploy
 
-The permission set that grants access to the Angular Recipes app references the UI Bundle metadata, so the app must be deployed to the org before the permset can be assigned.
+Angular Recipes is in preview and force-ignored, so it is skipped by the standard deploy. The steps below opt it in for an org. The permission set that grants access to the app references the UI Bundle metadata, so the app must be deployed to the org before the permset can be assigned.
 
-1. Install dependencies, fetch the GraphQL schema, and run codegen:
+1. Install dependencies:
 
    ```bash
    cd force-app/main/angular-recipes/uiBundles/angularRecipes
    npm install
-   npm run graphql:schema
-   npm run graphql:codegen
    ```
 
 1. Build the app:
@@ -77,17 +78,28 @@ The permission set that grants access to the Angular Recipes app references the 
    npm run build
    ```
 
-1. Deploy the project to your org:
+1. Return to the repository root:
 
    ```bash
    cd ../../../../..
+   ```
+
+1. Opt Angular Recipes into the deploy by removing (or commenting out) its entry in the root `.forceignore`:
+
+   ```bash
+   # In .forceignore, remove the line: force-app/main/angular-recipes/**
+   ```
+
+1. Deploy the project to your org:
+
+   ```bash
    sf project deploy start
    ```
 
-1. Assign the **recipes** permission set to the default user:
+1. Assign the **Angular Recipes** permission set to the default user:
 
    ```bash
-   sf org assign permset -n recipes
+   sf org assign permset -n angularRecipes
    ```
 
 1. Import sample data:
