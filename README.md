@@ -3,8 +3,6 @@
 [![CI](https://github.com/trailheadapps/multiframework-recipes/actions/workflows/ci.yml/badge.svg)](https://github.com/trailheadapps/multiframework-recipes/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/trailheadapps/multiframework-recipes/branch/main/graph/badge.svg)](https://codecov.io/gh/trailheadapps/multiframework-recipes)
 
-![React Recipes](force-app/main/react-recipes/uiBundles/reactRecipes/react-recipes.png)
-
 A collection of easy-to-digest code examples for building apps on the Salesforce platform using modern frontend frameworks. Each recipe demonstrates how to accomplish a specific task — from querying data with GraphQL to handling errors and navigating between views — in the fewest lines of code possible while following best practices. Each recipe includes an inline source code viewer so you can see exactly how it works.
 
 This sample application is designed to run on the Salesforce Platform. It covers what a frontend developer needs to know about Salesforce, and what a Salesforce developer needs to know about modern frameworks — taught at the intersection.
