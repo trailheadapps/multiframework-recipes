@@ -12,6 +12,7 @@
     "build": "ng lint && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:coverage": "ng test --coverage --coverage-reporters=lcovonly --coverage-reporters=text-summary --watch=false",
     "lint": "ng lint",
     "build:e2e": "ng lint && ng build && node scripts/rewrite-e2e-assets.mjs",
     "e2e": "playwright test",
@@ -58,7 +59,8 @@
     "tailwindcss": "^4.0.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.0.0",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.0"
   },
   "overrides": {
     "undici": "^7.28.0"

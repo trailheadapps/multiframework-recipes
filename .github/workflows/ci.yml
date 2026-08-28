@@ -81,10 +81,18 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: multiframework-recipes
 
-      # Run Angular tests
+      # Run Angular tests with coverage
       - name: "Test Angular"
-        run: npm test -- --watch=false
+        run: npm run test:coverage
         working-directory: force-app/main/angular-recipes/uiBundles/angularRecipes
+
+      # Upload code coverage data
+      - name: "Upload code coverage for Angular to Codecov.io"
+        uses: codecov/codecov-action@v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: force-app/main/angular-recipes/uiBundles/angularRecipes/coverage/angularRecipes/lcov.info
+          flags: angular
 
       # Build both apps
       - name: "Build"
