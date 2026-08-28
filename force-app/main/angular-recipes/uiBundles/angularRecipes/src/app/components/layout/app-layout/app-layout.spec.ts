@@ -1,12 +1,25 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, provideRouter, type Route } from '@angular/router';
 import { AppLayoutComponent } from './app-layout';
+
+const layoutRoute: Route = {
+	path: '',
+	children: [
+		{ path: '' },
+		{ path: 'hello', data: { showInNavigation: true, label: 'Hello' } },
+		{ path: '**' },
+	],
+};
 
 describe('AppLayoutComponent', () => {
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			imports: [AppLayoutComponent],
-			providers: [provideRouter([])],
+			providers: [
+				provideRouter([]),
+				// The component derives its nav from the layout route's children.
+				{ provide: ActivatedRoute, useValue: { routeConfig: layoutRoute } },
+			],
 		}).compileComponents();
 	});
 
