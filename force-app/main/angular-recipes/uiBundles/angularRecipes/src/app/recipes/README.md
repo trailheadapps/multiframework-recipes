@@ -1,6 +1,6 @@
 # Angular Recipes Catalog
 
-Angular Recipes are self-contained examples that teach one concept at a time. Every recipe inlines its GraphQL queries, types, and SDK calls so you can read the whole pattern in one place. Each recipe is an Angular standalone component — open its folder in `src/recipes/` and the `.ts` (logic) and `.html` (template) hold everything you need.
+Angular Recipes are self-contained examples that teach one concept at a time. Every recipe inlines its GraphQL queries, types, and SDK calls so you can read the whole pattern in one place. Each recipe is an Angular standalone component — open its folder in `src/app/recipes/` and the `.ts` (logic) and `.html` (template) hold everything you need.
 
 ## Recommended Learning Path
 
