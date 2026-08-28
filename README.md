@@ -9,29 +9,25 @@ A collection of easy-to-digest code examples for building apps on the Salesforce
 
 This sample application is designed to run on the Salesforce Platform. It covers what a frontend developer needs to know about Salesforce, and what a Salesforce developer needs to know about modern frameworks — taught at the intersection.
 
-> Multi-Framework currently supports **React**, with additional frameworks coming over time.
+> Multi-Framework ships **React Recipes** today, with **Angular Recipes** available in preview. Salesforce UI Bundles are currently a Beta feature.
 
 **Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/multiframework/guide) for a comprehensive overview.
 
-## Architecture
-
-```mermaid
-graph LR
-    A[React App<br/>Vite + TypeScript] -->|Build| B[UI Bundle]
-    B -->|Deploy| C[Salesforce Org]
-    C -->|Query| D[GraphQL UIAPI]
-    C -->|Fetch| E[REST APIs]
-```
-
 ## Table of Contents
 
+- [Recipe Apps](#recipe-apps)
+- [Prerequisites](#prerequisites)
 - [Setting up a Scratch Org](#setting-up-a-scratch-org)
-- [Setting up a Developer Edition Org](#setting-up-a-developer-edition-org)
-- [Local Development](#local-development)
-- [Testing](#testing)
-- [Optional installation instructions](#optional-installation-instructions)
+- [Optional Installation Instructions](#optional-installation-instructions)
 
-## Setting up a Scratch Org
+## Recipe Apps
+
+| App                                                           | Framework | README                                             |
+| ------------------------------------------------------------- | --------- | -------------------------------------------------- |
+| [React Recipes](force-app/main/react-recipes)                 | React     | [README](force-app/main/react-recipes/README.md)   |
+| [Angular Recipes _(preview)_](force-app/main/angular-recipes) | Angular   | [README](force-app/main/angular-recipes/README.md) |
+
+## Prerequisites
 
 1. Set up your environment. Follow the steps in the [Quick Start: Lightning Web Components](https://trailhead.salesforce.com/content/learn/projects/quick-start-lightning-web-components/) Trailhead project. The steps include:
    - Enable Dev Hub in your Trailhead Playground
@@ -42,6 +38,10 @@ graph LR
 1. Make sure you have **Node.js v22+** and **npm** installed.
 
 1. Make sure you have **Salesforce CLI v2.130.7+** installed. This version includes the UI Bundle plugin. Check your version with `sf --version` and update with `sf update` if needed.
+
+## Setting up a Scratch Org
+
+These steps deploy the shared metadata and the default **React Recipes** app. For framework-specific development, build, and testing — and for the **Angular Recipes** preview — follow the per-app README linked under [Recipe Apps](#recipe-apps).
 
 1. If you haven't already done so, authorize your hub org and provide it with an alias (**myhuborg** in the command below):
 
@@ -62,7 +62,7 @@ graph LR
    sf org create scratch -d -f config/project-scratch-def.json -a recipes
    ```
 
-1. Install dependencies and build the app:
+1. Install dependencies and build the apps:
 
    ```bash
    npm run install:all
@@ -81,15 +81,6 @@ graph LR
    sf org assign permset -n recipes
    ```
 
-1. Fetch the GraphQL schema and run codegen:
-
-   ```bash
-   cd force-app/main/react-recipes/uiBundles/reactRecipes
-   npm run graphql:schema
-   npm run graphql:codegen
-   cd ../../../../..
-   ```
-
 1. Import sample data:
 
    ```bash
@@ -101,106 +92,6 @@ graph LR
    ```bash
    sf org open
    ```
-
-## Setting up a Developer Edition Org
-
-1. Set up your environment. Follow the steps in the [Quick Start: Lightning Web Components](https://trailhead.salesforce.com/content/learn/projects/quick-start-lightning-web-components/) Trailhead project. The steps include:
-   - Install Salesforce CLI
-   - Install Visual Studio Code
-   - Install the Visual Studio Code Salesforce extensions
-
-1. Make sure you have **Node.js v22+** and **npm** installed.
-
-1. Make sure you have **Salesforce CLI v2.130.7+** installed. This version includes the UI Bundle plugin. Check your version with `sf --version` and update with `sf update` if needed.
-
-1. Authorize your Developer Edition org and provide it with an alias (**mydevorg** in the command below):
-
-   ```bash
-   sf org login web -a mydevorg
-   ```
-
-1. Clone this repository:
-
-   ```bash
-   git clone https://github.com/trailheadapps/multiframework-recipes
-   cd multiframework-recipes
-   ```
-
-1. Install dependencies and build the app:
-
-   ```bash
-   npm run install:all
-   npm run build
-   ```
-
-1. Deploy metadata and the UI bundle:
-
-   ```bash
-   sf project deploy start --source-dir force-app
-   ```
-
-1. Assign the **recipes** permission set to the default user:
-
-   ```bash
-   sf org assign permset -n recipes
-   ```
-
-1. Fetch the GraphQL schema and run codegen:
-
-   ```bash
-   cd force-app/main/react-recipes/uiBundles/reactRecipes
-   npm run graphql:schema
-   npm run graphql:codegen
-   cd ../../../../..
-   ```
-
-1. Import sample data:
-
-   ```bash
-   sf data tree import -p ./data/data-plan.json
-   ```
-
-1. Open the org and select the **React Recipes** app in App Launcher:
-
-   ```bash
-   sf org open
-   ```
-
-## Local Development
-
-Start the development server with hot reload:
-
-```bash
-npm run dev
-```
-
-Build for production:
-
-```bash
-npm run build
-```
-
-## Testing
-
-Run unit tests ([Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)):
-
-```bash
-npm test
-```
-
-Run with coverage:
-
-```bash
-npm run test:coverage
-```
-
-Run end-to-end tests ([Playwright](https://playwright.dev/)):
-
-```bash
-npx playwright install chromium
-npm run build:e2e
-npm run test:e2e
-```
 
 ## Optional Installation Instructions
 
