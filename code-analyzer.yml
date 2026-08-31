@@ -1,6 +1,7 @@
 ignores:
   files:
     - "**/react-recipes/**"
+    - "**/angular-recipes/**"
     - "**/dist/**"
     - "**/node_modules/**"
     - "**/coverage/**"

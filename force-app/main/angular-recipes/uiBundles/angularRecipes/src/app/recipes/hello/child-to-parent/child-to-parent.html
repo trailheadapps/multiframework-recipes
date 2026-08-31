@@ -1,0 +1,22 @@
+<div>
+	<!-- The child emits (industrySelected) — the parent owns what happens next. -->
+	<app-industry-picker (industrySelected)="onIndustry($event)" />
+
+	@if (loading()) {
+		<p class="text-sm mt-2">Loading…</p>
+	} @else if (error(); as error) {
+		<p class="text-destructive mt-2">{{ error }}</p>
+	} @else if (industry(); as industry) {
+		<div class="mt-2">
+			@if (accounts().length > 0) {
+				<ul class="list-disc pl-5">
+					@for (name of accounts(); track name) {
+						<li class="text-sm">{{ name }}</li>
+					}
+				</ul>
+			} @else {
+				<p class="text-muted-foreground">No accounts in {{ industry }}.</p>
+			}
+		</div>
+	}
+</div>

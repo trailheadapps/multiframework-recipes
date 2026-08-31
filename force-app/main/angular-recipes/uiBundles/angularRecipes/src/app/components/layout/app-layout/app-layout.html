@@ -1,0 +1,30 @@
+<header
+	class="sticky top-0 z-50 border-b-2 border-b-primary/30 bg-background/80 backdrop-blur-md"
+>
+	<div class="mx-auto flex h-14 max-w-screen-2xl items-center gap-6 px-6">
+		<a routerLink="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+			<ng-icon name="lucideCode" size="1.25rem" class="text-[#dd0031]" />
+			<span class="font-semibold tracking-tight">Angular Recipes</span>
+		</a>
+
+		<nav class="flex items-center gap-1">
+			@for (item of navigationItems; track item.path) {
+				<a
+					[routerLink]="item.path"
+					routerLinkActive="bg-primary text-primary-foreground"
+					class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-muted-foreground hover:bg-accent hover:text-foreground"
+				>
+					{{ item.label }}
+				</a>
+			}
+		</nav>
+
+		<div class="ml-auto">
+			<app-search-bar />
+		</div>
+	</div>
+</header>
+
+<div class="mx-auto max-w-screen-2xl px-6 py-6">
+	<router-outlet />
+</div>

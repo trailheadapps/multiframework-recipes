@@ -1,0 +1,10 @@
+@if (account(); as account) {
+	<div class="rounded-md border border-border bg-card p-4">
+		<p class="text-lg font-semibold">{{ account.name }}</p>
+		<p class="text-xs text-muted-foreground mt-0.5">{{ account.industry ?? 'No Industry' }}</p>
+	</div>
+} @else {
+	<div class="rounded-md border border-dashed border-border bg-card/50 p-6 text-center">
+		<p class="text-muted-foreground">Select an account</p>
+	</div>
+}

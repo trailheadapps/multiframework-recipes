@@ -276,6 +276,8 @@ Keep brief. Explain Salesforce-specific concepts, not React basics.
 
 The default-exported recipe component goes **at the top** of the file. Helper sub-components are placed **below** it. This is the opposite of typical "define before use" style, but better for a reading-first codebase.
 
+> **Angular exception.** When a recipe file defines helper sub-components that the main recipe lists in its `imports: [...]`, those helpers must be declared **above** the main component. Angular evaluates `@Component` decorator metadata eagerly at class-definition time, so a class referenced in `imports` before it is defined hits the temporal dead zone and throws at load. In those files — currently `lifecycle-fetch`, `parent-to-child`, `child-to-parent`, and `state-management` — helpers-above-recipe is required and overrides the recipe-first ordering. This does not apply to React (JSX references resolve at render time, not at definition).
+
 ### Break complex JSX into named sub-components
 
 Loading skeletons, error states, cards, and list items should be their own components within the file, placed below the main component.
@@ -361,7 +363,7 @@ This rule overrides the "GraphQL Workflow" section above. The recommended patter
 6. Helper sub-components (below the main export)
 ```
 
-This ordering is mandatory for recipes. The reader should hit the GraphQL query before the component, so they understand the data shape before seeing how it's rendered.
+This ordering is mandatory for recipes. The reader should hit the GraphQL query before the component, so they understand the data shape before seeing how it's rendered. (Angular files that import helper sub-components in the main component's `imports: [...]` are the documented exception — see the Angular exception under "Component ordering" above.)
 
 ---
 

@@ -1,0 +1,8 @@
+<div>
+	<app-button appearance="outlined" (clicked)="mounted.set(!mounted())">
+		{{ mounted() ? 'Unmount' : 'Mount' }} Contact Fetcher
+	</app-button>
+	@if (mounted()) {
+		<app-contact-fetcher />
+	}
+</div>

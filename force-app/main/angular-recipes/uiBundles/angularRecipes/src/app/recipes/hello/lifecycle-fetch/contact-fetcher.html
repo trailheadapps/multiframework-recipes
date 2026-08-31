@@ -1,0 +1,16 @@
+@if (loading()) {
+	<p class="text-sm mt-2">Fetching contact…</p>
+} @else if (error(); as error) {
+	<p class="text-destructive mt-2">{{ error }}</p>
+} @else if (contact(); as contact) {
+	<div class="rounded-md border border-border bg-card p-4 mt-2">
+		<p class="text-sm">
+			<strong>{{ contact.name }}</strong>
+		</p>
+		@if (contact.title) {
+			<p class="text-xs text-muted-foreground">{{ contact.title }}</p>
+		}
+	</div>
+} @else {
+	<p class="text-sm mt-2">No contact found.</p>
+}
