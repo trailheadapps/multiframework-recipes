@@ -1,11 +1,14 @@
 # Microfrontend Recipes (Developer Preview)
 
-![Microfrontend Recipes](../../../microfrontend-recipes.webp)
+![Microfrontend Recipes](microfrontend-recipes.webp)
 
-Recipes that show how to embed an externally hosted framework app into Salesforce via the standard `<lightning-ui-embedding>` base component. Each recipe is a pair: an LWC host component deployed to the org, and a small React guest served by a Vite dev server on an `/embedding/*` route.
+Recipes that show how to embed an externally hosted framework app into Salesforce via the standard `<lightning-ui-embedding>` base component. Each recipe is an LWC host component, deployed to the org, that embeds a small React guest served by a Vite dev server on an `/embedding/*` route. Most hosts pair with their own guest; the ready- and error-state recipes reuse the Basic Render guest to demonstrate host-side handling.
 
 > [!NOTE]
 > Micro-Frontends is a Developer Preview feature. The Dev Channel provides access to features that are not generally available and have been designated as pilot, beta, limited release, or developer preview. Their use is at the Customer's sole discretion and is subject to the Beta Services Terms at [Agreements - Salesforce.com](https://www.salesforce.com/company/legal/agreements/). See the [release notes](https://help.salesforce.com/s/articleView?id=release-notes.rn_mfe_data_exchange.htm&language=en_US&type=5&release=262).
+
+> [!IMPORTANT]
+> Microfrontend Recipes is excluded from the standard deploy via the root [`.forceignore`](../../../.forceignore), so `sf project deploy start` ships **React Recipes only**. The steps below opt it into an org — they include removing that force-ignore entry.
 
 ## How the pieces fit together
 
@@ -56,14 +59,20 @@ graph LR
    sf org create scratch -d -f config/project-scratch-def.json -a recipes
    ```
 
-1. Install dependencies, fetch the GraphQL schema, and build the framework bundle that hosts the guest recipes:
+1. Install dependencies and build the framework bundle that hosts the guest recipes:
 
    ```bash
    cd force-app/main/react-recipes/uiBundles/reactRecipes
    npm install
-   npm run graphql:schema
-   npm run graphql:codegen
    npm run build
+   ```
+
+   The generated GraphQL types are committed, so this builds as-is. Only if you change a query, regenerate them against your org: `npm run graphql:schema && npm run graphql:codegen`.
+
+1. Opt Microfrontend Recipes into the deploy by removing (or commenting out) its entry in the root `.forceignore`:
+
+   ```bash
+   # In .forceignore, remove the line: force-app/main/microfrontend-recipes/**
    ```
 
 1. Deploy the project to your org:
@@ -73,10 +82,11 @@ graph LR
    sf project deploy start
    ```
 
-1. Assign the **recipes** permission set to the default user:
+1. Assign the **recipes** and **microfrontendRecipes** permission sets to the default user. `recipes` grants the shared object, field, and tab access; `microfrontendRecipes` adds the Microfrontend Recipes app and its tab:
 
    ```bash
    sf org assign permset -n recipes
+   sf org assign permset -n microfrontendRecipes
    ```
 
 1. Import sample data:
@@ -100,4 +110,40 @@ graph LR
    sf org open
    ```
 
-   The app landing page is a banner that jumps to a demo Account. That Account's record page is overridden — inside this app only — with `Microfrontend_Recipes_Account.flexipage`, an accordion of the nine recipes. Every other app sees the stock Account page.
+   The app landing page is a banner that jumps to a demo Account. Within this app, Account record pages are overridden with `Microfrontend_Recipes_Account.flexipage` — an accordion of the nine recipes; every other app shows the stock Account page.
+
+## Local Development
+
+Each recipe has two moving parts you iterate on separately.
+
+### Guests (React)
+
+Guests run on the React Recipes Vite dev server — see [React Recipes → Local Development](../react-recipes/README.md#local-development). They live under `src/recipes/embedding/`, are served at `/embedding/<recipe>`, and hot-reload inside the embedded iframe.
+
+### Hosts (LWC)
+
+Hosts are deployed to the org. After editing a component under `lwc/`, redeploy it (with Microfrontend Recipes opted into the deploy, per [Install & Run](#install--run)):
+
+```bash
+sf project deploy start --source-dir force-app/main/microfrontend-recipes
+```
+
+## Testing
+
+### Host components (LWC)
+
+Covered by [sfdx-lwc-jest](https://github.com/salesforce/sfdx-lwc-jest). Run from the repository root:
+
+```bash
+npm run test:unit
+```
+
+Run with coverage:
+
+```bash
+npm run test:unit:coverage
+```
+
+### Guest recipes (React)
+
+Covered by the React Recipes test suite — see [React Recipes → Testing](../react-recipes/README.md#testing).
