@@ -22,5 +22,12 @@ export class HomeComponent {
 				'Start here. Covers template binding, conditional and list rendering, lifecycle, and component composition with inputs and outputs.',
 			count: getRecipeCount('/hello'),
 		},
+		{
+			to: '/styling',
+			name: 'Styling',
+			description:
+				"Two styling systems side by side: SLDS blueprint classes and sprites, and the app's spartan-ng (Tailwind) components and Lucide icons.",
+			count: getRecipeCount('/styling'),
+		},
 	];
 }

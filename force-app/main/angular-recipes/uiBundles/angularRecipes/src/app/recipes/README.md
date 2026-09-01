@@ -7,6 +7,7 @@ Angular Recipes are self-contained examples that teach one concept at a time. Ev
 More categories are being ported from React Recipes over time. Available today:
 
 1. **Hello** -- Angular fundamentals on Salesforce: template binding, conditional rendering, lists, inputs, outputs, signals, lifecycle
+2. **Styling** -- SLDS blueprint classes and sprites alongside the app's spartan-ng (Tailwind) components and Lucide icons
 
 ## Full Recipe Table
 
@@ -20,3 +21,9 @@ More categories are being ported from React Recipes over time. Available today:
 | Hello    | Parent-to-Child (Inputs)        | The parent fetches Accounts via GraphQL and passes each one to a child component as inputs.     |
 | Hello    | Child-to-Parent (Outputs)       | A child component presents an Industry selector and emits an output to its parent.              |
 | Hello    | State Management (Shared State) | Two sibling components share a selected Account by lifting state to their common parent.        |
+| Styling  | Button (SLDS)                   | Standard button variants as slds-button_* classes on plain buttons.                             |
+| Styling  | Button (spartan-ng)             | The app shell's spartan-ng button — appearances, sizes, disabled, and icons.                    |
+| Styling  | Account Card (SLDS)             | Account data rendered with SLDS blueprint card classes on plain markup.                         |
+| Styling  | Account Card (spartan-ng)       | The same Account data rendered with the app's spartan-ng card components.                       |
+| Styling  | Icons (SLDS)                    | SLDS icons referenced from SVG sprite sheets (utility and standard).                            |
+| Styling  | Icons (Lucide)                  | Lucide icons via @ng-icons as individual, tree-shakable ng-icon components.                     |

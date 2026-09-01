@@ -1,0 +1,20 @@
+<app-slds-scope>
+	@for (category of categories; track category.label) {
+		<section class="slds-m-bottom_medium">
+			<h3 class="slds-text-heading_small slds-m-bottom_small">{{ category.label }}</h3>
+			<ul class="slds-grid slds-wrap slds-gutters_small">
+				@for (name of category.names; track name) {
+					<li class="slds-col slds-p-around_x-small slds-text-align_center" style="min-width: 4.5rem">
+						<span [class]="containerClass(category, name)" [title]="name">
+							<svg class="slds-icon slds-icon_small" aria-hidden="true">
+								<use [attr.href]="href(category, name)" />
+							</svg>
+							<span class="slds-assistive-text">{{ name }}</span>
+						</span>
+						<p class="slds-text-color_weak slds-m-top_xx-small slds-text-body_small">{{ name }}</p>
+					</li>
+				}
+			</ul>
+		</section>
+	}
+</app-slds-scope>

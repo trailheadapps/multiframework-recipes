@@ -74,6 +74,50 @@ export const recipeRegistry: RecipeEntry[] = [
 		description:
 			'Two sibling components share a selected Account by lifting state to their common parent.',
 	},
+
+	// Styling
+	{
+		category: 'Styling',
+		categoryRoute: '/styling',
+		recipeIndex: 0,
+		name: 'Button (SLDS)',
+		description: 'Standard button variants as slds-button_* classes on plain buttons.',
+	},
+	{
+		category: 'Styling',
+		categoryRoute: '/styling',
+		recipeIndex: 1,
+		name: 'Button (spartan-ng)',
+		description: "The app shell's spartan-ng button — appearances, sizes, disabled, and icons.",
+	},
+	{
+		category: 'Styling',
+		categoryRoute: '/styling',
+		recipeIndex: 2,
+		name: 'Account Card (SLDS)',
+		description: 'Account data rendered with SLDS blueprint card classes on plain markup.',
+	},
+	{
+		category: 'Styling',
+		categoryRoute: '/styling',
+		recipeIndex: 3,
+		name: 'Account Card (spartan-ng)',
+		description: "The same Account data rendered with the app's spartan-ng card components.",
+	},
+	{
+		category: 'Styling',
+		categoryRoute: '/styling',
+		recipeIndex: 4,
+		name: 'Icons (SLDS)',
+		description: 'SLDS icons referenced from SVG sprite sheets (utility and standard).',
+	},
+	{
+		category: 'Styling',
+		categoryRoute: '/styling',
+		recipeIndex: 5,
+		name: 'Icons (Lucide)',
+		description: 'Lucide icons via @ng-icons as individual, tree-shakable ng-icon components.',
+	},
 ];
 
 /** Returns the number of recipes for a given category route (e.g. "/hello"). */

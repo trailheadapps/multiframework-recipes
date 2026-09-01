@@ -16,7 +16,8 @@
     "lint": "ng lint",
     "build:e2e": "ng lint && ng build && node scripts/rewrite-e2e-assets.mjs",
     "e2e": "playwright test",
-    "graphql:schema": "node scripts/get-graphql-schema.mjs"
+    "graphql:schema": "node scripts/get-graphql-schema.mjs",
+    "postinstall": "node scripts/slds2-stub-assets.mjs"
   },
   "dependencies": {
     "@angular/cdk": "^21.2.0",
@@ -28,7 +29,7 @@
     "@angular/router": "^21.2.0",
     "@ng-icons/core": "^32.2.0",
     "@ng-icons/lucide": "^32.2.0",
-    "@salesforce-ux/design-system": "2.29.0",
+    "@salesforce-ux/design-system-2": "^2.264.1",
     "@salesforce/angular-plugin-ui-bundle": "^11.62.1",
     "@salesforce/platform-sdk": "^11.62.1",
     "@salesforce/ui-bundle": "^11.62.1",
@@ -50,6 +51,7 @@
     "@graphql-tools/utils": "^11.2.2",
     "@playwright/test": "^1.49.0",
     "@tailwindcss/postcss": "^4.0.0",
+    "@vitest/coverage-v8": "^4.1.0",
     "angular-eslint": "^21.0.0",
     "eslint": "^9.0.0",
     "graphql": "^16.11.0",
@@ -60,8 +62,7 @@
     "tailwindcss": "^4.0.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.0.0",
-    "vitest": "^4.1.0",
-    "@vitest/coverage-v8": "^4.1.0"
+    "vitest": "^4.1.0"
   },
   "overrides": {
     "undici": "^7.28.0"

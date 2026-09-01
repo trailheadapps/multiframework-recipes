@@ -5,10 +5,21 @@
 @import '@spartan-ng/brain/hlm-tailwind-preset.css';
 
 /*
- * SLDS in its own layer, after `base` but before Tailwind's `components` and
- * `utilities` layers, so Tailwind classes used in a recipe still win.
+ * SLDS 2 — scoped, modular build (@salesforce-ux/design-system-2), in its own
+ * layer after `base` but before Tailwind's `components`/`utilities` so Tailwind
+ * classes in a recipe still win. Scoped means blueprint styles only apply inside
+ * a `.slds-scope` container (see the SldsScopeComponent wrapper), keeping SLDS
+ * out of the Tailwind/spartan app shell. Swap the theme import to
+ * slds2.theme.lightning-blue.css to change the SLDS look.
+ *
+ * The base sheet references a few decorative avatar/Einstein/background assets
+ * the npm package does not ship; scripts/slds2-stub-assets.mjs (postinstall)
+ * drops in 1x1 placeholders so Angular's esbuild build can resolve the url()s
+ * (no recipe uses these assets).
  */
-@import '@salesforce-ux/design-system/assets/styles/salesforce-lightning-design-system.min.css'
+@import '@salesforce-ux/design-system-2/dist/css/modular/slds2.scoped.base.css'
+	layer(slds);
+@import '@salesforce-ux/design-system-2/dist/css/modular/slds2.theme.cosmos.css'
 	layer(slds);
 
 @layer slds {
