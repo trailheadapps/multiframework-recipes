@@ -1,0 +1,66 @@
+<div class="flex flex-col gap-4">
+	<div class="flex flex-wrap gap-2">
+		<app-button appearance="outlined" (clicked)="load()">Reload</app-button>
+		<app-button appearance="outlined" (clicked)="simulateLoading()">Simulate: Loading</app-button>
+		<app-button appearance="outlined" (clicked)="simulateError()">Simulate: Error</app-button>
+		<app-button appearance="outlined" (clicked)="simulateEmpty()">Simulate: Empty</app-button>
+	</div>
+
+	@switch (state().status) {
+		@case ('loading') {
+			<div class="rounded-md border border-border bg-card p-4 shadow-sm">
+				<ul>
+					@for (i of [0, 1, 2]; track i) {
+						<li class="py-2 flex items-center gap-4">
+							<app-skeleton variant="avatar" />
+							<app-skeleton [lines]="3" />
+						</li>
+					}
+				</ul>
+			</div>
+		}
+		@case ('error') {
+			<div class="rounded-md bg-rose-50 border border-rose-200 p-4 text-rose-700" role="alert">
+				<p class="text-base font-semibold mb-1">Something went wrong</p>
+				<p class="text-sm mb-3">{{ errorMessage() }}</p>
+				<app-button appearance="text" (clicked)="load()">Try Again</app-button>
+			</div>
+		}
+		@case ('empty') {
+			<div class="rounded-md border border-dashed border-border bg-card/50 text-center p-6">
+				<p class="text-lg font-semibold mb-1">No Contacts Found</p>
+				<p class="text-sm text-muted-foreground">Your query returned no results.</p>
+			</div>
+		}
+		@case ('data') {
+			<div class="rounded-md border border-border bg-card p-4 shadow-sm">
+				<ul>
+					@for (contact of contacts(); track contact.id) {
+						<li
+							class="py-2 -mx-2 px-2 flex items-center gap-4 rounded-md transition-colors hover:bg-accent/50"
+						>
+							@if (contact.picture) {
+								<img
+									[src]="contact.picture"
+									[alt]="contact.name"
+									class="h-12 w-12 rounded-full object-cover"
+								/>
+							}
+							<div>
+								<p class="text-xs"><strong>{{ contact.name }}</strong></p>
+								@if (contact.title) {
+									<p class="text-xs text-muted-foreground">{{ contact.title }}</p>
+								}
+								@if (contact.phone) {
+									<a [href]="'tel:' + contact.phone" class="text-xs text-primary hover:underline">{{
+										contact.phone
+									}}</a>
+								}
+							</div>
+						</li>
+					}
+				</ul>
+			</div>
+		}
+	}
+</div>

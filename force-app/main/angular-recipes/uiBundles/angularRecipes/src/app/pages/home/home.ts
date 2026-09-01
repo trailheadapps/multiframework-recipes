@@ -22,5 +22,12 @@ export class HomeComponent {
 				'Start here. Covers template binding, conditional and list rendering, lifecycle, and component composition with inputs and outputs.',
 			count: getRecipeCount('/hello'),
 		},
+		{
+			to: '/error-handling',
+			name: 'Error Handling',
+			description:
+				'Handle async states explicitly, contain failures without a render boundary, and read GraphQL errors from result.errors[].',
+			count: getRecipeCount('/error-handling'),
+		},
 	];
 }

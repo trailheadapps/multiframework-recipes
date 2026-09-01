@@ -74,6 +74,31 @@ export const recipeRegistry: RecipeEntry[] = [
 		description:
 			'Two sibling components share a selected Account by lifting state to their common parent.',
 	},
+
+	// Error Handling
+	{
+		category: 'Error Handling',
+		categoryRoute: '/error-handling',
+		recipeIndex: 0,
+		name: 'Loading, Error, and Empty States',
+		description:
+			'Handles loading, error, and empty states explicitly with a discriminated-union signal.',
+	},
+	{
+		category: 'Error Handling',
+		categoryRoute: '/error-handling',
+		recipeIndex: 1,
+		name: 'Error Boundary',
+		description:
+			'Angular has no render boundary — guard the risky work and surface failures with a signal.',
+	},
+	{
+		category: 'Error Handling',
+		categoryRoute: '/error-handling',
+		recipeIndex: 2,
+		name: 'GraphQL Errors',
+		description: 'Reads query-level errors from result.errors[] and contrasts them with thrown exceptions.',
+	},
 ];
 
 /** Returns the number of recipes for a given category route (e.g. "/hello"). */

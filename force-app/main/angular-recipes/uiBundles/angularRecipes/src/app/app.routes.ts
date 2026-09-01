@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AppLayoutComponent } from './components/layout/app-layout/app-layout';
 import { HomeComponent } from './pages/home/home';
 import { HelloComponent } from './pages/hello/hello';
+import { ErrorHandlingComponent } from './pages/error-handling/error-handling';
 import { NotFoundComponent } from './pages/not-found/not-found';
 
 export const routes: Routes = [
@@ -17,6 +18,11 @@ export const routes: Routes = [
 				path: 'hello',
 				component: HelloComponent,
 				data: { showInNavigation: true, label: 'Hello' },
+			},
+			{
+				path: 'error-handling',
+				component: ErrorHandlingComponent,
+				data: { showInNavigation: true, label: 'Error Handling' },
 			},
 			{
 				path: '**',
