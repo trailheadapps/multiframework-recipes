@@ -74,6 +74,65 @@ export const recipeRegistry: RecipeEntry[] = [
 		description:
 			'Two sibling components share a selected Account by lifting state to their common parent.',
 	},
+
+	// Read Data
+	{
+		category: 'Read Data',
+		categoryRoute: '/read-data',
+		recipeIndex: 0,
+		name: 'Single Record',
+		description: 'Queries a single Contact via UIAPI GraphQL and displays its fields.',
+	},
+	{
+		category: 'Read Data',
+		categoryRoute: '/read-data',
+		recipeIndex: 1,
+		name: 'List of Records',
+		description: 'Queries multiple Contacts and renders each one from the Relay edges[].node shape.',
+	},
+	{
+		category: 'Read Data',
+		categoryRoute: '/read-data',
+		recipeIndex: 2,
+		name: 'Filtered List with Variables',
+		description: 'Queries Contacts by name using a debounced GraphQL variable bound to an input.',
+	},
+	{
+		category: 'Read Data',
+		categoryRoute: '/read-data',
+		recipeIndex: 3,
+		name: 'Sorted Results',
+		description: 'Fetches Contacts with an orderBy rebuilt from signals whenever the sort changes.',
+	},
+	{
+		category: 'Read Data',
+		categoryRoute: '/read-data',
+		recipeIndex: 4,
+		name: 'Paginated List',
+		description: 'Fetches Contacts two at a time using Relay cursor pagination (first / after).',
+	},
+	{
+		category: 'Read Data',
+		categoryRoute: '/read-data',
+		recipeIndex: 5,
+		name: 'Related Records',
+		description:
+			'Queries Contacts with their parent Account in one request, traversing a lookup relationship.',
+	},
+	{
+		category: 'Read Data',
+		categoryRoute: '/read-data',
+		recipeIndex: 6,
+		name: 'Aliased Multi-Object Query',
+		description: 'Queries Accounts and Contacts in a single request using GraphQL aliases.',
+	},
+	{
+		category: 'Read Data',
+		categoryRoute: '/read-data',
+		recipeIndex: 7,
+		name: 'Imperative Refetch',
+		description: 'Displays a Contact list with a Refresh button that re-runs the query on demand.',
+	},
 ];
 
 /** Returns the number of recipes for a given category route (e.g. "/hello"). */

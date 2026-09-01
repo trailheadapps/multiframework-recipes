@@ -22,5 +22,12 @@ export class HomeComponent {
 				'Start here. Covers template binding, conditional and list rendering, lifecycle, and component composition with inputs and outputs.',
 			count: getRecipeCount('/hello'),
 		},
+		{
+			to: '/read-data',
+			name: 'Read Data',
+			description:
+				'Query Salesforce records with UIAPI GraphQL: single records, lists, filtering, sorting, cursor pagination, related records, and aliased multi-object queries.',
+			count: getRecipeCount('/read-data'),
+		},
 	];
 }
