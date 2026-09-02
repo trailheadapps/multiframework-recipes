@@ -7,4 +7,17 @@
         <target>lightning__RecordPage</target>
         <target>lightning__HomePage</target>
     </targets>
+    <targetConfigs>
+        <targetConfig
+      targets="lightning__RecordPage,lightning__AppPage,lightning__HomePage"
+    >
+            <property
+        name="baseUrl"
+        type="String"
+        label="Guest base URL"
+        description="Origin that serves the microfrontend guest — the Vite dev server in development, or your own hosting/CDN in production."
+        default="http://localhost:5173"
+      />
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

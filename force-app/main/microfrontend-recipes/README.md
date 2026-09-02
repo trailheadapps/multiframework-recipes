@@ -32,7 +32,7 @@ graph LR
 - **LWC host components** (this package, under [`lwc/`](lwc/)) render `<lightning-ui-embedding src="...">` and point at a guest URL built from `baseUrl` + a route.
 - **Guest recipes** are written in whichever framework you like. In this repo they're React, living under [`../react-recipes/uiBundles/reactRecipes/src/recipes/embedding/`](../react-recipes/uiBundles/reactRecipes/src/recipes/embedding/) and served on `/embedding/*` routes by the Vite dev server.
 - **In development,** "externally hosted" means `http://localhost:5173`.
-- **In production,** you deploy the framework app to your own hosting (Vercel, AWS, anywhere) and point each LWC host's `baseUrl` at that URL.
+- **In production,** you deploy the framework app to your own hosting (Vercel, AWS, anywhere) and repoint the hosts. Each `uiEmbedding*` host exposes a **Guest base URL** property (a `targetConfig` on the component), so an admin sets it per placement in the Lightning App Builder — no code change or redeploy. It defaults to `http://localhost:5173` for local development.
 
 **Use when:** you already have an externally hosted app you want to reuse across Salesforce and non-Salesforce surfaces.
 
