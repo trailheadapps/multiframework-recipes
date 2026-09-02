@@ -8,7 +8,7 @@ A collection of easy-to-digest code examples for building apps on the Salesforce
 This sample application is designed to run on the Salesforce Platform. It covers what a frontend developer needs to know about Salesforce, and what a Salesforce developer needs to know about modern frameworks — taught at the intersection.
 
 > [!NOTE]
-> **React Recipes** is available now. **Angular Recipes** and **Microfrontend Recipes** are in developer preview.
+> **React Recipes** is available now. **Angular Recipes** is a work-in-progress preview; **Microfrontend Recipes** is a Developer Preview feature.
 
 **Learn more:** Read the [Salesforce Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/multiframework/guide) for a comprehensive overview.
 

@@ -89,6 +89,9 @@ graph LR
    sf org assign permset -n microfrontendRecipes
    ```
 
+   > [!IMPORTANT]
+   > Both permission sets are required. Microfrontend Recipes has no data model of its own — its guests are React Recipes views — so it deliberately reuses the shared `recipes` permission set for Account access, and `microfrontendRecipes` only layers on the app and tab. Assign just one and the demo loads with no data (or no app).
+
 1. Import sample data:
 
    ```bash
