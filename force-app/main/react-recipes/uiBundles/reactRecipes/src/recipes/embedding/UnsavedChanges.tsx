@@ -9,7 +9,8 @@
  * Save dispatches `guestsave`; the host writes to Salesforce and pushes
  * fresh values back through ui-state. The Save button stays clickable
  * throughout. An in-flight ref prevents rapid re-clicks from firing
- * duplicate updateRecords.
+ * duplicate updateRecords, and a short timeout releases that guard if the
+ * host's save fails (it toasts without re-emitting), so Save never sticks.
  *
  * @see SendToHost, ReadHostData
  */
@@ -61,6 +62,9 @@ export default function UnsavedChanges() {
   // The button stays clickable so its state doesn't dirty → clean → dirty
   // flicker while the host round-trips.
   const savingRef = useRef(false);
+  // Failsafe timer: releases `savingRef` if the host never echoes back
+  // (e.g. its updateRecord failed), so a failed save doesn't lock the button.
+  const saveTimeoutRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
@@ -79,12 +83,15 @@ export default function UnsavedChanges() {
       seed(ui.state.props as AccountProps);
       unsubscribe = ui.subscribe(latest => {
         seed(latest.props as AccountProps);
+        // Host echoed fresh values → the save round-trip completed.
         savingRef.current = false;
+        if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
       });
     });
     return () => {
       cancelled = true;
       unsubscribe?.();
+      if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
     };
   }, []);
 
@@ -118,6 +125,12 @@ export default function UnsavedChanges() {
         bubbles: true,
       }),
     );
+    // The host normally releases the guard by echoing fresh values via
+    // ui-state. If its updateRecord fails (it surfaces a toast and doesn't
+    // re-emit), release after a short delay so a failed save can be retried.
+    saveTimeoutRef.current = window.setTimeout(() => {
+      savingRef.current = false;
+    }, 4000);
   }
 
   function handleDiscard() {
