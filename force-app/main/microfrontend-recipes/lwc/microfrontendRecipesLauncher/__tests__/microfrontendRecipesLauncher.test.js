@@ -55,4 +55,39 @@ describe("c-microfrontend-recipes-launcher", () => {
     expect(pageReference.type).toBe("standard__recordPage");
     expect(pageReference.attributes.recordId).toBe("001");
   });
+
+  it("surfaces a GraphQL error and keeps the button disabled", async () => {
+    const el = createElement("c-microfrontend-recipes-launcher", {
+      is: MicrofrontendRecipesLauncher
+    });
+    document.body.appendChild(el);
+
+    graphql.emitErrors([{ message: "GraphQL query failed" }]);
+    await Promise.resolve();
+
+    const error = el.shadowRoot.querySelector(".slds-text-color_error");
+    expect(error).not.toBeNull();
+    expect(error.textContent).toContain("GraphQL query failed");
+    expect(el.shadowRoot.querySelector("lightning-button").disabled).toBe(
+      true
+    );
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it("shows a no-accounts message when the org has no Accounts", async () => {
+    const el = createElement("c-microfrontend-recipes-launcher", {
+      is: MicrofrontendRecipesLauncher
+    });
+    document.body.appendChild(el);
+
+    graphql.emit({ uiapi: { query: { Account: { edges: [] } } } });
+    await Promise.resolve();
+
+    const error = el.shadowRoot.querySelector(".slds-text-color_error");
+    expect(error).not.toBeNull();
+    expect(error.textContent).toContain("No Accounts found");
+    expect(el.shadowRoot.querySelector("lightning-button").disabled).toBe(
+      true
+    );
+  });
 });

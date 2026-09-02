@@ -97,6 +97,22 @@ describe('BasicRender', () => {
     expect(screen.getByText('Retail')).toBeInTheDocument();
   });
 
+  it('unsubscribes from ui-state on unmount', async () => {
+    const unsubscribe = vi.fn();
+    mockView({
+      getUiState: () => ({
+        state: { props: { name: 'Acme' } },
+        subscribe: () => unsubscribe,
+      }),
+    });
+
+    const { unmount } = render(<BasicRender />);
+    await flushSdk();
+    unmount();
+
+    expect(unsubscribe).toHaveBeenCalledTimes(1);
+  });
+
   it('is accessible', async () => {
     mockView(
       stubUiState({

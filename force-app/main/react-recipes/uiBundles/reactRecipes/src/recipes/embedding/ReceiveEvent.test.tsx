@@ -100,6 +100,25 @@ describe('ReceiveEvent', () => {
     expect(screen.getByText(/1 refresh received/)).toBeInTheDocument();
   });
 
+  it('removes its refreshticker listener on unmount', async () => {
+    const view = stubView({
+      recordId: '001',
+      name: 'Acme',
+      tickerSymbol: 'ACME',
+    });
+    const removeSpy = vi.spyOn(view, 'removeEventListener');
+    mockView(view);
+
+    const { unmount } = render(<ReceiveEvent />);
+    await flushSdk();
+    unmount();
+
+    expect(removeSpy).toHaveBeenCalledWith(
+      'refreshticker',
+      expect.any(Function),
+    );
+  });
+
   it('is accessible', async () => {
     mockView(stubView({ recordId: '001', name: 'Acme', tickerSymbol: 'ACME' }));
 
