@@ -30,13 +30,6 @@ const recipes: EmbeddingRecipe[] = [
       'The minimum viable guest. Reads Account fields the host pushes over the SDK ui-state channel and renders them as a card.',
   },
   {
-    name: 'Read Host Data',
-    route: '/embedding/read-host-data',
-    source: `${GUEST_SOURCE_BASE}/ReadHostData.tsx`,
-    description:
-      'Subscribes to live host updates — each change the host pushes re-renders the guest.',
-  },
-  {
     name: 'Send to Host',
     route: '/embedding/send-to-host',
     source: `${GUEST_SOURCE_BASE}/SendToHost.tsx`,
@@ -44,11 +37,18 @@ const recipes: EmbeddingRecipe[] = [
       'A scoring matrix; clicking a cell dispatches a score event the host writes back to the record.',
   },
   {
-    name: 'Auto Resize',
-    route: '/embedding/auto-resize',
-    source: `${GUEST_SOURCE_BASE}/AutoResize.tsx`,
+    name: 'Read Host Data',
+    route: '/embedding/read-host-data',
+    source: `${GUEST_SOURCE_BASE}/ReadHostData.tsx`,
     description:
-      "Add or remove items and the embedded iframe's height follows the guest's content automatically.",
+      'Subscribes to live host updates — each change the host pushes re-renders the guest.',
+  },
+  {
+    name: 'Unsaved Changes',
+    route: '/embedding/unsaved-changes',
+    source: `${GUEST_SOURCE_BASE}/UnsavedChanges.tsx`,
+    description:
+      'An editable form that marks dirty state, so the record page shows a Save/Discard bar and warns before navigating away.',
   },
   {
     name: 'Theme Tokens',
@@ -58,11 +58,11 @@ const recipes: EmbeddingRecipe[] = [
       'The host sends a theme name; the guest maps it to CSS variables its components read.',
   },
   {
-    name: 'Unsaved Changes',
-    route: '/embedding/unsaved-changes',
-    source: `${GUEST_SOURCE_BASE}/UnsavedChanges.tsx`,
+    name: 'Auto Resize',
+    route: '/embedding/auto-resize',
+    source: `${GUEST_SOURCE_BASE}/AutoResize.tsx`,
     description:
-      'An editable form that marks dirty state, so the record page shows a Save/Discard bar and warns before navigating away.',
+      "Add or remove items and the embedded iframe's height follows the guest's content automatically.",
   },
   {
     name: 'Receive Event',
