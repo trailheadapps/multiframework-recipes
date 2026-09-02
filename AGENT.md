@@ -268,9 +268,11 @@ Title line + 1–2 sentences max. No bullet lists.
  */
 ```
 
+Place this docblock on the recipe's primary export: in **React** directly above the exported function; in **Angular** above the `@Component` decorator (below the `gql` const and its comment when the recipe has one).
+
 ### Inline comments
 
-Keep brief. Explain Salesforce-specific concepts, not React basics.
+Keep brief. Explain Salesforce-specific concepts, not framework basics. Put the comment on its own line directly **above** the statement it explains (the *why*, not the *what*), not trailing at end-of-line — the same in every framework.
 
 ### Component ordering: most relevant code first
 
@@ -356,14 +358,16 @@ This rule overrides the "GraphQL Workflow" section above. The recommended patter
 
 ```
 1. File header comment (title, what it demonstrates, related recipes)
-2. Imports (SDK, React hooks)
+2. Imports (SDK, framework primitives)
 3. GraphQL query/mutation string (inline, not imported)
 4. Type definitions (explicit, not inferred from utility return types)
 5. Default export: the recipe component
 6. Helper sub-components (below the main export)
 ```
 
-This ordering is mandatory for recipes. The reader should hit the GraphQL query before the component, so they understand the data shape before seeing how it's rendered. (Angular files that import helper sub-components in the main component's `imports: [...]` are the documented exception — see the Angular exception under "Component ordering" above.)
+**Order for reading, by export.** The reader should hit the `gql` query before the component — understand the data shape before seeing how it's rendered — with the response types kept next to the export. The list above is the **React** realization: the recipe is a function, so its response types read most naturally _above_ it (step 4). In **Angular** the recipe is a class (the headline export), so the query still leads but the response `interface`/`type` definitions go _below_ the class; the shipped `hello` recipes follow this. Either way the query comes first and the docblock sits on the export.
+
+(One placement is forced by the framework rather than by style: helper sub-components a main Angular component lists in `imports: [...]` must be declared **above** it — a temporal-dead-zone constraint documented under "Component ordering" above.)
 
 ---
 
