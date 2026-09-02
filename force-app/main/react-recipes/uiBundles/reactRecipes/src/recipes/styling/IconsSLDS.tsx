@@ -17,14 +17,6 @@ const STANDARD_ICONS = [
   'case',
   'task',
 ];
-const ACTION_ICONS = [
-  'new_note',
-  'edit',
-  'delete',
-  'share',
-  'log_a_call',
-  'new_account',
-];
 
 type IconCategory = {
   label: string;
@@ -45,14 +37,6 @@ const CATEGORIES: IconCategory[] = [
     sprite: 'standard-sprite',
     names: STANDARD_ICONS,
     containerClass: name => `slds-icon_container slds-icon-standard-${name}`,
-  },
-  {
-    label: 'Action',
-    sprite: 'action-sprite',
-    names: ACTION_ICONS,
-    // sprite names use underscores; CSS classes use hyphens
-    containerClass: name =>
-      `slds-icon_container slds-icon_container_circle slds-icon-action-${name.replace(/_/g, '-')}`,
   },
 ];
 

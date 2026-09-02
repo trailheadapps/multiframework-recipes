@@ -1,31 +1,34 @@
 @layer base, slds;
-@import '@salesforce-ux/design-system/assets/styles/salesforce-lightning-design-system.min.css' layer(slds);
 
-@keyframes slds-shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
-}
-
-.slds-skeleton-block {
-  display: block;
-  background: linear-gradient(90deg, #e5e5e5 25%, #f5f5f5 50%, #e5e5e5 75%);
-  background-size: 200% 100%;
-  animation: slds-shimmer 1.5s ease-in-out infinite;
-  border-radius: 0.25rem;
-}
+/**
+ * SLDS 2 — scoped, modular build (@salesforce-ux/design-system-2).
+ *
+ * Scoped: component styles only apply inside a `.slds-scope` container, so SLDS
+ * stays out of the Tailwind/shadcn app shell (see the SldsScope wrapper).
+ * Modular: the base structure is loaded once, then a single theme file sets the
+ * design tokens. Swap the theme import below to slds2.theme.lightning-blue.css
+ * to switch the SLDS look; theme tokens target :where(html) and apply globally.
+ */
+@import '@salesforce-ux/design-system-2/dist/css/modular/slds2.scoped.base.css'
+  layer(slds);
+@import '@salesforce-ux/design-system-2/dist/css/modular/slds2.theme.cosmos.css'
+  layer(slds);
 
 @layer slds {
-  .slds-context-bar {
-    max-width: 100%;
-    overflow-x: auto;
+  /**
+   * Decorative lift for the icon buttons in the SLDS button recipe. Namespaced
+   * (recipes-*) rather than overriding .slds-button_icon-border-filled directly,
+   * per SLDS 2 guidance against restyling SLDS classes. Applied alongside the
+   * SLDS class in ButtonSLDS.
+   */
+  .slds-scope .recipes-buttonIcon-lift {
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
   }
 
-  .slds-button_icon-border-filled {
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .slds-button_icon-border-filled:hover {
+  .slds-scope .recipes-buttonIcon-lift:hover {
     transform: translateY(-1px);
-    box-shadow: 0 2px 0 0 black;
+    box-shadow: 0 2px 0 0 var(--slds-g-color-border-1, black);
   }
 }

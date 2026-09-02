@@ -17,7 +17,7 @@
     "graphql:schema": "node scripts/get-graphql-schema.mjs"
   },
   "dependencies": {
-    "@salesforce-ux/design-system": "2.29.0",
+    "@salesforce-ux/design-system-2": "2.264.1",
     "@salesforce/platform-sdk": "^10.24.0",
     "@salesforce/ui-bundle": "^10.24.0",
     "@tailwindcss/vite": "^4.1.17",

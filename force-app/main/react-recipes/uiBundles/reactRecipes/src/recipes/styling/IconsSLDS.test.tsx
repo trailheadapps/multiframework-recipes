@@ -11,7 +11,6 @@ describe('IconsSLDS', () => {
     render(<IconsSLDS />);
     expect(screen.getByText('Utility')).toBeInTheDocument();
     expect(screen.getByText('Standard')).toBeInTheDocument();
-    expect(screen.getByText('Action')).toBeInTheDocument();
   });
 
   it('renders utility icon names', () => {
@@ -27,12 +26,6 @@ describe('IconsSLDS', () => {
     expect(screen.getAllByText('account').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('contact').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('opportunity').length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('renders action icon names', () => {
-    render(<IconsSLDS />);
-    expect(screen.getAllByText('new_note').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('share').length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders SVG elements with aria-hidden', () => {

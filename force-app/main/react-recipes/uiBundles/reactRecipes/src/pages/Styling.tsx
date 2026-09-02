@@ -1,4 +1,5 @@
 import Layout, { type RecipeItem } from '@/components/app/Layout';
+import SldsScope from '@/components/app/SldsScope';
 import AccountCardSLDS from '@/recipes/styling/AccountCardSLDS';
 import AccountCardShadcn from '@/recipes/styling/AccountCardShadcn';
 import IconsSLDS from '@/recipes/styling/IconsSLDS';
@@ -20,7 +21,11 @@ export default function Styling() {
       name: 'Account Card — SLDS Blueprint',
       description:
         'Account card built with SLDS blueprint classes (slds-card) — the JSX equivalent of <lightning-card>.',
-      component: <AccountCardSLDS />,
+      component: (
+        <SldsScope>
+          <AccountCardSLDS />
+        </SldsScope>
+      ),
       source: accountCardSLDSSource,
     },
     {
@@ -33,8 +38,12 @@ export default function Styling() {
     {
       name: 'Icons — SLDS Blueprint',
       description:
-        'SLDS icons via SVG sprite references — the slds-icon_container + <use href> pattern. Shows all three categories: utility (monochrome), standard (colorized square), and action (colorized circle). There is no <lightning-icon> React equivalent; you own this markup.',
-      component: <IconsSLDS />,
+        'SLDS icons via SVG sprite references — the slds-icon_container + <use href> pattern. Shows utility (monochrome) and standard (colorized square) icons. There is no <lightning-icon> React equivalent; you own this markup.',
+      component: (
+        <SldsScope>
+          <IconsSLDS />
+        </SldsScope>
+      ),
       source: iconsSLDSSource,
     },
     {
@@ -48,7 +57,11 @@ export default function Styling() {
       name: 'Button — SLDS Blueprint',
       description:
         'All standard SLDS button variants using slds-button classes on plain <button> elements. Shows variants (neutral, brand, outline-brand, destructive, success), disabled state, and icon buttons (icon-only and label+icon patterns).',
-      component: <ButtonSLDS />,
+      component: (
+        <SldsScope>
+          <ButtonSLDS />
+        </SldsScope>
+      ),
       source: buttonSLDSSource,
     },
     {

@@ -25,9 +25,12 @@ export default function ButtonSLDS() {
         <h3 className="slds-text-heading_small slds-m-bottom_small">
           Variants
         </h3>
-        <div className="slds-button-group-row">
+        <div className="slds-grid slds-wrap">
           {VARIANTS.map(({ label, className }) => (
-            <button key={label} className={`slds-button ${className}`}>
+            <button
+              key={label}
+              className={`slds-button ${className} slds-m-right_x-small slds-m-bottom_x-small`}
+            >
               {label}
             </button>
           ))}
@@ -39,11 +42,17 @@ export default function ButtonSLDS() {
         <h3 className="slds-text-heading_small slds-m-bottom_small">
           Disabled
         </h3>
-        <div className="slds-button-group-row">
-          <button className="slds-button slds-button_neutral" disabled>
+        <div className="slds-grid slds-wrap">
+          <button
+            className="slds-button slds-button_neutral slds-m-right_x-small slds-m-bottom_x-small"
+            disabled
+          >
             Neutral
           </button>
-          <button className="slds-button slds-button_brand" disabled>
+          <button
+            className="slds-button slds-button_brand slds-m-right_x-small slds-m-bottom_x-small"
+            disabled
+          >
             Brand
           </button>
         </div>
@@ -54,10 +63,10 @@ export default function ButtonSLDS() {
         <h3 className="slds-text-heading_small slds-m-bottom_small">
           Icon Buttons
         </h3>
-        <div className="slds-button-group-row slds-grid_vertical-align-center">
+        <div className="slds-grid slds-wrap slds-grid_vertical-align-center">
           {/* Icon-only */}
           <button
-            className="slds-button slds-button_icon slds-button_icon-border-filled"
+            className="slds-button slds-button_icon slds-button_icon-border-filled recipes-buttonIcon-lift slds-m-right_x-small slds-m-bottom_x-small"
             title="Settings"
           >
             <svg className="slds-button__icon" aria-hidden="true">
@@ -68,7 +77,7 @@ export default function ButtonSLDS() {
 
           {/* Icon-only, brand */}
           <button
-            className="slds-button slds-button_icon slds-button_icon-brand"
+            className="slds-button slds-button_icon slds-button_icon-brand slds-m-right_x-small slds-m-bottom_x-small"
             title="Add"
           >
             <svg className="slds-button__icon" aria-hidden="true">
@@ -78,7 +87,7 @@ export default function ButtonSLDS() {
           </button>
 
           {/* Label + icon */}
-          <button className="slds-button slds-button_neutral">
+          <button className="slds-button slds-button_neutral slds-m-right_x-small slds-m-bottom_x-small">
             <svg
               className="slds-button__icon slds-button__icon_left"
               aria-hidden="true"
@@ -88,7 +97,7 @@ export default function ButtonSLDS() {
             New Record
           </button>
 
-          <button className="slds-button slds-button_brand">
+          <button className="slds-button slds-button_brand slds-m-right_x-small slds-m-bottom_x-small">
             <svg
               className="slds-button__icon slds-button__icon_left"
               aria-hidden="true"

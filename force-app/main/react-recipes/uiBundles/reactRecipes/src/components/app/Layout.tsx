@@ -123,9 +123,7 @@ export default function Layout({ header, recipes = [] }: LayoutProps) {
                     <CardDescription>{selected.description}</CardDescription>
                   )}
                 </CardHeader>
-                <CardContent className="slds-card__body_inner">
-                  {selected.component}
-                </CardContent>
+                <CardContent>{selected.component}</CardContent>
               </Card>
             </div>
 

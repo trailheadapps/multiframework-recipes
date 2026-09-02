@@ -17,7 +17,7 @@ export default function AccountCardSLDS() {
     return <p className="slds-text-color_weak">No account found.</p>;
 
   return (
-    <article className="slds-card">
+    <article className="slds-card slds-border_top slds-border_right slds-border_bottom slds-border_left">
       {/* Header: icon + title */}
       <div className="slds-card__header slds-grid">
         <header className="slds-media slds-media_center slds-has-flexi-truncate">

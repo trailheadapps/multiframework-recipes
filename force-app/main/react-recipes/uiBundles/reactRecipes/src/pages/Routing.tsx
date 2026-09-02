@@ -1,5 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router';
 import Layout, { type RecipeItem } from '@/components/app/Layout';
+import SldsScope from '@/components/app/SldsScope';
 import CodeBlock from '@/components/app/CodeBlock';
 import LinkDemo from '@/recipes/routing/LinkDemo';
 import { RouteParametersList } from '@/recipes/routing/RouteParameters';
@@ -38,7 +39,7 @@ export default function Routing() {
     {
       name: 'Route Parameters',
       description:
-        'An Account list links to a detail view using a dynamic route parameter (:accountId). useParams reads the ID from the URL — in LWC you\'d wire CurrentPageReference and read it from the page state object.',
+        "An Account list links to a detail view using a dynamic route parameter (:accountId). useParams reads the ID from the URL — in LWC you'd wire CurrentPageReference and read it from the page state object.",
       component: <RouteParametersList />,
       source: routeParametersSource,
     },
@@ -91,55 +92,54 @@ function DemoPage({
   backTo?: string;
 }) {
   return (
-    <div className="slds-p-vertical_medium">
-      <div className="slds-page-header slds-m-bottom_medium">
-        <div className="slds-page-header__row">
-          <div className="slds-page-header__col-title">
-            <div className="slds-media">
-              <div className="slds-media__body">
-                <div className="slds-page-header__name">
-                  <div className="slds-page-header__name-title">
-                    <h1>
-                      <span className="slds-page-header__title">{title}</span>
-                    </h1>
-                    {subtitle && (
-                      <p className="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
-                        <code>{subtitle}</code>
-                      </p>
-                    )}
+    <SldsScope>
+      <div className="slds-p-vertical_medium">
+        <div className="slds-page-header slds-m-bottom_medium">
+          <div className="slds-page-header__row">
+            <div className="slds-page-header__col-title">
+              <div className="slds-media">
+                <div className="slds-media__body">
+                  <div className="slds-page-header__name">
+                    <div className="slds-page-header__name-title">
+                      <h1>
+                        <span className="slds-page-header__title">{title}</span>
+                      </h1>
+                      {subtitle && (
+                        <p className="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                          <code>{subtitle}</code>
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            {backTo && (
+              <div className="slds-page-header__col-actions">
+                <Link to={backTo} className="slds-button slds-button_neutral">
+                  ← Back to Routing
+                </Link>
+              </div>
+            )}
           </div>
-          {backTo && (
-            <div className="slds-page-header__col-actions">
-              <Link
-                to={backTo}
-                className="slds-button slds-button_neutral"
-              >
-                ← Back to Routing
-              </Link>
-            </div>
-          )}
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '1rem',
+            alignItems: 'start',
+          }}
+        >
+          <div className="slds-box">
+            {/* Child routes render here — see routes.tsx for the route tree */}
+            <Outlet />
+          </div>
+          <div style={{ height: 'calc(100vh - 10rem)' }}>
+            <CodeBlock source={source} />
+          </div>
         </div>
       </div>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '1rem',
-          alignItems: 'start',
-        }}
-      >
-        <div className="slds-box">
-          {/* Child routes render here — see routes.tsx for the route tree */}
-          <Outlet />
-        </div>
-        <div style={{ height: 'calc(100vh - 10rem)' }}>
-          <CodeBlock source={source} />
-        </div>
-      </div>
-    </div>
+    </SldsScope>
   );
 }

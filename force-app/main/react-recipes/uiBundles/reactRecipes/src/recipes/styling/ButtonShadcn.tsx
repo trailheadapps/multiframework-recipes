@@ -15,9 +15,7 @@ export default function ButtonShadcn() {
     <div className="space-y-6">
       {/* Variants */}
       <section>
-        <h3 className="slds-text-heading_small slds-m-bottom_small">
-          Variants
-        </h3>
+        <h3 className="text-sm font-bold mb-3">Variants</h3>
         <div className="flex flex-wrap gap-2">
           <Button>Default</Button>
           <Button variant="destructive">Destructive</Button>
@@ -30,7 +28,7 @@ export default function ButtonShadcn() {
 
       {/* Sizes */}
       <section>
-        <h3 className="slds-text-heading_small slds-m-bottom_small">Sizes</h3>
+        <h3 className="text-sm font-bold mb-3">Sizes</h3>
         <div className="flex flex-wrap gap-2 items-center">
           <Button size="sm">Small</Button>
           <Button>Default</Button>
@@ -43,9 +41,7 @@ export default function ButtonShadcn() {
 
       {/* Disabled */}
       <section>
-        <h3 className="slds-text-heading_small slds-m-bottom_small">
-          Disabled
-        </h3>
+        <h3 className="text-sm font-bold mb-3">Disabled</h3>
         <div className="flex flex-wrap gap-2">
           <Button disabled>Default</Button>
           <Button variant="destructive" disabled>
@@ -59,9 +55,7 @@ export default function ButtonShadcn() {
 
       {/* With icons */}
       <section>
-        <h3 className="slds-text-heading_small slds-m-bottom_small">
-          With Icons
-        </h3>
+        <h3 className="text-sm font-bold mb-3">With Icons</h3>
         <div className="flex flex-wrap gap-2">
           <Button>
             <Plus />
