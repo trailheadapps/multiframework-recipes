@@ -1,58 +1,14 @@
-@layer theme, base, slds, components, utilities;
+@layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/preflight.css' layer(base);
 @import 'tailwindcss/utilities.css';
 @import '@spartan-ng/brain/hlm-tailwind-preset.css';
-
-/*
- * SLDS in its own layer, after `base` but before Tailwind's `components` and
- * `utilities` layers, so Tailwind classes used in a recipe still win.
- */
-@import '@salesforce-ux/design-system/assets/styles/salesforce-lightning-design-system.min.css'
-	layer(slds);
-
-@layer slds {
-	html,
-	body,
-	app-root {
-		background-color: var(--background);
-		font-size: 16px;
-	}
-
-	a {
-		color: inherit;
-	}
-
-	a,
-	a:hover,
-	a:focus {
-		text-decoration: none;
-	}
-}
 
 @layer base {
 	html,
 	body {
 		@apply min-h-screen;
 	}
-}
-
-/* Skeleton shimmer for loading states. */
-@keyframes slds-shimmer {
-	0% {
-		background-position: -200% 0;
-	}
-	100% {
-		background-position: 200% 0;
-	}
-}
-
-.slds-skeleton-block {
-	display: block;
-	background: linear-gradient(90deg, #e5e5e5 25%, #f5f5f5 50%, #e5e5e5 75%);
-	background-size: 200% 100%;
-	animation: slds-shimmer 1.5s ease-in-out infinite;
-	border-radius: 0.25rem;
 }
 
 @custom-variant dark (&:is(.dark *));

@@ -28,7 +28,6 @@
     "@angular/router": "^21.2.0",
     "@ng-icons/core": "^32.2.0",
     "@ng-icons/lucide": "^32.2.0",
-    "@salesforce-ux/design-system": "2.29.0",
     "@salesforce/angular-plugin-ui-bundle": "^11.62.1",
     "@salesforce/platform-sdk": "^11.62.1",
     "@salesforce/ui-bundle": "^11.62.1",
