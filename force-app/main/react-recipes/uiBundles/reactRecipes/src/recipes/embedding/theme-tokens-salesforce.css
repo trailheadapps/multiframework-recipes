@@ -1,0 +1,96 @@
+/* Salesforce theme — SLDS-flavored palette, applied via the
+ * `.salesforce` class on the guest root. Flipping the class swaps every
+ * CSS variable at once; shadcn primitives read those variables through
+ * `bg-card`, `text-foreground`, etc.
+ *
+ * The rules are split into two blocks:
+ *   1. Palette overrides — the theme itself.
+ *   2. Component chrome — optional overrides that make Card/Badge look
+ *      SLDS-native. These target shadcn's `data-slot` attributes; if
+ *      you're building your own components you won't need this block.
+ */
+
+/* 1. Palette overrides */
+.salesforce {
+  --background: #f3f3f3;
+  --foreground: #181818;
+  --card: #ffffff;
+  --card-foreground: #181818;
+  --popover: #ffffff;
+  --popover-foreground: #181818;
+  --primary: #0176d3;
+  --primary-foreground: #ffffff;
+  --secondary: #ecebea;
+  --secondary-foreground: #181818;
+  --muted: #ecebea;
+  --muted-foreground: #706e6b;
+  --accent: #eaf5fe;
+  --accent-foreground: #014486;
+  --border: #dddbda;
+  --input: #dddbda;
+  --ring: #0176d3;
+  --radius: 0.25rem;
+  font-family:
+    'Salesforce Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+/* 2. Component chrome — makes shadcn Card and Badge look SLDS-native. */
+.salesforce [data-slot='card'] {
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0 1px #dddbda;
+  background: #ffffff;
+}
+
+.salesforce [data-slot='card-header'] {
+  padding: 0.75rem 1rem 0.5rem;
+  border-bottom: 1px solid #dddbda;
+}
+
+.salesforce [data-slot='card-title'] {
+  color: #080707;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.salesforce [data-slot='card-description'] {
+  color: #706e6b;
+  font-size: 0.75rem;
+}
+
+.salesforce [data-slot='card-content'] {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.salesforce [data-slot='card-content'] dt {
+  color: #706e6b;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.salesforce [data-slot='card-content'] dd {
+  color: #080707;
+  font-size: 0.8125rem;
+}
+
+.salesforce [data-slot='badge'] {
+  border-radius: 15rem;
+  padding: 0 8px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  background: #ecebea;
+  color: #080707;
+  border-color: #dddbda;
+}
+
+.salesforce a {
+  color: #0176d3;
+}

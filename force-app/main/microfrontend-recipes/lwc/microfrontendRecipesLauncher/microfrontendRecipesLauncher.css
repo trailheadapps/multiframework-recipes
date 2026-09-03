@@ -1,0 +1,31 @@
+.hero {
+  display: flex;
+  justify-content: center;
+  padding: var(--slds-g-spacing-8, 3rem) var(--slds-g-spacing-4, 1rem);
+  background: linear-gradient(135deg, #eaf5fe 0%, #ffffff 100%);
+  border-radius: var(--slds-g-radius-border-2, 0.5rem);
+}
+
+.content {
+  max-width: 42rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero h1 {
+  font-size: var(--slds-g-font-scale-4, 1.5rem);
+  font-weight: var(--slds-g-font-weight-3, 300);
+  color: var(--slds-g-color-on-surface-2, #181818);
+  line-height: var(--slds-g-font-lineheight-2, 1.25);
+  margin: 0;
+}
+
+.lead {
+  font-size: 0.9375rem;
+  color: var(--slds-g-color-on-surface-1, #5c5c5c);
+  line-height: var(--slds-g-font-lineheight-base, 1.5);
+  margin: 0;
+}

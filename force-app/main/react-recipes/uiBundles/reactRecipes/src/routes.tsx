@@ -9,13 +9,25 @@ import SalesforceAPIs from './pages/SalesforceAPIs';
 import Authentication from './pages/Authentication';
 import ErrorHandling from './pages/ErrorHandling';
 import Styling from './pages/Styling';
-import Routing, { RouteParametersPage, NestedRoutesPage } from './pages/Routing';
+import Routing, {
+  RouteParametersPage,
+  NestedRoutesPage,
+} from './pages/Routing';
 import Integration from './pages/Integration';
+import Embedding from './pages/Embedding';
 import { RouteParametersDetail } from './recipes/routing/RouteParameters';
 import NestedRoutes, {
   NestedRoutesIndex,
   NestedRoutesDetail,
 } from './recipes/routing/NestedRoutes';
+import GuestLayout from './recipes/embedding/GuestLayout';
+import BasicRender from './recipes/embedding/BasicRender';
+import ReadHostData from './recipes/embedding/ReadHostData';
+import SendToHost from './recipes/embedding/SendToHost';
+import AutoResize from './recipes/embedding/AutoResize';
+import ThemeTokens from './recipes/embedding/ThemeTokens';
+import UnsavedChanges from './recipes/embedding/UnsavedChanges';
+import ReceiveEvent from './recipes/embedding/ReceiveEvent';
 
 export const routes: RouteObject[] = [
   {
@@ -92,9 +104,33 @@ export const routes: RouteObject[] = [
         handle: { showInNavigation: true, label: 'Integration' },
       },
       {
+        // Index of the embedding guests. Reached from the Home callout, not
+        // the navbar — it lists the guest routes below and links out to their
+        // source. The guest routes themselves live under GuestLayout (below).
+        path: 'embedding',
+        element: <Embedding />,
+      },
+      {
         path: '*',
         element: <NotFound />,
       },
+    ],
+  },
+  {
+    // Externally-hosted embedding guests. Loaded by the uiEmbedding*
+    // LWC hosts via <lightning-ui-embedding src=".../embedding/<recipe>">. This
+    // is a PATHLESS layout route (no `path`) so it sits OUTSIDE AppLayout —
+    // the iframe renders a clean recipe with no gallery navbar/footer.
+    // GuestLayout bootstraps the Platform SDK and provides it to each recipe.
+    element: <GuestLayout />,
+    children: [
+      { path: 'embedding/basic-render', element: <BasicRender /> },
+      { path: 'embedding/read-host-data', element: <ReadHostData /> },
+      { path: 'embedding/send-to-host', element: <SendToHost /> },
+      { path: 'embedding/auto-resize', element: <AutoResize /> },
+      { path: 'embedding/theme-tokens', element: <ThemeTokens /> },
+      { path: 'embedding/unsaved-changes', element: <UnsavedChanges /> },
+      { path: 'embedding/receive-event', element: <ReceiveEvent /> },
     ],
   },
 ];

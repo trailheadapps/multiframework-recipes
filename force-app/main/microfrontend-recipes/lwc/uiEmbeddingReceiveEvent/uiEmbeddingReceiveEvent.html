@@ -1,0 +1,46 @@
+<template>
+  <div class="recipe-body">
+    <div class="controls">
+      <lightning-button
+        label="Refresh quote"
+        icon-name="utility:refresh"
+        onclick={handleRefresh}
+        disabled={disabled}
+      ></lightning-button>
+    </div>
+    <div class="shell-container">
+      <lightning-ui-embedding
+        lwc:ref="embedding"
+        sandbox="allow-popups"
+        shell-title="Receive Event"
+        src={computedSrc}
+        props={account}
+      ></lightning-ui-embedding>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        Click Refresh quote. The host dispatches a refreshticker event on
+        &lt;lightning-ui-embedding&gt;; the guest hears it via
+        viewSDK.addEventListener() and re-pulls the share price. The ticker
+        itself arrives through ui-state — the price does not, so only the guest
+        can fetch it.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingReceiveEvent"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingReceiveEvent)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
