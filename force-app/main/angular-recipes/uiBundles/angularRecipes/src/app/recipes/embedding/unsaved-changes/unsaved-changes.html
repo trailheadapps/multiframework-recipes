@@ -1,0 +1,51 @@
+<div class="p-1">
+	<app-card class="max-w-md">
+		<app-card-header>
+			<app-card-title class="text-lg">Edit Account</app-card-title>
+			<app-card-description>
+				@if (connected()) {
+					Edit any field. Watch the host badge track your changes.
+				} @else {
+					Drop this component on an Account record page to edit.
+				}
+			</app-card-description>
+		</app-card-header>
+		<app-card-content class="space-y-4">
+			<app-input
+				label="Name"
+				[value]="form().name ?? ''"
+				(valueChange)="setName($event)"
+			/>
+
+			<app-select
+				label="Rating"
+				placeholder="Choose rating"
+				[options]="ratingOptions"
+				[value]="form().rating ?? ''"
+				(valueChange)="setRating($event)"
+			/>
+
+			<app-select
+				label="Type"
+				placeholder="Choose type"
+				[options]="typeOptions"
+				[value]="form().type ?? ''"
+				(valueChange)="setType($event)"
+			/>
+
+			<div class="flex gap-2 pt-2">
+				<app-button size="sm" (clicked)="save()">Save</app-button>
+				<app-button size="sm" appearance="outlined" (clicked)="discard()">Discard</app-button>
+			</div>
+		</app-card-content>
+	</app-card>
+	<a
+		href="https://github.com/trailheadapps/multiframework-recipes/blob/main/force-app/main/angular-recipes/uiBundles/angularRecipes/src/app/recipes/embedding/unsaved-changes/unsaved-changes.ts"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="text-muted-foreground hover:text-primary mt-3 inline-flex items-center gap-1 text-xs"
+	>
+		Guest (unsaved-changes.ts)
+		<app-icon name="externalLink" size="0.75rem" />
+	</a>
+</div>
