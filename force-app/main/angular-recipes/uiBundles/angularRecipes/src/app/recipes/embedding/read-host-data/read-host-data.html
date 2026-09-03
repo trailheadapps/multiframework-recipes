@@ -1,0 +1,99 @@
+<div class="p-1">
+	<!--
+		Re-key the card on every host push so it is destroyed and recreated,
+		replaying the fade-in as a visual "pulse" that confirms fresh data.
+	-->
+	@for (tick of [updateCount()]; track tick) {
+		<div
+			class="max-w-md"
+			[class.animate-in]="tick > 0"
+			[class.fade-in]="tick > 0"
+			[class.duration-500]="tick > 0"
+		>
+			<app-card class="transition-shadow">
+				<app-card-header>
+					<app-card-title class="flex items-center gap-2 text-lg">
+						<app-icon name="person" size="1rem" />
+						{{ account().name ?? 'Account' }}
+					</app-card-title>
+					<app-card-description>
+						@if (connected()) {
+							Live from the host — {{ tick }} update{{ tick === 1 ? '' : 's' }} received
+						} @else {
+							Drop this component on an Account record page to see live data.
+						}
+					</app-card-description>
+				</app-card-header>
+				<app-card-content>
+					<dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
+						<dt class="text-muted-foreground flex items-center gap-1.5">
+							<app-icon name="rating" size="0.875rem" />
+							Rating
+						</dt>
+						<dd>
+							@if (account().rating; as rating) {
+								<app-badge variant="secondary" [class]="'font-normal ' + ratingTone(rating)">
+									{{ rating }}
+								</app-badge>
+							} @else {
+								<span class="text-muted-foreground">—</span>
+							}
+						</dd>
+
+						<dt class="text-muted-foreground flex items-center gap-1.5">
+							<app-icon name="tag" size="0.875rem" />
+							Type
+						</dt>
+						<dd>
+							@if (account().type; as type) {
+								<app-badge variant="outline" class="font-normal">{{ type }}</app-badge>
+							} @else {
+								<span class="text-muted-foreground">—</span>
+							}
+						</dd>
+
+						<dt class="text-muted-foreground flex items-center gap-1.5">
+							<app-icon name="company" size="0.875rem" />
+							Industry
+						</dt>
+						<dd>{{ account().industry ?? '—' }}</dd>
+
+						<dt class="text-muted-foreground flex items-center gap-1.5">
+							<app-icon name="website" size="0.875rem" />
+							Website
+						</dt>
+						<dd>
+							@if (account().website; as website) {
+								<a
+									[href]="normalizeUrl(website)"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="text-primary hover:underline"
+								>
+									{{ website }}
+								</a>
+							} @else {
+								<span class="text-muted-foreground">—</span>
+							}
+						</dd>
+
+						<dt class="text-muted-foreground flex items-center gap-1.5">
+							<app-icon name="phone" size="0.875rem" />
+							Phone
+						</dt>
+						<dd>{{ account().phone ?? '—' }}</dd>
+					</dl>
+				</app-card-content>
+			</app-card>
+		</div>
+	}
+	<a
+		href="https://github.com/trailheadapps/multiframework-recipes/blob/main/force-app/main/angular-recipes/uiBundles/angularRecipes/src/app/recipes/embedding/read-host-data/read-host-data.ts"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="text-muted-foreground hover:text-primary mt-3 inline-flex items-center gap-1 text-xs"
+	>
+		Guest (read-host-data.ts)
+		<app-icon name="externalLink" size="0.75rem" />
+	</a>
+</div>
