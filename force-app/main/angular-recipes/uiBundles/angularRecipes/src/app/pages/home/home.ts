@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCode } from '@ng-icons/lucide';
+import { lucideArrowRight, lucideCode, lucideLightbulb } from '@ng-icons/lucide';
 import { CardImports } from '../../components/ui/card/card';
 import { getRecipeCount } from '../../recipe-registry';
 
@@ -9,7 +9,7 @@ import { getRecipeCount } from '../../recipe-registry';
 	selector: 'app-home',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [RouterLink, NgIcon, CardImports],
-	providers: [provideIcons({ lucideCode })],
+	providers: [provideIcons({ lucideArrowRight, lucideCode, lucideLightbulb })],
 	templateUrl: './home.html',
 })
 export class HomeComponent {

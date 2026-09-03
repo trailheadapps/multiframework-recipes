@@ -15,6 +15,30 @@
 				Get Started
 			</a>
 		</div>
+
+		<!-- Aside pointing to the microfrontend guests. Kept as a muted tip so it
+		     doesn't compete with Get Started; the persistent nav link reinforces
+		     it, and the full story lives on the page it links to. -->
+		<div
+			class="mt-8 flex w-fit max-w-full items-center gap-3 rounded-xl border border-border/70 bg-muted/40 px-4 py-3"
+		>
+			<ng-icon
+				name="lucideLightbulb"
+				size="1.25rem"
+				class="shrink-0 text-primary"
+				aria-hidden="true"
+			/>
+			<p class="text-sm text-muted-foreground">
+				This app also serves guest views for embedding in Salesforce.
+				<a
+					routerLink="/embedding"
+					class="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+				>
+					Browse the guest recipes
+					<ng-icon name="lucideArrowRight" size="0.875rem" aria-hidden="true" />
+				</a>
+			</p>
+		</div>
 	</div>
 
 	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
