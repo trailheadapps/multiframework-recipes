@@ -15,8 +15,26 @@
 	html,
 	body,
 	app-root {
-		background-color: var(--background);
 		font-size: 16px;
+	}
+
+	/* Default (gallery) chrome paints the app background. */
+	html:not(.embedding-guest),
+	html:not(.embedding-guest) body,
+	html:not(.embedding-guest) app-root {
+		background-color: var(--background);
+	}
+
+	/*
+	 * Embedding guests render inside a host iframe: a transparent surface with
+	 * no margin, so only the recipe card shows through. GuestLayout toggles
+	 * `.embedding-guest` on the document root.
+	 */
+	html.embedding-guest,
+	html.embedding-guest body,
+	html.embedding-guest app-root {
+		margin: 0;
+		background: transparent;
 	}
 
 	a {
@@ -31,8 +49,14 @@
 }
 
 @layer base {
-	html,
-	body {
+	/*
+	 * Full-height only for the gallery shell. Embedding guests must NOT get
+	 * min-h-screen: the host measures the guest body to size its iframe, and a
+	 * 100vh floor would keep the iframe from shrinking (e.g. the Auto Resize
+	 * guest could only ever grow).
+	 */
+	html:not(.embedding-guest),
+	html:not(.embedding-guest) body {
 		@apply min-h-screen;
 	}
 }
@@ -171,7 +195,10 @@
 	* {
 		@apply border-border outline-ring/50;
 	}
-	body {
+	html:not(.embedding-guest) body {
 		@apply bg-background text-foreground;
+	}
+	html.embedding-guest body {
+		@apply text-foreground;
 	}
 }
