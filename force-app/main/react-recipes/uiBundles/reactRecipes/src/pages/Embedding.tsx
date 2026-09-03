@@ -95,9 +95,9 @@ export default function Embedding() {
       <div className="border-border/70 bg-muted/40 mb-8 flex w-fit max-w-full gap-3 rounded-xl border p-4">
         <Info className="text-muted-foreground mt-0.5 h-5 w-5 shrink-0" />
         <p className="text-muted-foreground text-sm leading-relaxed">
-          These are microfrontend <strong>guests</strong> examples. To see them
-          running live, open the <strong>Microfrontend Recipes</strong> app from
-          the App Launcher.
+          These are Micro-Frontend <strong>guest</strong> examples. To see them
+          running live, open the <strong>Micro-Frontend Recipes</strong> app
+          from the App Launcher.
         </p>
       </div>
 

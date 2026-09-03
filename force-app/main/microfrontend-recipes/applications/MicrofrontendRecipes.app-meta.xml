@@ -10,7 +10,7 @@
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
     <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
-    <label>Microfrontend Recipes</label>
+    <label>Micro-Frontend Recipes</label>
     <navType>Standard</navType>
     <actionOverrides>
         <actionName>View</actionName>

@@ -68,9 +68,7 @@ describe("c-microfrontend-recipes-launcher", () => {
     const error = el.shadowRoot.querySelector(".slds-text-color_error");
     expect(error).not.toBeNull();
     expect(error.textContent).toContain("GraphQL query failed");
-    expect(el.shadowRoot.querySelector("lightning-button").disabled).toBe(
-      true
-    );
+    expect(el.shadowRoot.querySelector("lightning-button").disabled).toBe(true);
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
@@ -86,8 +84,6 @@ describe("c-microfrontend-recipes-launcher", () => {
     const error = el.shadowRoot.querySelector(".slds-text-color_error");
     expect(error).not.toBeNull();
     expect(error.textContent).toContain("No Accounts found");
-    expect(el.shadowRoot.querySelector("lightning-button").disabled).toBe(
-      true
-    );
+    expect(el.shadowRoot.querySelector("lightning-button").disabled).toBe(true);
   });
 });

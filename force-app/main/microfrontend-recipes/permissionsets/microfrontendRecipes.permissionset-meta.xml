@@ -5,7 +5,7 @@
         <visible>true</visible>
     </applicationVisibilities>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>Microfrontend Recipes</label>
+    <label>Micro-Frontend Recipes</label>
     <tabSettings>
         <tab>Microfrontend_Recipes_Home</tab>
         <visibility>Visible</visibility>

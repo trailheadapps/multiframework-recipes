@@ -27,8 +27,8 @@ node_modules/
 # single switch that ships Angular Recipes when it graduates from preview.
 force-app/main/angular-recipes/**
 
-# Microfrontend Recipes is in preview and not yet part of the standard deploy. It
+# Micro-Frontend Recipes is in preview and not yet part of the standard deploy. It
 # is excluded here on purpose so `sf project deploy start` ships React Recipes
-# only. To try Microfrontend Recipes in an org, remove (or comment out) the line
+# only. To try Micro-Frontend Recipes in an org, remove (or comment out) the line
 # below, then deploy — see force-app/main/microfrontend-recipes/README.md.
 force-app/main/microfrontend-recipes/**

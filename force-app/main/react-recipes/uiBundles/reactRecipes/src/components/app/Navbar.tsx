@@ -62,7 +62,7 @@ export default function Navbar() {
                 : 'text-muted-foreground hover:bg-accent hover:text-foreground'
             )}
           >
-            Microfrontends
+            Micro-Frontends
           </button>
         </nav>
 

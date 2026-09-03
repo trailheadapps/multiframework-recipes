@@ -1,6 +1,6 @@
-# Microfrontend Recipes (Developer Preview)
+# Micro-Frontend Recipes (Developer Preview)
 
-![Microfrontend Recipes](microfrontend-recipes.webp)
+![Micro-Frontend Recipes](microfrontend-recipes.webp)
 
 Recipes that show how to embed an externally hosted framework app into Salesforce via the standard `<lightning-ui-embedding>` base component. Each recipe is an LWC host component, deployed to the org, that embeds a small React guest served by a Vite dev server on an `/embedding/*` route. Most hosts pair with their own guest; the ready- and error-state recipes reuse the Basic Render guest to demonstrate host-side handling.
 
@@ -8,7 +8,7 @@ Recipes that show how to embed an externally hosted framework app into Salesforc
 > Micro-Frontends is a Developer Preview feature. The Dev Channel provides access to features that are not generally available and have been designated as pilot, beta, limited release, or developer preview. Their use is at the Customer's sole discretion and is subject to the Beta Services Terms at [Agreements - Salesforce.com](https://www.salesforce.com/company/legal/agreements/). See the [release notes](https://help.salesforce.com/s/articleView?id=release-notes.rn_mfe_data_exchange.htm&language=en_US&type=5&release=262).
 
 > [!IMPORTANT]
-> Microfrontend Recipes is excluded from the standard deploy via the root [`.forceignore`](../../../.forceignore), so `sf project deploy start` ships **React Recipes only**. The steps below opt it into an org — they include removing that force-ignore entry.
+> Micro-Frontend Recipes is excluded from the standard deploy via the root [`.forceignore`](../../../.forceignore), so `sf project deploy start` ships **React Recipes only**. The steps below opt it into an org — they include removing that force-ignore entry.
 
 ## How the pieces fit together
 
@@ -69,7 +69,7 @@ graph LR
 
    The generated GraphQL types are committed, so this builds as-is. Only if you change a query, regenerate them against your org: `npm run graphql:schema && npm run graphql:codegen`.
 
-1. Opt Microfrontend Recipes into the deploy by removing (or commenting out) its entry in the root `.forceignore`:
+1. Opt Micro-Frontend Recipes into the deploy by removing (or commenting out) its entry in the root `.forceignore`:
 
    ```bash
    # In .forceignore, remove the line: force-app/main/microfrontend-recipes/**
@@ -82,7 +82,7 @@ graph LR
    sf project deploy start
    ```
 
-1. Assign the **recipes** and **microfrontendRecipes** permission sets to the default user. `recipes` grants the shared object, field, and tab access; `microfrontendRecipes` adds the Microfrontend Recipes app and its tab:
+1. Assign the **recipes** and **microfrontendRecipes** permission sets to the default user. `recipes` grants the shared object, field, and tab access; `microfrontendRecipes` adds the Micro-Frontend Recipes app and its tab:
 
    ```bash
    sf org assign permset -n recipes
@@ -90,7 +90,7 @@ graph LR
    ```
 
    > [!IMPORTANT]
-   > Both permission sets are required. Microfrontend Recipes has no data model of its own — its guests are React Recipes views — so it deliberately reuses the shared `recipes` permission set for Account access, and `microfrontendRecipes` only layers on the app and tab. Assign just one and the demo loads with no data (or no app).
+   > Both permission sets are required. Micro-Frontend Recipes has no data model of its own — its guests are React Recipes views — so it deliberately reuses the shared `recipes` permission set for Account access, and `microfrontendRecipes` only layers on the app and tab. Assign just one and the demo loads with no data (or no app).
 
 1. Import sample data:
 
@@ -107,7 +107,7 @@ graph LR
 
    The server starts at `http://localhost:5173`; the guest recipes are served under `/embedding/*` (for example `http://localhost:5173/embedding/basic-render`). Keep this running while using the app in your org. The CSP trusted site for `localhost:5173` is included in the deployed metadata — no extra CSP step needed.
 
-1. In a new terminal, open the org and select the **Microfrontend Recipes** app in App Launcher:
+1. In a new terminal, open the org and select the **Micro-Frontend Recipes** app in App Launcher:
 
    ```bash
    sf org open
@@ -125,7 +125,7 @@ Guests run on the React Recipes Vite dev server — see [React Recipes → Local
 
 ### Hosts (LWC)
 
-Hosts are deployed to the org. After editing a component under `lwc/`, redeploy it (with Microfrontend Recipes opted into the deploy, per [Install & Run](#install--run)):
+Hosts are deployed to the org. After editing a component under `lwc/`, redeploy it (with Micro-Frontend Recipes opted into the deploy, per [Install & Run](#install--run)):
 
 ```bash
 sf project deploy start --source-dir force-app/main/microfrontend-recipes

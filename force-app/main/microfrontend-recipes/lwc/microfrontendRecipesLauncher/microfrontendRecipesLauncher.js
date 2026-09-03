@@ -2,7 +2,7 @@ import { LightningElement, wire } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { gql, graphql } from "lightning/uiGraphQLApi";
 
-// The Microfrontend Recipes app installs a custom Account record page
+// The Micro-Frontend Recipes app installs a custom Account record page
 // with nine embedding recipes as accordion sections. This banner picks
 // the first Account (any Account works; the data-tree import seeds
 // ten) and navigates the user there. The record page is where the
