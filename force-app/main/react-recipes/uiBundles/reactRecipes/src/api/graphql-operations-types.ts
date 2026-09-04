@@ -44,6 +44,7 @@ export type AccountCreateInput = {
 export type AccountCreateRepresentation = {
   AccountNumber?: InputMaybe<Scalars['String']['input']>;
   AccountSource?: InputMaybe<Scalars['Picklist']['input']>;
+  Active__c?: InputMaybe<Scalars['Picklist']['input']>;
   AnnualRevenue?: InputMaybe<Scalars['Currency']['input']>;
   BillingCity?: InputMaybe<Scalars['String']['input']>;
   BillingCountry?: InputMaybe<Scalars['String']['input']>;
@@ -54,6 +55,7 @@ export type AccountCreateRepresentation = {
   BillingState?: InputMaybe<Scalars['String']['input']>;
   BillingStreet?: InputMaybe<Scalars['TextArea']['input']>;
   CleanStatus?: InputMaybe<Scalars['Picklist']['input']>;
+  CustomerPriority__c?: InputMaybe<Scalars['Picklist']['input']>;
   DandbCompanyId?: InputMaybe<Scalars['IdOrRef']['input']>;
   Description?: InputMaybe<Scalars['LongTextArea']['input']>;
   DunsNumber?: InputMaybe<Scalars['String']['input']>;
@@ -64,12 +66,16 @@ export type AccountCreateRepresentation = {
   NaicsDesc?: InputMaybe<Scalars['String']['input']>;
   Name?: InputMaybe<Scalars['String']['input']>;
   NumberOfEmployees?: InputMaybe<Scalars['Int']['input']>;
+  NumberofLocations__c?: InputMaybe<Scalars['Double']['input']>;
   OperatingHoursId?: InputMaybe<Scalars['IdOrRef']['input']>;
   OwnerId?: InputMaybe<Scalars['IdOrRef']['input']>;
   Ownership?: InputMaybe<Scalars['Picklist']['input']>;
   ParentId?: InputMaybe<Scalars['IdOrRef']['input']>;
   Phone?: InputMaybe<Scalars['PhoneNumber']['input']>;
   Rating?: InputMaybe<Scalars['Picklist']['input']>;
+  SLAExpirationDate__c?: InputMaybe<Scalars['Date']['input']>;
+  SLASerialNumber__c?: InputMaybe<Scalars['String']['input']>;
+  SLA__c?: InputMaybe<Scalars['Picklist']['input']>;
   ShippingCity?: InputMaybe<Scalars['String']['input']>;
   ShippingCountry?: InputMaybe<Scalars['String']['input']>;
   ShippingGeocodeAccuracy?: InputMaybe<Scalars['Picklist']['input']>;
@@ -84,6 +90,7 @@ export type AccountCreateRepresentation = {
   TickerSymbol?: InputMaybe<Scalars['String']['input']>;
   Tradestyle?: InputMaybe<Scalars['String']['input']>;
   Type?: InputMaybe<Scalars['Picklist']['input']>;
+  UpsellOpportunity__c?: InputMaybe<Scalars['Picklist']['input']>;
   Website?: InputMaybe<Scalars['Url']['input']>;
   YearStarted?: InputMaybe<Scalars['String']['input']>;
 };
@@ -96,6 +103,7 @@ export type AccountUpdateInput = {
 export type AccountUpdateRepresentation = {
   AccountNumber?: InputMaybe<Scalars['String']['input']>;
   AccountSource?: InputMaybe<Scalars['Picklist']['input']>;
+  Active__c?: InputMaybe<Scalars['Picklist']['input']>;
   AnnualRevenue?: InputMaybe<Scalars['Currency']['input']>;
   BillingCity?: InputMaybe<Scalars['String']['input']>;
   BillingCountry?: InputMaybe<Scalars['String']['input']>;
@@ -106,6 +114,7 @@ export type AccountUpdateRepresentation = {
   BillingState?: InputMaybe<Scalars['String']['input']>;
   BillingStreet?: InputMaybe<Scalars['TextArea']['input']>;
   CleanStatus?: InputMaybe<Scalars['Picklist']['input']>;
+  CustomerPriority__c?: InputMaybe<Scalars['Picklist']['input']>;
   DandbCompanyId?: InputMaybe<Scalars['IdOrRef']['input']>;
   Description?: InputMaybe<Scalars['LongTextArea']['input']>;
   DunsNumber?: InputMaybe<Scalars['String']['input']>;
@@ -116,12 +125,16 @@ export type AccountUpdateRepresentation = {
   NaicsDesc?: InputMaybe<Scalars['String']['input']>;
   Name?: InputMaybe<Scalars['String']['input']>;
   NumberOfEmployees?: InputMaybe<Scalars['Int']['input']>;
+  NumberofLocations__c?: InputMaybe<Scalars['Double']['input']>;
   OperatingHoursId?: InputMaybe<Scalars['IdOrRef']['input']>;
   OwnerId?: InputMaybe<Scalars['IdOrRef']['input']>;
   Ownership?: InputMaybe<Scalars['Picklist']['input']>;
   ParentId?: InputMaybe<Scalars['IdOrRef']['input']>;
   Phone?: InputMaybe<Scalars['PhoneNumber']['input']>;
   Rating?: InputMaybe<Scalars['Picklist']['input']>;
+  SLAExpirationDate__c?: InputMaybe<Scalars['Date']['input']>;
+  SLASerialNumber__c?: InputMaybe<Scalars['String']['input']>;
+  SLA__c?: InputMaybe<Scalars['Picklist']['input']>;
   ShippingCity?: InputMaybe<Scalars['String']['input']>;
   ShippingCountry?: InputMaybe<Scalars['String']['input']>;
   ShippingGeocodeAccuracy?: InputMaybe<Scalars['Picklist']['input']>;
@@ -136,6 +149,7 @@ export type AccountUpdateRepresentation = {
   TickerSymbol?: InputMaybe<Scalars['String']['input']>;
   Tradestyle?: InputMaybe<Scalars['String']['input']>;
   Type?: InputMaybe<Scalars['Picklist']['input']>;
+  UpsellOpportunity__c?: InputMaybe<Scalars['Picklist']['input']>;
   Website?: InputMaybe<Scalars['Url']['input']>;
   YearStarted?: InputMaybe<Scalars['String']['input']>;
 };
@@ -166,8 +180,10 @@ export type ContactCreateRepresentation = {
   HomePhone?: InputMaybe<Scalars['PhoneNumber']['input']>;
   IndividualId?: InputMaybe<Scalars['IdOrRef']['input']>;
   Jigsaw?: InputMaybe<Scalars['String']['input']>;
+  Languages__c?: InputMaybe<Scalars['String']['input']>;
   LastName?: InputMaybe<Scalars['String']['input']>;
   LeadSource?: InputMaybe<Scalars['Picklist']['input']>;
+  Level__c?: InputMaybe<Scalars['Picklist']['input']>;
   MailingCity?: InputMaybe<Scalars['String']['input']>;
   MailingCountry?: InputMaybe<Scalars['String']['input']>;
   MailingGeocodeAccuracy?: InputMaybe<Scalars['Picklist']['input']>;
@@ -232,6 +248,12 @@ export enum FieldExtraTypeInfo {
   Plaintextarea = 'PLAINTEXTAREA',
   Richtextarea = 'RICHTEXTAREA',
   SwitchablePersonname = 'SWITCHABLE_PERSONNAME'
+}
+
+export enum FormFactor {
+  Large = 'LARGE',
+  Medium = 'MEDIUM',
+  Small = 'SMALL'
 }
 
 export enum LayoutComponentType {
