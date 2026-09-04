@@ -1,0 +1,46 @@
+<app-recipe-gallery header="Routing">
+	<ng-template
+		appRecipe="Link"
+		description="Client-side navigation with the routerLink directive — renders a plain <a> but navigates without a full page reload."
+		[sources]="linkSources"
+	>
+		<app-link-demo />
+	</ng-template>
+
+	<ng-template
+		appRecipe="NavLink"
+		description="routerLinkActive styles a link when it matches the current URL, and ariaCurrentWhenActive sets aria-current='page' automatically — the Angular replacement for React Router's NavLink + useMatch."
+		[sources]="navLinkSources"
+	>
+		<app-nav-link-demo />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Programmatic Navigation"
+		description="Inject Router and call navigate() imperatively — e.g. to redirect after a save. Enter a name and submit to navigate to Read Data automatically."
+		[sources]="useNavigateSources"
+	>
+		<app-use-navigate />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Route Parameters"
+		description="An Account list links to a detail route with a dynamic :accountId segment. The detail component reads it through a signal input() via withComponentInputBinding()."
+		[sources]="routeParamsSources"
+	>
+		<app-route-parameters />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Nested Routes"
+		description="A master-detail layout: a persistent sidebar with a <router-outlet> detail panel, sharing its account list through a route-scoped store (Angular's alternative to useOutletContext)."
+		[sources]="nestedRoutesSources"
+	>
+		<p class="text-sm text-muted-foreground">
+			This recipe has its own route.
+			<a routerLink="/routing/nested-routes" class="text-primary hover:underline"
+				>Open the Nested Routes demo →</a
+			>
+		</p>
+	</ng-template>
+</app-recipe-gallery>

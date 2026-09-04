@@ -1,0 +1,41 @@
+<div class="flex flex-col gap-4">
+	@if (status() === 'done') {
+		<div class="rounded-md bg-emerald-50 border border-emerald-200 p-4" role="status">
+			<p class="text-sm text-emerald-700">
+				<strong>“{{ name() }}”</strong> created — navigating to Read Data…
+			</p>
+		</div>
+	} @else {
+		<form (submit)="onSubmit($event)" class="space-y-4">
+			<div class="space-y-2">
+				<label for="nav-name" class="text-sm font-medium">Account Name</label>
+				<input
+					#box
+					id="nav-name"
+					type="text"
+					placeholder="Enter a name"
+					class="w-full rounded-md border border-input px-3 py-2 text-sm"
+					required
+					[value]="name()"
+					(input)="name.set(box.value)"
+				/>
+			</div>
+			<button
+				type="submit"
+				[disabled]="status() === 'saving'"
+				class="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium disabled:opacity-50"
+			>
+				{{ status() === 'saving' ? 'Saving…' : 'Create & Navigate' }}
+			</button>
+		</form>
+	}
+
+	<div class="rounded-md bg-muted p-4 text-xs border-l-4 border-l-primary">
+		<p class="mb-1"><strong>Router.navigate options:</strong></p>
+		<ul class="list-disc pl-5">
+			<li><code>router.navigate(['/path'])</code> — push onto the history stack</li>
+			<li><code>router.navigate(['/path'], &#123; replaceUrl: true &#125;)</code> — replace (no Back)</li>
+			<li><code>location.back()</code> / <code>location.forward()</code> — from &#64;angular/common</li>
+		</ul>
+	</div>
+</div>
