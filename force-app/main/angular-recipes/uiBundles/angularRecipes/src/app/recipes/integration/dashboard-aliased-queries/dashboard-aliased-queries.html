@@ -1,0 +1,16 @@
+@if (loading()) {
+	<p class="text-sm">Loading…</p>
+} @else if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (stats()) {
+	<div class="flex gap-4 flex-wrap">
+		@for (card of cards(); track card.label) {
+			<app-stat-card
+				class="w-1/3"
+				[label]="card.label"
+				[count]="card.count"
+				[accent]="card.accent"
+			/>
+		}
+	</div>
+}
