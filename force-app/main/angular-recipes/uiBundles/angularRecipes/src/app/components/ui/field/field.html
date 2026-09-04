@@ -1,0 +1,15 @@
+@if (label()) {
+	<label hlmFieldLabel [for]="htmlFor() ?? undefined">
+		{{ label() }}
+		@if (required()) {
+			<span aria-hidden="true" class="text-destructive">*</span>
+		}
+	</label>
+}
+@if (description()) {
+	<p hlmFieldDescription>{{ description() }}</p>
+}
+<ng-content />
+@if (error()) {
+	<hlm-field-error [forceShow]="true">{{ error() }}</hlm-field-error>
+}
