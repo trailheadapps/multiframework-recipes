@@ -1,0 +1,65 @@
+<div>
+	<section class="slds-m-bottom_medium">
+		<h3 class="slds-text-heading_small slds-m-bottom_small">Variants</h3>
+		<!-- slds-grid + slds-wrap lays the buttons in a row that wraps to the next
+		     line instead of clipping; slds-m-* utilities space them. -->
+		<div class="slds-grid slds-wrap">
+			@for (variant of variants; track variant.label) {
+				<button class="slds-button {{ variant.className }} slds-m-right_x-small slds-m-bottom_x-small">
+					{{ variant.label }}
+				</button>
+			}
+		</div>
+	</section>
+
+	<section class="slds-m-bottom_medium">
+		<h3 class="slds-text-heading_small slds-m-bottom_small">Disabled</h3>
+		<div class="slds-grid slds-wrap">
+			<button class="slds-button slds-button_neutral slds-m-right_x-small slds-m-bottom_x-small" disabled>
+				Neutral
+			</button>
+			<button class="slds-button slds-button_brand slds-m-right_x-small slds-m-bottom_x-small" disabled>
+				Brand
+			</button>
+		</div>
+	</section>
+
+	<section>
+		<h3 class="slds-text-heading_small slds-m-bottom_small">Icon Buttons</h3>
+		<div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+			<button
+				class="slds-button slds-button_icon slds-button_icon-border-filled slds-m-right_x-small slds-m-bottom_x-small"
+				title="Settings"
+			>
+				<svg class="slds-button__icon" aria-hidden="true">
+					<use href="/assets/icons/utility-sprite/svg/symbols.svg#settings" />
+				</svg>
+				<span class="slds-assistive-text">Settings</span>
+			</button>
+
+			<button
+				class="slds-button slds-button_icon slds-button_icon-brand slds-m-right_x-small slds-m-bottom_x-small"
+				title="Add"
+			>
+				<svg class="slds-button__icon" aria-hidden="true">
+					<use href="/assets/icons/utility-sprite/svg/symbols.svg#add" />
+				</svg>
+				<span class="slds-assistive-text">Add</span>
+			</button>
+
+			<button class="slds-button slds-button_neutral slds-m-right_x-small slds-m-bottom_x-small">
+				<svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+					<use href="/assets/icons/utility-sprite/svg/symbols.svg#add" />
+				</svg>
+				New Record
+			</button>
+
+			<button class="slds-button slds-button_brand slds-m-right_x-small slds-m-bottom_x-small">
+				<svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+					<use href="/assets/icons/utility-sprite/svg/symbols.svg#upload" />
+				</svg>
+				Upload
+			</button>
+		</div>
+	</section>
+</div>

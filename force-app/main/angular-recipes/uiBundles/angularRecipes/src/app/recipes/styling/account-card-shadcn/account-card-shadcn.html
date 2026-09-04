@@ -1,0 +1,25 @@
+@if (loading()) {
+	<p class="text-sm text-muted-foreground">Loading…</p>
+} @else if (error(); as error) {
+	<p class="text-sm text-destructive">{{ error }}</p>
+} @else if (account(); as account) {
+	<app-card>
+		<app-card-header>
+			<app-card-title>{{ account.name }}</app-card-title>
+		</app-card-header>
+		<app-card-content>
+			<dl class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+				<dt class="text-muted-foreground">Industry</dt>
+				<dd>{{ account.industry ?? '—' }}</dd>
+
+				<dt class="text-muted-foreground">Annual Revenue</dt>
+				<dd>{{ account.revenue }}</dd>
+			</dl>
+		</app-card-content>
+		<app-card-footer>
+			<a href="#" class="text-sm text-primary hover:underline">View Account</a>
+		</app-card-footer>
+	</app-card>
+} @else {
+	<p class="text-sm text-muted-foreground">No account found.</p>
+}
