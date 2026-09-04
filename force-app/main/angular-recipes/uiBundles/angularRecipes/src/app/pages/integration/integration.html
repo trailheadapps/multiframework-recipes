@@ -1,0 +1,17 @@
+<app-recipe-gallery header="Integration">
+	<ng-template
+		appRecipe="Searchable Account List"
+		description="A controlled, debounced search input drives a GraphQL $name variable filtering Accounts — combining variables, imperative refetch, loading states, and debounce in one pattern."
+		[sources]="searchSources"
+	>
+		<app-searchable-account-list />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Dashboard with Aliased Queries"
+		description="Fetches Accounts, Contacts, and Opportunities in a single aliased request and transforms the results into stat cards — the dashboard pattern in one round-trip."
+		[sources]="dashboardSources"
+	>
+		<app-dashboard-aliased-queries />
+	</ng-template>
+</app-recipe-gallery>
