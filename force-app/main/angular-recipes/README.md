@@ -1,5 +1,7 @@
 # Angular Recipes
 
+![Angular Recipes](angular-recipes.webp)
+
 A Salesforce UI Bundle demonstrating how to build an Angular app that runs directly on the Salesforce platform. The bundle is built with the Angular CLI (esbuild) + TypeScript and deployed to the org as a single artifact; Salesforce serves the static assets.
 
 > [!IMPORTANT]
