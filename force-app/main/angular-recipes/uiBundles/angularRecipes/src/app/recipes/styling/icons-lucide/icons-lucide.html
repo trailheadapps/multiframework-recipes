@@ -1,0 +1,10 @@
+<ul class="flex flex-wrap gap-4 list-none p-0 m-0">
+	@for (icon of icons; track icon.name) {
+		<li class="flex flex-col items-center gap-1.5 min-w-[4.5rem]">
+			<span class="flex items-center justify-center w-8 h-8">
+				<ng-icon [name]="icon.name" size="1.25rem" class="text-foreground" aria-hidden="true" />
+			</span>
+			<span class="text-[0.65rem] text-muted-foreground text-center leading-tight">{{ icon.label }}</span>
+		</li>
+	}
+</ul>
