@@ -1,0 +1,35 @@
+<div class="flex flex-col gap-4">
+	@if (result(); as result) {
+		<div class="rounded-md bg-emerald-50 border border-emerald-200 p-4 text-emerald-700" role="status">
+			<span class="sr-only">Success:</span>
+			<p class="text-lg font-semibold">Account created</p>
+			<p class="text-xs"><strong>{{ result.name }}</strong> — ID: <code>{{ result.id }}</code></p>
+		</div>
+	}
+
+	@if (error(); as error) {
+		<div class="rounded-md bg-rose-50 border border-rose-200 p-4 text-rose-700" role="alert">
+			<p>{{ error }}</p>
+		</div>
+	}
+
+	<form (submit)="onSubmit($event)">
+		<app-field class="block mb-2" label="Account Name" required htmlFor="account-name">
+			<app-input
+				id="account-name"
+				placeholder="e.g. Acme Corp"
+				[value]="name()"
+				(valueChange)="name.set($event)"
+			/>
+		</app-field>
+
+		<div class="flex gap-2">
+			<app-button type="submit" [disabled]="submitting() || !name().trim()" [loading]="submitting()" loadingLabel="Creating…">
+				Create Account
+			</app-button>
+			@if (result()) {
+				<app-button appearance="outlined" (clicked)="reset()">Create Another</app-button>
+			}
+		</div>
+	</form>
+</div>
