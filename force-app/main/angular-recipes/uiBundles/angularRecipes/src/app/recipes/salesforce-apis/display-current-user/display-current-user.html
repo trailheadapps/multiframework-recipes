@@ -1,0 +1,10 @@
+@if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (user(); as user) {
+	<div>
+		<p class="text-lg font-semibold">{{ user.displayName }}</p>
+		<p class="text-xs text-muted-foreground">{{ user.email }}</p>
+	</div>
+} @else {
+	<p class="text-sm">Loading…</p>
+}

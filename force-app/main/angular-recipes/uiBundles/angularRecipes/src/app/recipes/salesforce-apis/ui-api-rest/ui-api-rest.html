@@ -1,0 +1,36 @@
+@if (loading()) {
+	<p class="text-sm">Loading…</p>
+} @else if (error(); as error) {
+	<p class="text-xs text-destructive">{{ error }}</p>
+} @else if (records(); as records) {
+	@if (records.length === 0) {
+		<p class="text-muted-foreground text-sm">No contacts found.</p>
+	} @else {
+		<ul>
+			@for (r of records; track $index) {
+				<li class="py-2 -mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+					<div class="flex items-center gap-3">
+						@if (r.fields.Picture__c.value) {
+							<img
+								[src]="r.fields.Picture__c.value"
+								[alt]="r.fields.Name.value ?? ''"
+								class="h-10 w-10 rounded-full object-cover"
+							/>
+						}
+						<div>
+							<p class="text-sm"><strong>{{ r.fields.Name.value }}</strong></p>
+							@if (r.fields.Title.value) {
+								<p class="text-xs text-muted-foreground">{{ r.fields.Title.value }}</p>
+							}
+							@if (r.fields.Phone.value) {
+								<a [href]="'tel:' + r.fields.Phone.value" class="text-xs text-primary hover:underline">{{
+									r.fields.Phone.value
+								}}</a>
+							}
+						</div>
+					</div>
+				</li>
+			}
+		</ul>
+	}
+}
