@@ -1,0 +1,25 @@
+<app-recipe-gallery header="Salesforce APIs">
+	<ng-template
+		appRecipe="Display Current User"
+		description="Fetches the current user from the Chatter REST endpoint /users/me via sdk.fetch — the first recipe to use REST rather than GraphQL."
+		[sources]="userSources"
+	>
+		<app-display-current-user />
+	</ng-template>
+
+	<ng-template
+		appRecipe="UI API (REST)"
+		description="Uses sdk.fetch against two UI API endpoints — list-ui to find the AllContacts list view, then list-records to fetch its contacts."
+		[sources]="uiApiSources"
+	>
+		<app-ui-api-rest />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Apex REST"
+		description="Calls a custom Apex REST endpoint (ContactsResource) via sdk.fetch. Apex returns plain JSON with no { value } wrappers."
+		[sources]="apexSources"
+	>
+		<app-apex-rest />
+	</ng-template>
+</app-recipe-gallery>
