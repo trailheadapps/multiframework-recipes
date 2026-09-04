@@ -1,0 +1,21 @@
+<div>
+	<p class="text-xs text-muted-foreground mb-2">
+		<code>routerLinkActive</code> adds classes when the link matches the current URL, and
+		<code>ariaCurrentWhenActive</code> sets <code>aria-current="page"</code> automatically.
+	</p>
+	<nav class="flex flex-col">
+		<ul>
+			@for (page of pages; track page.path) {
+				<li>
+					<a
+						[routerLink]="page.path"
+						routerLinkActive="bg-accent text-accent-foreground font-medium"
+						ariaCurrentWhenActive="page"
+						class="block px-3 py-2 text-sm rounded-md hover:bg-accent"
+						>{{ page.label }}</a
+					>
+				</li>
+			}
+		</ul>
+	</nav>
+</div>

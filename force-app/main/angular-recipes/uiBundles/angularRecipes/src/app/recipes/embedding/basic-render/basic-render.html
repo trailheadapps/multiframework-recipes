@@ -1,0 +1,77 @@
+<div class="p-4">
+	<app-card class="max-w-md">
+		<app-card-header>
+			<app-card-title class="text-lg">{{ account().name ?? 'Account' }}</app-card-title>
+			<app-card-description>
+				@if (connected()) {
+					Live from
+					<a
+						[href]="href"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-primary hover:underline"
+					>
+						<code class="text-xs">{{ origin }}</code>
+					</a>
+				} @else {
+					Waiting for host…
+				}
+			</app-card-description>
+		</app-card-header>
+		<app-card-content>
+			<dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
+				<dt class="text-muted-foreground flex items-center gap-1.5">
+					<app-icon name="company" size="0.875rem" />
+					Industry
+				</dt>
+				<dd>
+					@if (account().industry; as industry) {
+						<app-badge variant="secondary" class="font-normal">{{ industry }}</app-badge>
+					} @else {
+						<span class="text-muted-foreground">—</span>
+					}
+				</dd>
+
+				<dt class="text-muted-foreground flex items-center gap-1.5">
+					<app-icon name="tag" size="0.875rem" />
+					Type
+				</dt>
+				<dd>
+					@if (account().type; as type) {
+						<app-badge variant="outline" class="font-normal">{{ type }}</app-badge>
+					} @else {
+						<span class="text-muted-foreground">—</span>
+					}
+				</dd>
+
+				<dt class="text-muted-foreground flex items-center gap-1.5">
+					<app-icon name="website" size="0.875rem" />
+					Website
+				</dt>
+				<dd>
+					@if (account().website; as website) {
+						<a
+							[href]="normalizeUrl(website)"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-primary hover:underline"
+						>
+							{{ website }}
+						</a>
+					} @else {
+						<span class="text-muted-foreground">—</span>
+					}
+				</dd>
+			</dl>
+		</app-card-content>
+	</app-card>
+	<a
+		href="https://github.com/trailheadapps/multiframework-recipes/blob/main/force-app/main/angular-recipes/uiBundles/angularRecipes/src/app/recipes/embedding/basic-render/basic-render.ts"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="text-muted-foreground hover:text-primary mt-3 inline-flex items-center gap-1 text-xs"
+	>
+		Guest (basic-render.ts)
+		<app-icon name="externalLink" size="0.75rem" />
+	</a>
+</div>

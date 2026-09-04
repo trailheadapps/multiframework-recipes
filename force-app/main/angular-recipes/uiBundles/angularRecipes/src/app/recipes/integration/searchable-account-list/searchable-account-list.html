@@ -1,0 +1,31 @@
+<div>
+	<div class="space-y-1 mb-2">
+		<app-input
+			[value]="search()"
+			(valueChange)="onSearch($event)"
+			placeholder="Search accounts by name…"
+			ariaLabel="Search accounts by name"
+		/>
+	</div>
+
+	@if (error(); as error) {
+		<p class="text-destructive">{{ error }}</p>
+	} @else if (loading()) {
+		<p class="text-sm text-muted-foreground">Searching…</p>
+	} @else if (accounts().length === 0) {
+		<p class="text-sm text-muted-foreground">No accounts match “{{ search() }}”</p>
+	} @else {
+		<div class="rounded-md border border-border bg-card p-4 shadow-sm">
+			<ul>
+				@for (account of accounts(); track account.id) {
+					<li class="py-2 -mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+						<p class="text-sm text-foreground">{{ account.name }}</p>
+						@if (account.industry) {
+							<p class="text-xs text-muted-foreground">{{ account.industry }}</p>
+						}
+					</li>
+				}
+			</ul>
+		</div>
+	}
+</div>

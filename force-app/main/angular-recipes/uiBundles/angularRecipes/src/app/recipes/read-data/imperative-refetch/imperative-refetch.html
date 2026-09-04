@@ -1,0 +1,32 @@
+<div>
+	<div class="flex items-center mb-2">
+		<!-- Unlike @wire, you decide when to re-fetch. -->
+		<app-button
+			appearance="outlined"
+			[loading]="loading()"
+			loadingLabel="Refreshing…"
+			(clicked)="refetch()"
+			>Refresh</app-button
+		>
+		<span class="text-xs text-muted-foreground ml-2">
+			Fetched {{ fetchCount() }} {{ fetchCount() === 1 ? 'time' : 'times' }}
+		</span>
+	</div>
+
+	@if (error(); as error) {
+		<p class="text-destructive">{{ error }}</p>
+	} @else if (!loading()) {
+		<div class="rounded-md border border-border bg-card p-4 shadow-sm">
+			<ul>
+				@for (contact of contacts(); track contact.id) {
+					<li class="py-2 -mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+						<p class="text-sm text-foreground">{{ contact.name }}</p>
+						@if (contact.title) {
+							<p class="text-xs text-muted-foreground">{{ contact.title }}</p>
+						}
+					</li>
+				}
+			</ul>
+		</div>
+	}
+</div>

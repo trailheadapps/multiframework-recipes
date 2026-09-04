@@ -1,0 +1,30 @@
+<div>
+	<a routerLink="/routing" class="text-xs text-primary mb-2 inline-block hover:underline">← Back to list</a>
+
+	@if (loading()) {
+		<p class="text-sm">Loading…</p>
+	} @else if (error(); as error) {
+		<p class="text-destructive">{{ error }}</p>
+	} @else if (account(); as account) {
+		<div class="rounded-md bg-muted p-4 mt-2">
+			<p class="text-lg font-semibold">{{ account.name }}</p>
+			@if (account.industry) {
+				<p class="text-xs text-muted-foreground mt-1">{{ account.industry }}</p>
+			}
+			@if (account.phone) {
+				<p class="text-xs mt-1">
+					<a [href]="'tel:' + account.phone" class="text-primary hover:underline">{{ account.phone }}</a>
+				</p>
+			}
+			@if (account.website) {
+				<p class="text-xs mt-1">
+					<a [href]="account.website" target="_blank" rel="noreferrer" class="text-primary hover:underline">{{
+						account.website
+					}}</a>
+				</p>
+			}
+		</div>
+	} @else {
+		<p class="text-muted-foreground">Not found.</p>
+	}
+</div>

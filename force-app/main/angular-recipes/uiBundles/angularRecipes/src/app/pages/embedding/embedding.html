@@ -1,0 +1,55 @@
+<main class="py-10">
+	<!-- Hero -->
+	<div class="mb-12 grid items-start gap-10 lg:grid-cols-2">
+		<div>
+			<div class="mb-4 flex items-center gap-3">
+				<app-icon name="window" size="2.5rem" class="text-primary" />
+				<h1 class="text-foreground text-4xl font-bold tracking-tight">UI Embedding</h1>
+			</div>
+			<p class="text-muted-foreground max-w-md text-xl">Embed Angular components in Lightning</p>
+		</div>
+	</div>
+
+	<!-- Framing note -->
+	<div class="border-border/70 bg-muted/40 mb-8 flex w-fit max-w-full gap-3 rounded-xl border p-4">
+		<app-icon name="info" size="1.25rem" class="text-muted-foreground mt-0.5 shrink-0" />
+		<p class="text-muted-foreground text-sm leading-relaxed">
+			These are Micro-Frontend <strong>guest</strong> examples. To see them running live, open the
+			<strong>Micro-Frontend Recipes</strong> app from the App Launcher.
+		</p>
+	</div>
+
+	<!-- Guest recipes -->
+	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+		@for (recipe of recipes; track recipe.route) {
+			<app-card class="border-border/70 flex flex-col">
+				<app-card-header>
+					<app-card-title class="text-primary text-base">{{ recipe.name }}</app-card-title>
+					<app-card-description class="text-sm leading-relaxed">
+						{{ recipe.description }}
+					</app-card-description>
+				</app-card-header>
+				<app-card-content class="mt-auto flex items-center gap-4 text-sm">
+					<a
+						[routerLink]="recipe.route"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-primary inline-flex items-center gap-1 font-medium hover:underline"
+					>
+						Open guest
+						<app-icon name="arrowRight" size="0.875rem" />
+					</a>
+					<a
+						[href]="recipe.source"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-muted-foreground hover:text-primary inline-flex items-center gap-1"
+					>
+						Source
+						<app-icon name="externalLink" size="0.875rem" />
+					</a>
+				</app-card-content>
+			</app-card>
+		}
+	</div>
+</main>

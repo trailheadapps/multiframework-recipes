@@ -1,0 +1,50 @@
+<div class="flex flex-col gap-4">
+	<form (submit)="onSubmit($event)">
+		<div class="space-y-1 mb-2">
+			<label class="text-sm font-medium" for="apex-name">Filter by name</label>
+			<input
+				#box
+				id="apex-name"
+				type="text"
+				placeholder="e.g. Smith (leave blank for first 10)"
+				class="w-full rounded-md border border-input px-3 py-2 text-sm"
+				[value]="nameFilter()"
+				(input)="nameFilter.set(box.value)"
+			/>
+		</div>
+		<app-button type="submit" [loading]="loading()" loadingLabel="Loading…">Fetch Contacts</app-button>
+	</form>
+
+	@if (error(); as error) {
+		<div class="rounded-md bg-rose-50 border border-rose-200 p-4 text-rose-700" role="alert">
+			<p class="text-xs">{{ error }}</p>
+		</div>
+	}
+
+	@if (contacts(); as contacts) {
+		@if (contacts.length === 0) {
+			<p class="text-muted-foreground text-sm">No contacts found.</p>
+		} @else {
+			<ul>
+				@for (c of contacts; track c.id) {
+					<li class="py-2 -mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+						<div class="flex items-center gap-3">
+							@if (c.pictureUrl) {
+								<img [src]="c.pictureUrl" [alt]="c.name" class="h-10 w-10 rounded-full object-cover" />
+							}
+							<div>
+								<p class="text-sm"><strong>{{ c.name }}</strong></p>
+								@if (c.title) {
+									<p class="text-xs text-muted-foreground">{{ c.title }}</p>
+								}
+								@if (c.phone) {
+									<a [href]="'tel:' + c.phone" class="text-xs text-primary hover:underline">{{ c.phone }}</a>
+								}
+							</div>
+						</div>
+					</li>
+				}
+			</ul>
+		}
+	}
+</div>

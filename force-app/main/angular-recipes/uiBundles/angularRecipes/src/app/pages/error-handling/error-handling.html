@@ -1,0 +1,25 @@
+<app-recipe-gallery header="Error Handling">
+	<ng-template
+		appRecipe="Loading, Error, and Empty States"
+		description="Every async component must handle loading, error, and empty states explicitly. In LWC @wire hands you data and error automatically; here you own all four as a discriminated-union state machine in a signal. Use the simulate buttons to force each state."
+		[sources]="loadingSources"
+	>
+		<app-loading-error-empty />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Error Boundary"
+		description="Angular has no render-time error boundary like React's class components. A throw during rendering reaches the application's ErrorHandler; to contain a failure to one region you guard the risky work and surface it through a signal. Break It triggers a failure, Try Again resets."
+		[sources]="boundarySources"
+	>
+		<app-error-boundary />
+	</ng-template>
+
+	<ng-template
+		appRecipe="GraphQL Errors"
+		description="Runs a query that requests a nonexistent field to trigger a GraphQL error. UIAPI returns these in result.errors[] rather than throwing — run both queries to see query-level errors versus thrown exceptions."
+		[sources]="graphqlSources"
+	>
+		<app-graphql-errors />
+	</ng-template>
+</app-recipe-gallery>

@@ -1,0 +1,41 @@
+<app-recipe-gallery header="Modify Data">
+	<ng-template
+		appRecipe="Create a Record"
+		description="Creates an Account via the AccountCreate UIAPI mutation on form submit; the response returns the new record's Id and Name."
+		[sources]="createSources"
+	>
+		<app-create-record />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Update a Record"
+		description="Loads an Account and edits Name and Industry via AccountUpdate. The SDK mutate has no cache to invalidate — local signals are synced from the server response."
+		[sources]="updateSources"
+	>
+		<app-update-record />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Delete a Record"
+		description="Lists Accounts with a per-row confirm; confirming calls AccountDelete (RecordDeleteInput) and removes the row from local state."
+		[sources]="deleteSources"
+	>
+		<app-delete-record />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Server-Side Error Handling"
+		description="A ContactCreate that omits the required LastName field, surfacing a top-level GraphQL error from result.errors[] rather than a thrown exception."
+		[sources]="serverErrorSources"
+	>
+		<app-server-error-handling />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Query + Mutation Together"
+		description="Lists Accounts with inline editing: query populates the table, AccountUpdate saves a row, and the server response patches just that row in local state."
+		[sources]="queryMutationSources"
+	>
+		<app-query-mutation-together />
+	</ng-template>
+</app-recipe-gallery>

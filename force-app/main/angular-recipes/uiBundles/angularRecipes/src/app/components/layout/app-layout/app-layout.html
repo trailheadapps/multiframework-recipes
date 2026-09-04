@@ -2,24 +2,40 @@
 	class="sticky top-0 z-50 border-b-2 border-b-primary/30 bg-background/80 backdrop-blur-md"
 >
 	<div class="mx-auto flex h-14 max-w-screen-2xl items-center gap-6 px-6">
-		<a routerLink="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+		<a routerLink="/" class="flex shrink-0 items-center gap-2 hover:opacity-80 transition-opacity">
 			<ng-icon name="lucideCode" size="1.25rem" class="text-[#dd0031]" />
 			<span class="font-semibold tracking-tight">Angular Recipes</span>
 		</a>
 
-		<nav class="flex items-center gap-1">
+		<!-- Scrolls horizontally rather than wrapping when the row is tight
+		     (narrow windows, or the Lightning shell's reduced width). -->
+		<nav
+			class="flex min-w-0 items-center gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+		>
 			@for (item of navigationItems; track item.path) {
 				<a
 					[routerLink]="item.path"
 					routerLinkActive="bg-primary text-primary-foreground"
-					class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-muted-foreground hover:bg-accent hover:text-foreground"
+					class="shrink-0 px-3 py-1.5 text-sm font-medium whitespace-nowrap rounded-md transition-colors text-muted-foreground hover:bg-accent hover:text-foreground"
 				>
 					{{ item.label }}
 				</a>
 			}
+
+			<!-- Embedding sits apart from the recipe categories — it's the guest
+			     side of the app, not another recipe. The rule signals that. -->
+			<span class="mx-1.5 h-4 w-px shrink-0 bg-border/70" aria-hidden="true"></span>
+			<a
+				routerLink="/embedding"
+				routerLinkActive="bg-primary text-primary-foreground"
+				[routerLinkActiveOptions]="{ exact: true }"
+				class="shrink-0 px-3 py-1.5 text-sm font-medium whitespace-nowrap rounded-md transition-colors text-muted-foreground hover:bg-accent hover:text-foreground"
+			>
+				Micro-Frontends
+			</a>
 		</nav>
 
-		<div class="ml-auto">
+		<div class="ml-auto shrink-0">
 			<app-search-bar />
 		</div>
 	</div>

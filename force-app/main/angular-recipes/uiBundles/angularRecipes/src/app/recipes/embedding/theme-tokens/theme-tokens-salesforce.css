@@ -1,0 +1,36 @@
+/*
+ * Salesforce theme — an SLDS-flavored palette applied via the `.salesforce`
+ * class on the guest root. Flipping the class swaps every CSS variable at once;
+ * the spartan-ng primitives read those variables through bg-card,
+ * text-foreground, etc. CSS custom properties inherit through the DOM, so the
+ * palette cascades to the child card even across component boundaries.
+ *
+ * (light/dark need no rules here — they reuse the app's :root and .dark tokens.)
+ */
+.salesforce {
+	--background: #f3f3f3;
+	--foreground: #181818;
+	--card: #ffffff;
+	--card-foreground: #181818;
+	--popover: #ffffff;
+	--popover-foreground: #181818;
+	--primary: #0176d3;
+	--primary-foreground: #ffffff;
+	--secondary: #ecebea;
+	--secondary-foreground: #181818;
+	--muted: #ecebea;
+	--muted-foreground: #706e6b;
+	--accent: #eaf5fe;
+	--accent-foreground: #014486;
+	--border: #dddbda;
+	--input: #dddbda;
+	--ring: #0176d3;
+	--radius: 0.25rem;
+	font-family:
+		'Salesforce Sans',
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		sans-serif;
+}

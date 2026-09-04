@@ -1,0 +1,35 @@
+@if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (contacts(); as contacts) {
+	<div class="rounded-md border border-border bg-card p-4 shadow-sm">
+		<ul>
+			<!-- @for replaces LWC's for:each; track the record Id for stable rendering. -->
+			@for (contact of contacts; track contact.id) {
+				<li class="py-2 -mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+					<div class="flex items-center gap-3">
+						@if (contact.pictureUrl) {
+							<img
+								[src]="contact.pictureUrl"
+								[alt]="contact.name"
+								class="h-8 w-8 rounded-full object-cover"
+							/>
+						}
+						<div class="min-w-0">
+							<p class="text-sm text-foreground">{{ contact.name }}</p>
+							@if (contact.title) {
+								<p class="text-xs text-muted-foreground">{{ contact.title }}</p>
+							}
+							@if (contact.phone) {
+								<a [href]="'tel:' + contact.phone" class="text-xs text-primary hover:underline">{{
+									contact.phone
+								}}</a>
+							}
+						</div>
+					</div>
+				</li>
+			}
+		</ul>
+	</div>
+} @else {
+	<p class="text-sm">Loading…</p>
+}

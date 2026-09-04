@@ -1,0 +1,17 @@
+<div class="flex flex-col gap-4">
+	<app-button appearance="destructive" class="w-full" [disabled]="!!error()" (clicked)="breakIt()"
+		>Break It</app-button
+	>
+
+	@if (error(); as message) {
+		<div class="rounded-md bg-rose-50 border border-rose-200 p-4 text-rose-700" role="alert">
+			<h2 class="text-base font-semibold mb-1">Caught the failure</h2>
+			<p class="text-sm mb-3">{{ message }}</p>
+			<app-button appearance="text" (clicked)="reset()">Try Again</app-button>
+		</div>
+	} @else {
+		<div class="rounded-md bg-muted p-4 text-sm">
+			Component rendered successfully. Click "Break It" to trigger a failure.
+		</div>
+	}
+</div>

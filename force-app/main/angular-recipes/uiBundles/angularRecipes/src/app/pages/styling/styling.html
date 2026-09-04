@@ -1,0 +1,49 @@
+<app-recipe-gallery header="Styling">
+	<ng-template
+		appRecipe="Account Card (SLDS)"
+		description="Account data rendered with SLDS blueprint classes on plain markup — the manual equivalent of lightning-card, with a standard-sprite header icon."
+		[sources]="cardSldsSources"
+	>
+		<app-account-card-slds />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Account Card (spartan-ng)"
+		description="The same Account data rendered with the app's spartan-ng card components (Tailwind + helm) — a neutral design system for custom UIs."
+		[sources]="cardShadcnSources"
+	>
+		<app-account-card-shadcn />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Icons (SLDS)"
+		description="SLDS icons referenced from SVG sprite sheets. Standard icons add a per-object color class; you own the markup (no lightning-icon)."
+		[sources]="iconsSldsSources"
+	>
+		<app-icons-slds />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Icons (Lucide)"
+		description="Lucide icons via @ng-icons — individual, tree-shakable ng-icon components rather than sprites, for custom UIs outside the Salesforce visual system."
+		[sources]="iconsLucideSources"
+	>
+		<app-icons-lucide />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Button (SLDS)"
+		description="Standard button variants as slds-button_* classes on plain buttons — the manual equivalent of lightning-button, with icons from the SLDS utility sprite."
+		[sources]="buttonSldsSources"
+	>
+		<app-button-slds />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Button (spartan-ng)"
+		description="The app shell's own button, built on spartan-ng helm primitives + Tailwind — the Angular counterpart of shadcn/ui: appearances, sizes, disabled, and icons."
+		[sources]="buttonShadcnSources"
+	>
+		<app-button-shadcn />
+	</ng-template>
+</app-recipe-gallery>

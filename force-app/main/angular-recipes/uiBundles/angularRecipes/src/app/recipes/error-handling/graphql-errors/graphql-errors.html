@@ -1,0 +1,38 @@
+<div>
+	<div class="flex gap-2 mb-2">
+		<app-button appearance="destructive" [disabled]="loading()" (clicked)="runBad()"
+			>Run Bad Query</app-button
+		>
+		<app-button [disabled]="loading()" (clicked)="runGood()">Run Good Query</app-button>
+	</div>
+
+	@if (loading()) {
+		<p class="text-sm">Executing…</p>
+	}
+
+	@if (errors(); as errors) {
+		<div class="rounded-md bg-rose-50 border border-rose-200 p-4 text-rose-700" role="alert">
+			<p class="text-xs mb-1">
+				<strong>{{ errors.length }} error{{ errors.length > 1 ? 's' : '' }} returned</strong>
+			</p>
+			<ul class="list-disc pl-5">
+				@for (e of errors; track $index) {
+					<li class="text-xs">
+						{{ e.message }}
+						@if (e.path; as path) {
+							@if (path.length) {
+								<span class="opacity-70"> — path: {{ path.join('.') }}</span>
+							}
+						}
+					</li>
+				}
+			</ul>
+		</div>
+	}
+
+	@if (success(); as success) {
+		<div class="rounded-md bg-emerald-50 border border-emerald-200 p-4 text-emerald-700" role="status">
+			<p class="text-xs">{{ success }}</p>
+		</div>
+	}
+</div>

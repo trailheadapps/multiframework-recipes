@@ -1,0 +1,10 @@
+@if (account(); as account) {
+	<div class="rounded-md bg-muted p-4">
+		<p class="text-lg font-semibold">{{ account.name }}</p>
+		<p class="text-xs text-muted-foreground mt-1">{{ account.industry ?? 'No Industry' }}</p>
+	</div>
+} @else if (!store.loaded()) {
+	<p class="text-sm">Loading…</p>
+} @else {
+	<p class="text-muted-foreground">Not found.</p>
+}

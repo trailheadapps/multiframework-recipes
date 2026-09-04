@@ -1,6 +1,10 @@
 # Angular Recipes
 
+![Angular Recipes](angular-recipes.webp)
+
 A Salesforce UI Bundle demonstrating how to build an Angular app that runs directly on the Salesforce platform. The bundle is built with the Angular CLI (esbuild) + TypeScript and deployed to the org as a single artifact; Salesforce serves the static assets.
+
+The same bundle also serves the Micro-Frontend **guest** views: chromeless `/embedding/*` routes (plus an `/embedding` catalog, linked as **Micro-Frontends** in the nav) that render outside the app shell and exchange state and events with `<lightning-ui-embedding>` through `@salesforce/platform-sdk`. The LWC hosts that embed them live in [Micro-Frontend Recipes](../microfrontend-recipes).
 
 > [!IMPORTANT]
 > **Preview — in active development.** Angular Recipes is being built toward feature parity with React Recipes and currently includes only a subset of the recipes, with more categories added over time. Because it's still a work in progress, it's excluded from the standard deploy via the root [`.forceignore`](../../../.forceignore), so `sf project deploy start` ships **React Recipes only**. To try Angular Recipes in an org, follow the steps below — they include temporarily removing the force-ignore entry.
@@ -123,6 +127,8 @@ Start the Angular development server (`sf-angular-serve`) with hot reload:
 ```bash
 npm run dev
 ```
+
+The dev server defaults to `http://localhost:5173`. Browse `/embedding` for the guest catalog. The `microfrontend-recipes` LWC hosts embed `http://localhost:5173/embedding/<recipe>`, so running this server makes the Angular guests live inside the **Micro-Frontend Recipes** app — those hosts embed whichever framework's guest is served on that port.
 
 Build the app for production:
 

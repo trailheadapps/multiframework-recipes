@@ -1,0 +1,46 @@
+<div class="flex flex-col gap-4">
+	<div class="rounded-md border-l-4 border-l-primary bg-background p-4 text-xs">
+		<strong>What to try:</strong> Submit without filling in any fields. Because <code>LastName</code>
+		is required but not part of this form, the server returns a top-level GraphQL error in
+		<code>result.errors[]</code>.
+	</div>
+
+	@if (topLevelError(); as error) {
+		<div class="rounded-md bg-rose-50 border border-rose-200 p-4 text-rose-700" role="alert">
+			<p class="text-xs"><strong>GraphQL error:</strong> {{ error }}</p>
+		</div>
+	}
+
+	@if (createdId(); as id) {
+		<div class="rounded-md bg-emerald-50 border border-emerald-200 p-4 text-emerald-700" role="status">
+			<span class="sr-only">Success:</span>
+			<p>Contact created — ID: <code>{{ id }}</code></p>
+		</div>
+	}
+
+	<form (submit)="onSubmit($event)">
+		<app-field class="block mb-2" label="Email" htmlFor="err-email">
+			<app-input
+				id="err-email"
+				type="email"
+				placeholder="email@example.com"
+				[value]="email()"
+				(valueChange)="email.set($event)"
+			/>
+		</app-field>
+
+		<app-field class="block mb-4" label="Phone" htmlFor="err-phone">
+			<app-input
+				id="err-phone"
+				type="tel"
+				placeholder="555-555-5555"
+				[value]="phone()"
+				(valueChange)="phone.set($event)"
+			/>
+		</app-field>
+
+		<app-button type="submit" [loading]="submitting()" loadingLabel="Submitting…">
+			Submit (no LastName → triggers server error)
+		</app-button>
+	</form>
+</div>

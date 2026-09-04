@@ -1,0 +1,40 @@
+<div class="space-y-6">
+	<section>
+		<h3 class="text-sm font-bold mb-3">Appearances</h3>
+		<div class="flex flex-wrap gap-2">
+			<app-button>Filled</app-button>
+			<app-button appearance="destructive">Destructive</app-button>
+			<app-button appearance="outlined">Outlined</app-button>
+			<app-button appearance="text">Text</app-button>
+		</div>
+	</section>
+
+	<section>
+		<h3 class="text-sm font-bold mb-3">Sizes</h3>
+		<div class="flex flex-wrap gap-2 items-center">
+			<app-button size="sm">Small</app-button>
+			<app-button>Default</app-button>
+			<app-button size="lg">Large</app-button>
+			<app-button size="icon" ariaLabel="Add" icon="add" />
+		</div>
+	</section>
+
+	<section>
+		<h3 class="text-sm font-bold mb-3">Disabled</h3>
+		<div class="flex flex-wrap gap-2">
+			<app-button [disabled]="true">Filled</app-button>
+			<app-button appearance="destructive" [disabled]="true">Destructive</app-button>
+			<app-button appearance="outlined" [disabled]="true">Outlined</app-button>
+		</div>
+	</section>
+
+	<section>
+		<h3 class="text-sm font-bold mb-3">With Icons</h3>
+		<div class="flex flex-wrap gap-2">
+			<app-button icon="add">New Record</app-button>
+			<app-button appearance="destructive" icon="delete">Delete</app-button>
+			<app-button appearance="outlined" iconEnd="chevronDown">Options</app-button>
+			<app-button appearance="text" icon="upload">Upload</app-button>
+		</div>
+	</section>
+</div>
