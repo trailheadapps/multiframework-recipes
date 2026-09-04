@@ -1,0 +1,49 @@
+@if (loading()) {
+	<p class="text-sm">Loading…</p>
+} @else if (error(); as error) {
+	<p class="text-xs text-destructive">{{ error }}</p>
+} @else if (accounts().length === 0) {
+	<p class="text-muted-foreground">No accounts. (Reload if you deleted all rows.)</p>
+} @else {
+	<table
+		class="w-full text-sm [&_th]:border-b [&_th]:border-border [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-medium [&_td]:border-b [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_tbody_tr]:transition-colors [&_tbody_tr:hover]:bg-accent/50"
+	>
+		<thead>
+			<tr>
+				<th scope="col">Name</th>
+				<th scope="col">Industry</th>
+				<th scope="col" class="w-52"></th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (account of accounts(); track account.id) {
+				<tr>
+					<td>{{ account.name }}</td>
+					<td class="text-muted-foreground">{{ account.industry ?? '—' }}</td>
+					<td class="text-right">
+						@if (deletingId() === account.id) {
+							<span class="text-muted-foreground text-xs">Deleting…</span>
+						} @else if (confirmId() === account.id) {
+							<span class="flex gap-2 justify-end">
+								<app-button
+									appearance="destructive"
+									[disabled]="deletingId() !== undefined"
+									(clicked)="handleDelete(account.id)"
+									>Yes, Delete</app-button
+								>
+								<app-button appearance="outlined" (clicked)="cancel()">Cancel</app-button>
+							</span>
+						} @else {
+							<app-button
+								appearance="outlined"
+								[disabled]="deletingId() !== undefined"
+								(clicked)="confirm(account.id)"
+								>Delete</app-button
+							>
+						}
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

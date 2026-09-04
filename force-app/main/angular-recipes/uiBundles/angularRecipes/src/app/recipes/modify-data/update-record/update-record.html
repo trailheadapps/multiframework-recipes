@@ -1,0 +1,39 @@
+@if (loading()) {
+	<p class="text-sm">Loading…</p>
+} @else if (!accountId() && !error()) {
+	<p class="text-muted-foreground">No accounts found.</p>
+} @else {
+	<div class="flex flex-col gap-4">
+		@if (success()) {
+			<div class="rounded-md bg-emerald-50 border border-emerald-200 p-4 text-emerald-700" role="status">
+				<span class="sr-only">Success:</span>
+				<p class="text-xs">Account updated successfully.</p>
+			</div>
+		}
+
+		@if (error(); as error) {
+			<div class="rounded-md bg-rose-50 border border-rose-200 p-4 text-rose-700" role="alert">
+				<p>{{ error }}</p>
+			</div>
+		}
+
+		<form (submit)="onSubmit($event)">
+			<app-field class="block mb-2" label="Account Name" required htmlFor="update-name">
+				<app-input id="update-name" [value]="name()" (valueChange)="name.set($event)" />
+			</app-field>
+
+			<app-field class="block mb-4" label="Industry" htmlFor="update-industry">
+				<app-select
+					id="update-industry"
+					[options]="industryOptions"
+					[value]="industry()"
+					(valueChange)="industry.set($event)"
+				/>
+			</app-field>
+
+			<app-button type="submit" [disabled]="submitting() || !name().trim()" [loading]="submitting()" loadingLabel="Saving…">
+				Save Changes
+			</app-button>
+		</form>
+	</div>
+}
