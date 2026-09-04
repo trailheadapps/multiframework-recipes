@@ -1,0 +1,9 @@
+@if (variant() === 'avatar') {
+	<span class="animate-pulse bg-muted rounded-full shrink-0 block" style="width: 3rem; height: 3rem"></span>
+} @else {
+	<div class="flex flex-col gap-1.5 w-full">
+		@for (i of rows(); track i) {
+			<span class="animate-pulse bg-muted rounded block h-3.5" [style.width]="widths[i % widths.length]"></span>
+		}
+	</div>
+}

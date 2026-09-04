@@ -3,14 +3,18 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
 	lucideArrowDown,
 	lucideArrowUp,
+	lucideChevronDown,
 	lucideChevronRight,
 	lucideCircleAlert,
 	lucideFileQuestion,
 	lucideListFilter,
 	lucideLogIn,
 	lucideLogOut,
+	lucidePlus,
 	lucideSearch,
 	lucideSearchX,
+	lucideTrash2,
+	lucideUpload,
 	lucideUser,
 	lucideUserPen,
 	lucideUserPlus,
@@ -28,10 +32,14 @@ export const APP_ICONS = {
 	search: lucideSearch,
 	filter: lucideListFilter,
 	chevronRight: lucideChevronRight,
+	chevronDown: lucideChevronDown,
 	arrowUp: lucideArrowUp,
 	arrowDown: lucideArrowDown,
 	noResults: lucideSearchX,
 	notFound: lucideFileQuestion,
+	add: lucidePlus,
+	delete: lucideTrash2,
+	upload: lucideUpload,
 } as const;
 
 export type AppIconName = keyof typeof APP_ICONS;
