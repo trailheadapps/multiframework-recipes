@@ -1,0 +1,35 @@
+@if (loading()) {
+	<p class="text-sm">Loading…</p>
+} @else if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (contact(); as contact) {
+	<div class="rounded-md border border-border bg-card p-4">
+		<div class="flex items-center gap-3">
+			@if (contact.pictureUrl) {
+				<img
+					[src]="contact.pictureUrl"
+					[alt]="contact.name"
+					class="h-12 w-12 rounded-full object-cover"
+				/>
+			} @else {
+				<span
+					class="h-12 w-12 rounded-full bg-muted flex items-center justify-center text-sm font-medium"
+					>{{ contact.name[0] }}</span
+				>
+			}
+			<div class="min-w-0">
+				<p class="text-lg font-semibold">{{ contact.name }}</p>
+				@if (contact.title) {
+					<p class="text-xs text-muted-foreground">{{ contact.title }}</p>
+				}
+				@if (contact.phone) {
+					<a [href]="'tel:' + contact.phone" class="text-xs text-primary hover:underline">{{
+						contact.phone
+					}}</a>
+				}
+			</div>
+		</div>
+	</div>
+} @else {
+	<p>No contacts found.</p>
+}

@@ -1,0 +1,32 @@
+@if (loading()) {
+	<p class="text-sm">Loading…</p>
+} @else if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else {
+	<div class="rounded-md border border-border bg-card p-4 shadow-sm">
+		<ul>
+			@for (contact of contacts(); track contact.id) {
+				<li class="py-2 -mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+					<p class="text-sm text-foreground">{{ contact.name }}</p>
+					@if (contact.title) {
+						<p class="text-xs text-muted-foreground">{{ contact.title }}</p>
+					}
+				</li>
+			}
+		</ul>
+
+		@if (hasNextPage()) {
+			<div class="mt-2">
+				<app-button
+					appearance="outlined"
+					[loading]="loadingMore()"
+					loadingLabel="Loading…"
+					(clicked)="loadMore()"
+					>Load More</app-button
+				>
+			</div>
+		} @else if (contacts().length > 0) {
+			<p class="text-xs text-muted-foreground mt-2">All {{ contacts().length }} contacts loaded.</p>
+		}
+	</div>
+}
