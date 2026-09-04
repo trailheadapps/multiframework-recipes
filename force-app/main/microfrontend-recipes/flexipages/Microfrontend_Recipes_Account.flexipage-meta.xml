@@ -127,6 +127,16 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>uiEmbeddingGraphqlData</componentName>
+                <identifier>uiEmbeddingGraphqlData_1</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-a1b2c3d4-graphql-data-0000-000000000005</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
                     <value>Facet-64e6ed4d-701e-4544-a358-85a3ec532146</value>
@@ -286,6 +296,24 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:accordionSection</componentName>
                 <identifier>flexipage_accordionSection10</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-a1b2c3d4-graphql-data-0000-000000000005</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Query GraphQL data</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>name</name>
+                    <value>accordionSection11</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:accordionSection</componentName>
+                <identifier>flexipage_accordionSection11</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-3a12688c-287e-49b2-9576-93955360aea7</name>
