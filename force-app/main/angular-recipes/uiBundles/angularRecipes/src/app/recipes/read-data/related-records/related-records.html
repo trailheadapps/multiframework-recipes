@@ -1,0 +1,33 @@
+@if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (contacts(); as contacts) {
+	<div class="rounded-md border border-border bg-card p-4 shadow-sm">
+		<div class="flex gap-4 mb-1 border-b border-border pb-1.5">
+			<span class="text-xs text-muted-foreground basis-1/2 shrink-0 grow-0"><strong>Contact</strong></span>
+			<span class="flex-1 text-xs text-muted-foreground"><strong>Account</strong></span>
+		</div>
+		<ul>
+			@for (contact of contacts; track contact.id) {
+				<li class="-mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+					<div class="flex gap-4 items-center py-2">
+						<div class="basis-1/2 shrink-0 grow-0">
+							<span class="text-sm text-foreground">{{ contact.name }}</span>
+							@if (contact.title) {
+								<span class="text-xs text-muted-foreground ml-1">— {{ contact.title }}</span>
+							}
+						</div>
+						<div class="flex-1">
+							@if (contact.accountName) {
+								<span class="text-sm text-foreground">{{ contact.accountName }}</span>
+							} @else {
+								<em class="text-muted-foreground">—</em>
+							}
+						</div>
+					</div>
+				</li>
+			}
+		</ul>
+	</div>
+} @else {
+	<p class="text-sm">Loading…</p>
+}
