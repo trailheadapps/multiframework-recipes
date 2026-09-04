@@ -1,0 +1,14 @@
+<div>
+	<p class="text-xs text-muted-foreground mb-2">
+		Navigates without a full page reload. Renders as a plain <code>&lt;a&gt;</code> in the DOM.
+	</p>
+	<div class="grid grid-cols-3 gap-2">
+		@for (page of pages; track page.path) {
+			<a
+				[routerLink]="page.path"
+				class="inline-flex items-center justify-center w-full rounded-md border border-input px-3 py-2 text-sm hover:bg-accent transition-colors"
+				>{{ page.label }}</a
+			>
+		}
+	</div>
+</div>
