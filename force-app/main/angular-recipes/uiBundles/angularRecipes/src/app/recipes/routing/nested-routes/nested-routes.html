@@ -1,0 +1,26 @@
+@if (store.error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (!store.loaded()) {
+	<p class="text-sm">Loading…</p>
+} @else {
+	<div class="flex min-h-40">
+		<div class="w-2/5 border-r border-border pr-3">
+			<ul class="divide-y">
+				@for (account of store.accounts(); track account.id) {
+					<li class="py-2">
+						<!-- Relative link — appends :accountId to the current route. -->
+						<a
+							[routerLink]="[account.id]"
+							routerLinkActive="font-medium"
+							class="text-sm text-primary hover:underline"
+							>{{ account.name }}</a
+						>
+					</li>
+				}
+			</ul>
+		</div>
+		<div class="pl-3 flex-1">
+			<router-outlet />
+		</div>
+	</div>
+}

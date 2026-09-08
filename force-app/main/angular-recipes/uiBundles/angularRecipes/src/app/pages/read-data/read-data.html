@@ -1,0 +1,65 @@
+<app-recipe-gallery header="Read Data">
+	<ng-template
+		appRecipe="Single Record"
+		description="Queries a single Contact via UIAPI GraphQL and displays its fields. In LWC you'd reach for @wire(getRecord); here ngOnInit fetches on mount and you own loading, error, and data as signals."
+		[sources]="singleRecordSources"
+	>
+		<app-single-record />
+	</ng-template>
+
+	<ng-template
+		appRecipe="List of Records"
+		description="Queries multiple Contacts and renders each with @for. The response uses the Relay connection shape, so records arrive as edges[].node instead of a plain array."
+		[sources]="listSources"
+	>
+		<app-list-of-records />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Filtered List with Variables"
+		description="Queries Contacts by name using a GraphQL variable bound to an input. A debounced handler re-runs the query with a fresh $name variable — the equivalent of a reactive @track property passed to @wire."
+		[sources]="filteredSources"
+	>
+		<app-filtered-list />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Sorted Results"
+		description="Fetches Contacts with an orderBy driven by signals. Since orderBy can't be a GraphQL variable in UIAPI, the query string is rebuilt and re-run whenever the sort field or direction changes."
+		[sources]="sortedSources"
+	>
+		<app-sorted-results />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Paginated List"
+		description="Fetches two Contacts at a time using Relay cursor pagination (first / after). Each Load More passes pageInfo.endCursor as $after, appending the next page to the list."
+		[sources]="paginatedSources"
+	>
+		<app-paginated-list />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Related Records"
+		description="Queries Contacts with their parent Account in a single request, traversing a lookup relationship. In LWC this needs separate @wire calls; here one query covers both objects."
+		[sources]="relatedSources"
+	>
+		<app-related-records />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Aliased Multi-Object Query"
+		description="Queries Accounts and Contacts in a single request using aliases. Each alias becomes its own key in the response, combining two objects into one round-trip."
+		[sources]="aliasedSources"
+	>
+		<app-aliased-multi-object-query />
+	</ng-template>
+
+	<ng-template
+		appRecipe="Imperative Refetch"
+		description="Displays a Contact list with a Refresh button that re-runs the query on demand. Unlike LWC's reactive @wire, you control exactly when data is fetched."
+		[sources]="imperativeSources"
+	>
+		<app-imperative-refetch />
+	</ng-template>
+</app-recipe-gallery>

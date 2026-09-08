@@ -1,0 +1,20 @@
+@if (error(); as error) {
+	<p class="text-destructive">{{ error }}</p>
+} @else if (accounts(); as accounts) {
+	<p class="text-xs text-muted-foreground mb-2">
+		Click an account to navigate to <code>/routing/route-parameters/:accountId</code>.
+	</p>
+	<ul class="divide-y">
+		@for (account of accounts; track account.id) {
+			<li class="py-2">
+				<a
+					[routerLink]="['/routing/route-parameters', account.id]"
+					class="text-sm text-primary hover:underline"
+					>{{ account.name }}</a
+				>
+			</li>
+		}
+	</ul>
+} @else {
+	<p class="text-sm">Loading…</p>
+}

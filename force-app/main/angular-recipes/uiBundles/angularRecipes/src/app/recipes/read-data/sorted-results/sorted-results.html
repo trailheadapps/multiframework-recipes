@@ -1,0 +1,48 @@
+<div>
+	<div class="flex gap-4 items-center mb-2">
+		<div class="w-1/2">
+			<label class="text-sm font-medium mb-1 block" for="sort-field">Sort by</label>
+			<select
+				#f
+				id="sort-field"
+				class="w-full rounded-md border border-input px-3 py-2 text-sm"
+				(change)="onField(f.value)"
+			>
+				@for (opt of sortFields; track opt.value) {
+					<option [value]="opt.value" [selected]="opt.value === field()">{{ opt.label }}</option>
+				}
+			</select>
+		</div>
+		<div class="w-1/2">
+			<label class="text-sm font-medium mb-1 block" for="sort-dir">Direction</label>
+			<select
+				#d
+				id="sort-dir"
+				class="w-full rounded-md border border-input px-3 py-2 text-sm"
+				(change)="onDir(d.value)"
+			>
+				<option value="ASC" [selected]="dir() === 'ASC'">Ascending</option>
+				<option value="DESC" [selected]="dir() === 'DESC'">Descending</option>
+			</select>
+		</div>
+	</div>
+
+	@if (loading()) {
+		<p class="text-sm mb-2">Loading…</p>
+	} @else if (error(); as error) {
+		<p class="text-destructive">{{ error }}</p>
+	} @else {
+		<div class="rounded-md border border-border bg-card p-4 shadow-sm">
+			<ul>
+				@for (contact of contacts(); track contact.id) {
+					<li class="py-2 -mx-2 px-2 rounded-md transition-colors hover:bg-accent/50">
+						<p class="text-sm text-foreground">{{ contact.name }}</p>
+						@if (contact.title) {
+							<p class="text-xs text-muted-foreground">{{ contact.title }}</p>
+						}
+					</li>
+				}
+			</ul>
+		</div>
+	}
+</div>

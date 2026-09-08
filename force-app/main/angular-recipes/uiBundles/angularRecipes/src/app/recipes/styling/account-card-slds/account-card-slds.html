@@ -1,0 +1,46 @@
+<div>
+	@if (loading()) {
+		<p class="slds-text-body_regular">Loading…</p>
+	} @else if (error(); as error) {
+		<p class="slds-text-color_error">{{ error }}</p>
+	} @else if (account(); as account) {
+		<article class="slds-card">
+			<div class="slds-card__header slds-grid">
+				<header class="slds-media slds-media_center slds-has-flexi-truncate">
+					<div class="slds-media__figure">
+						<!-- slds-icon-standard-account applies the object's color background. -->
+						<span class="slds-icon_container slds-icon-standard-account" title="Account">
+							<svg class="slds-icon slds-icon_small" aria-hidden="true">
+								<use href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+							</svg>
+							<span class="slds-assistive-text">Account</span>
+						</span>
+					</div>
+					<div class="slds-media__body">
+						<h2 class="slds-card__header-title">
+							<span class="slds-truncate" [title]="account.name">{{ account.name }}</span>
+						</h2>
+					</div>
+				</header>
+			</div>
+
+			<div class="slds-card__body slds-card__body_inner">
+				<dl class="slds-list_horizontal slds-wrap">
+					<dt class="slds-item_label slds-text-color_weak slds-truncate" title="Industry">Industry</dt>
+					<dd class="slds-item_detail slds-truncate">{{ account.industry ?? '—' }}</dd>
+
+					<dt class="slds-item_label slds-text-color_weak slds-truncate" title="Annual Revenue">
+						Annual Revenue
+					</dt>
+					<dd class="slds-item_detail slds-truncate">{{ account.revenue }}</dd>
+				</dl>
+			</div>
+
+			<footer class="slds-card__footer">
+				<a class="slds-card__footer-action" href="#">View Account</a>
+			</footer>
+		</article>
+	} @else {
+		<p class="slds-text-color_weak">No account found.</p>
+	}
+</div>

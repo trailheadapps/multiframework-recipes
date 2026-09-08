@@ -1,0 +1,45 @@
+<div class="p-4">
+	<app-card class="max-w-md">
+		<app-card-header>
+			<app-card-title class="flex items-center gap-2 text-lg">
+				<app-icon name="trendingUp" size="1rem" />
+				{{ account().tickerSymbol ?? 'Stock quote' }}
+			</app-card-title>
+			<app-card-description>
+				@if (connected()) {
+					@if (account().tickerSymbol) {
+						Live quote for {{ account().name ?? 'this Account' }}. The host fires a refreshticker
+						event via viewSDK.addEventListener; the guest re-pulls the price.
+					} @else {
+						This Account has no ticker symbol.
+					}
+				} @else {
+					Drop this component on an Account record page to see a quote.
+				}
+			</app-card-description>
+		</app-card-header>
+		<app-card-content class="space-y-4">
+			@if (account().tickerSymbol && quote(); as q) {
+				<div class="flex items-baseline gap-2">
+					<span class="text-3xl font-semibold tabular-nums">${{ q.price.toFixed(2) }}</span>
+					<span class="text-muted-foreground text-xs">as of {{ q.asOf }}</span>
+				</div>
+			}
+
+			@if (account().tickerSymbol) {
+				<p class="text-muted-foreground text-xs">
+					{{ refreshCount() }} refresh{{ refreshCount() === 1 ? '' : 'es' }} received from the host
+				</p>
+			}
+		</app-card-content>
+	</app-card>
+	<a
+		href="https://github.com/trailheadapps/multiframework-recipes/blob/main/force-app/main/angular-recipes/uiBundles/angularRecipes/src/app/recipes/embedding/receive-event/receive-event.ts"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="text-muted-foreground hover:text-primary mt-3 inline-flex items-center gap-1 text-xs"
+	>
+		Guest (receive-event.ts)
+		<app-icon name="externalLink" size="0.75rem" />
+	</a>
+</div>

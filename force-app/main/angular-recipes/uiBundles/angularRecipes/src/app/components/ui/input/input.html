@@ -1,0 +1,34 @@
+<div class="w-full space-y-1.5">
+	@if (label()) {
+		<label hlmLabel [for]="resolvedId()">{{ label() }}</label>
+	}
+	<hlm-input-group [class]="groupClasses()">
+		@if (icon(); as leadingIcon) {
+			<hlm-input-group-addon>
+				<app-icon [name]="leadingIcon" class="flex items-end" aria-hidden="true" />
+			</hlm-input-group-addon>
+		}
+		<input
+			hlmInputGroupInput
+			[type]="type()"
+			[placeholder]="placeholder()"
+			[disabled]="disabled()"
+			[id]="resolvedId()"
+			[attr.aria-label]="ariaLabel() || null"
+			[attr.aria-describedby]="describedBy()"
+			[attr.aria-invalid]="error() || null"
+			[attr.data-matches-spartan-invalid]="error() || null"
+			[(ngModel)]="value"
+		/>
+		@if (iconEnd(); as trailingIcon) {
+			<hlm-input-group-addon align="inline-end">
+				<app-icon [name]="trailingIcon" class="flex items-end" aria-hidden="true" />
+			</hlm-input-group-addon>
+		}
+	</hlm-input-group>
+	@if (error() && errorMessage()) {
+		<p [id]="errorId()" class="text-sm text-destructive" role="alert" aria-live="polite">
+			{{ errorMessage() }}
+		</p>
+	}
+</div>

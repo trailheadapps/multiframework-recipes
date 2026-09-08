@@ -1,0 +1,66 @@
+@if (loading()) {
+	<p class="text-sm">Loading…</p>
+} @else if (error(); as error) {
+	<p class="text-xs text-destructive">{{ error }}</p>
+} @else if (accounts().length === 0) {
+	<p class="text-muted-foreground">No accounts found.</p>
+} @else {
+	<table
+		class="w-full text-sm [&_th]:border-b [&_th]:border-border [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-medium [&_td]:border-b [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_tbody_tr]:transition-colors [&_tbody_tr:hover]:bg-accent/50"
+	>
+		<thead>
+			<tr>
+				<th scope="col">Name</th>
+				<th scope="col">Industry</th>
+				<th scope="col" class="w-24"></th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (account of accounts(); track account.id) {
+				<tr>
+					@if (editId() === account.id) {
+						<td [attr.colspan]="3" class="p-2">
+							@if (saveError(); as saveError) {
+								<p class="text-destructive text-xs mb-1">{{ saveError }}</p>
+							}
+							<form (submit)="handleSave($event)" class="flex gap-1 items-center">
+								<div class="flex-1">
+									<app-input
+										ariaLabel="Account name"
+										[value]="editName()"
+										(valueChange)="editName.set($event)"
+									/>
+								</div>
+								<div class="flex-1">
+									<app-select
+										ariaLabel="Industry"
+										[options]="industryOptions"
+										[value]="editIndustry()"
+										(valueChange)="editIndustry.set($event)"
+									/>
+								</div>
+								<div class="flex gap-2 shrink-0">
+									<app-button type="submit" [loading]="saving()" loadingLabel="…">Save</app-button>
+									<app-button appearance="outlined" [disabled]="saving()" (clicked)="cancelEdit()"
+										>Cancel</app-button
+									>
+								</div>
+							</form>
+						</td>
+					} @else {
+						<td>{{ account.name }}</td>
+						<td class="text-muted-foreground">{{ account.industry || '—' }}</td>
+						<td class="text-right">
+							<app-button
+								appearance="outlined"
+								[disabled]="editId() !== undefined"
+								(clicked)="startEdit(account)"
+								>Edit</app-button
+							>
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}

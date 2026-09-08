@@ -1,0 +1,55 @@
+<div class="p-1">
+	<app-card class="max-w-md">
+		<app-card-header>
+			<app-card-title class="text-lg">
+				{{ data().accountName ? data().accountName + ' contacts' : 'Contacts' }}
+			</app-card-title>
+			<app-card-description>
+				@if (data().error; as error) {
+					{{ error }}
+				} @else if (!data().loaded) {
+					Waiting for the host to send Contact data…
+				} @else if (contacts().length > 0) {
+					{{ contacts().length }} contact{{ contacts().length === 1 ? '' : 's' }} related to
+					{{ accountName() }}, fetched by the host and sent as an event.
+				} @else {
+					No contacts related to {{ accountName() }}.
+				}
+			</app-card-description>
+		</app-card-header>
+		<app-card-content>
+			<ul class="divide-border divide-y">
+				@for (contact of contacts(); track contact.id) {
+					<li class="flex flex-col gap-1 py-2 first:pt-0 last:pb-0">
+						<span class="font-medium">{{ contact.name ?? 'Unnamed' }}</span>
+						<div
+							class="text-muted-foreground grid grid-cols-[1rem_1fr] items-center gap-x-2 gap-y-1 text-xs"
+						>
+							@if (contact.title) {
+								<app-icon name="title" size="0.875rem" />
+								<span>{{ contact.title }}</span>
+							}
+							@if (contact.email) {
+								<app-icon name="email" size="0.875rem" />
+								<a [href]="'mailto:' + contact.email" class="hover:text-primary">{{ contact.email }}</a>
+							}
+							@if (contact.phone) {
+								<app-icon name="phone" size="0.875rem" />
+								<a [href]="'tel:' + contact.phone" class="hover:text-primary">{{ contact.phone }}</a>
+							}
+						</div>
+					</li>
+				}
+			</ul>
+		</app-card-content>
+	</app-card>
+	<a
+		href="https://github.com/trailheadapps/multiframework-recipes/blob/main/force-app/main/angular-recipes/uiBundles/angularRecipes/src/app/recipes/embedding/graphql-data/graphql-data.ts"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="text-muted-foreground hover:text-primary mt-3 inline-flex items-center gap-1 text-xs"
+	>
+		Guest (graphql-data.ts)
+		<app-icon name="externalLink" size="0.75rem" />
+	</a>
+</div>
