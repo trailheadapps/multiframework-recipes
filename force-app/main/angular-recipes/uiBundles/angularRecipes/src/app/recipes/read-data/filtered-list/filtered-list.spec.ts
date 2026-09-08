@@ -10,6 +10,30 @@ vi.mock('@salesforce/platform-sdk', () => ({
 
 const mockQuery = vi.fn();
 
+function contactResult(name: string) {
+	return {
+		data: {
+			uiapi: {
+				query: {
+					Contact: {
+						edges: [
+							{
+								node: {
+									Id: name,
+									Name: { value: name },
+									Title: { value: null },
+									Phone: { value: null },
+									Picture__c: { value: null },
+								},
+							},
+						],
+					},
+				},
+			},
+		},
+	};
+}
+
 describe('FilteredListComponent', () => {
 	beforeEach(() => {
 		(createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockQuery } });
@@ -47,5 +71,33 @@ describe('FilteredListComponent', () => {
 
 		expect(mockQuery).toHaveBeenCalledWith(expect.objectContaining({ variables: { name: '%Amy%' } }));
 		expect(fixture.nativeElement.textContent).toContain('Amy Taylor');
+	});
+
+	it('ignores a stale response that resolves after a newer one', async () => {
+		const resolvers: ((value: unknown) => void)[] = [];
+		mockQuery.mockImplementation(() => new Promise((resolve) => resolvers.push(resolve)));
+
+		await TestBed.configureTestingModule({ imports: [FilteredListComponent] }).compileComponents();
+		const fixture = TestBed.createComponent(FilteredListComponent);
+		fixture.detectChanges();
+		const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+
+		input.value = 'a';
+		input.dispatchEvent(new Event('input'));
+		await new Promise((resolve) => setTimeout(resolve, 350));
+		input.value = 'ab';
+		input.dispatchEvent(new Event('input'));
+		await new Promise((resolve) => setTimeout(resolve, 350));
+
+		expect(resolvers).toHaveLength(2);
+		resolvers[1](contactResult('Newer Match'));
+		resolvers[0](contactResult('Stale Match'));
+		await fixture.whenStable();
+		await new Promise((resolve) => setTimeout(resolve));
+		fixture.detectChanges();
+
+		const text = fixture.nativeElement.textContent;
+		expect(text).toContain('Newer Match');
+		expect(text).not.toContain('Stale Match');
 	});
 });
