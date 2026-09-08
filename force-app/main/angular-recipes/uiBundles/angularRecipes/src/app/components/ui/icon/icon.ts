@@ -5,6 +5,7 @@ import {
 	lucideArrowDown,
 	lucideArrowRight,
 	lucideArrowUp,
+	lucideBriefcase,
 	lucideBuilding2,
 	lucideChevronDown,
 	lucideChevronRight,
@@ -16,6 +17,7 @@ import {
 	lucideListFilter,
 	lucideLogIn,
 	lucideLogOut,
+	lucideMail,
 	lucidePhone,
 	lucidePlus,
 	lucideSearch,
@@ -62,6 +64,8 @@ export const APP_ICONS = {
 	window: lucideAppWindow,
 	arrowRight: lucideArrowRight,
 	info: lucideInfo,
+	title: lucideBriefcase,
+	email: lucideMail,
 } as const;
 
 export type AppIconName = keyof typeof APP_ICONS;

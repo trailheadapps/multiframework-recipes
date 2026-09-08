@@ -24,6 +24,7 @@ import { UnsavedChangesComponent } from './recipes/embedding/unsaved-changes/uns
 import { ThemeTokensComponent } from './recipes/embedding/theme-tokens/theme-tokens';
 import { AutoResizeComponent } from './recipes/embedding/auto-resize/auto-resize';
 import { ReceiveEventComponent } from './recipes/embedding/receive-event/receive-event';
+import { GraphqlDataComponent } from './recipes/embedding/graphql-data/graphql-data';
 
 export const routes: Routes = [
 	// Chromeless embedding guests, rendered OUTSIDE the app shell so the host
@@ -67,6 +68,11 @@ export const routes: Routes = [
 		path: 'embedding/receive-event',
 		component: GuestLayoutComponent,
 		children: [{ path: '', component: ReceiveEventComponent }],
+	},
+	{
+		path: 'embedding/graphql-data',
+		component: GuestLayoutComponent,
+		children: [{ path: '', component: GraphqlDataComponent }],
 	},
 	{
 		path: '',
