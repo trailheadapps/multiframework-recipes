@@ -162,6 +162,61 @@ describe('UnsavedChanges', () => {
     );
   });
 
+  it('adopts a later host update while the form is pristine', async () => {
+    const view = stubView({
+      recordId: '001',
+      name: 'Acme',
+      rating: 'Warm',
+      type: 'Prospect',
+    });
+    mockView(view);
+
+    render(<UnsavedChanges />);
+    await flushSdk();
+
+    act(() => {
+      view.emit({
+        recordId: '001',
+        name: 'Acme Renamed',
+        rating: 'Hot',
+        type: 'Prospect',
+      });
+    });
+
+    expect((screen.getByLabelText('Name') as HTMLInputElement).value).toBe(
+      'Acme Renamed'
+    );
+  });
+
+  it('keeps in-progress edits when the host updates in the background', async () => {
+    const user = userEvent.setup();
+    const view = stubView({
+      recordId: '001',
+      name: 'Acme',
+      rating: 'Warm',
+      type: 'Prospect',
+    });
+    mockView(view);
+
+    render(<UnsavedChanges />);
+    await flushSdk();
+
+    const nameInput = screen.getByLabelText('Name') as HTMLInputElement;
+    await user.clear(nameInput);
+    await user.type(nameInput, 'My Draft');
+
+    act(() => {
+      view.emit({
+        recordId: '001',
+        name: 'Server Rename',
+        rating: 'Cold',
+        type: 'Prospect',
+      });
+    });
+
+    expect(nameInput.value).toBe('My Draft');
+  });
+
   it('is accessible', async () => {
     mockView(
       stubView({
