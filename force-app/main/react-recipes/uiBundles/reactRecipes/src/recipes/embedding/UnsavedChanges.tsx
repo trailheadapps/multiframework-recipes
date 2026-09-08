@@ -77,9 +77,9 @@ export default function UnsavedChanges() {
       if (!ui) return;
       const seed = (p: AccountProps) => {
         // Adopt the host's values into the form when the user has nothing in
-        // progress: the first payload, a form still matching the last saved
-        // values, or the echo from our own save (the host may normalize what it
-        // stored). If the user has unsaved edits, keep them.
+        // progress. That means the first payload, a form still matching the last
+        // saved values, or the echo from our own save (which the host may
+        // normalize). Otherwise keep the user's in-progress edits.
         const prevSaved = savedRef.current;
         const wasSeeded = seededRef.current;
         const wasSaving = savingRef.current;

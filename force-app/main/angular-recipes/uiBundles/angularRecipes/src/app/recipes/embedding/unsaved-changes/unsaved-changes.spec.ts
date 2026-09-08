@@ -59,15 +59,19 @@ describe('UnsavedChangesComponent', () => {
 		expect(event.detail).toEqual({ name: 'Acme', rating: 'Warm', type: 'Prospect' });
 	});
 
-	it('adopts a later host update while the form is pristine', async () => {
+	it('adopts a later host update while the form is pristine, without marking dirty', async () => {
 		const view = stubView({ recordId: '001', name: 'Acme', rating: 'Warm', type: 'Prospect' });
 		(getViewSDK as Mock).mockResolvedValue(view);
 		const fixture = await render();
 		const component = fixture.componentInstance as unknown as { form(): { name?: string | null } };
+		view.markDirtyState.mockClear();
 
 		view.emit({ recordId: '001', name: 'Acme Renamed', rating: 'Hot', type: 'Prospect' });
+		await fixture.whenStable();
+		await new Promise((resolve) => setTimeout(resolve));
 
 		expect(component.form().name).toBe('Acme Renamed');
+		expect(view.markDirtyState).not.toHaveBeenCalled();
 	});
 
 	it('keeps in-progress edits when the host updates in the background', async () => {
@@ -83,5 +87,28 @@ describe('UnsavedChangesComponent', () => {
 		view.emit({ recordId: '001', name: 'Server Rename', rating: 'Cold', type: 'Prospect' });
 
 		expect(component.form().name).toBe('My Draft');
+	});
+
+	it('adopts the host echo after a save, even when the host normalized the values', async () => {
+		const view = stubView({ recordId: '001', name: 'Acme', rating: 'Warm', type: 'Prospect' });
+		(getViewSDK as Mock).mockResolvedValue(view);
+		const fixture = await render();
+		const component = fixture.componentInstance as unknown as {
+			setName(value: string): void;
+			form(): { name?: string | null };
+			isDirty(): boolean;
+		};
+
+		component.setName('  Umbrella  ');
+		const save = fixture.nativeElement.querySelector('app-button button') as HTMLButtonElement;
+		save.click();
+		await fixture.whenStable();
+		await new Promise((resolve) => setTimeout(resolve));
+
+		// Host trimmed the value and echoed the normalized form back.
+		view.emit({ recordId: '001', name: 'Umbrella', rating: 'Warm', type: 'Prospect' });
+
+		expect(component.form().name).toBe('Umbrella');
+		expect(component.isDirty()).toBe(false);
 	});
 });

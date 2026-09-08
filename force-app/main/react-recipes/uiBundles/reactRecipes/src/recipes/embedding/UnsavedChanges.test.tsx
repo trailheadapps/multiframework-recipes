@@ -162,7 +162,7 @@ describe('UnsavedChanges', () => {
     );
   });
 
-  it('adopts a later host update while the form is pristine', async () => {
+  it('adopts a later host update while the form is pristine, without marking dirty', async () => {
     const view = stubView({
       recordId: '001',
       name: 'Acme',
@@ -173,6 +173,7 @@ describe('UnsavedChanges', () => {
 
     render(<UnsavedChanges />);
     await flushSdk();
+    view.markDirtyState.mockClear();
 
     act(() => {
       view.emit({
@@ -182,10 +183,12 @@ describe('UnsavedChanges', () => {
         type: 'Prospect',
       });
     });
+    await flushSdk();
 
     expect((screen.getByLabelText('Name') as HTMLInputElement).value).toBe(
       'Acme Renamed'
     );
+    expect(view.markDirtyState).not.toHaveBeenCalled();
   });
 
   it('keeps in-progress edits when the host updates in the background', async () => {
@@ -215,6 +218,41 @@ describe('UnsavedChanges', () => {
     });
 
     expect(nameInput.value).toBe('My Draft');
+  });
+
+  it('adopts the host echo after a save, even when the host normalized the values', async () => {
+    const user = userEvent.setup();
+    const view = stubView({
+      recordId: '001',
+      name: 'Acme',
+      rating: 'Warm',
+      type: 'Prospect',
+    });
+    mockView(view);
+
+    render(<UnsavedChanges />);
+    await flushSdk();
+
+    const nameInput = screen.getByLabelText('Name') as HTMLInputElement;
+    await user.clear(nameInput);
+    await user.type(nameInput, '  Umbrella  ');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await flushSdk();
+
+    // Host trimmed the value and echoed the normalized form back.
+    act(() => {
+      view.emit({
+        recordId: '001',
+        name: 'Umbrella',
+        rating: 'Warm',
+        type: 'Prospect',
+      });
+    });
+    await flushSdk();
+
+    expect((screen.getByLabelText('Name') as HTMLInputElement).value).toBe(
+      'Umbrella'
+    );
   });
 
   it('is accessible', async () => {
