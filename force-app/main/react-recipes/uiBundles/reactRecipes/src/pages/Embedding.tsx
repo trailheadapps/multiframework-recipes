@@ -71,6 +71,13 @@ const recipes: EmbeddingRecipe[] = [
     description:
       'The host pushes an event down to the guest (a live stock quote) — the mirror of Send to Host.',
   },
+  {
+    name: 'GraphQL Data',
+    route: '/embedding/graphql-data',
+    source: `${GUEST_SOURCE_BASE}/GraphqlData.tsx`,
+    description:
+      "Indirect org access: the host runs one GraphQL query for the current account's related contacts and pushes the rows down as an event.",
+  },
 ];
 
 export default function Embedding() {

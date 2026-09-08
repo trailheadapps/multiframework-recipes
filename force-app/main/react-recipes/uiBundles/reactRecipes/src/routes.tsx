@@ -28,6 +28,7 @@ import AutoResize from './recipes/embedding/AutoResize';
 import ThemeTokens from './recipes/embedding/ThemeTokens';
 import UnsavedChanges from './recipes/embedding/UnsavedChanges';
 import ReceiveEvent from './recipes/embedding/ReceiveEvent';
+import GraphqlData from './recipes/embedding/GraphqlData';
 
 export const routes: RouteObject[] = [
   {
@@ -131,6 +132,7 @@ export const routes: RouteObject[] = [
       { path: 'embedding/theme-tokens', element: <ThemeTokens /> },
       { path: 'embedding/unsaved-changes', element: <UnsavedChanges /> },
       { path: 'embedding/receive-event', element: <ReceiveEvent /> },
+      { path: 'embedding/graphql-data', element: <GraphqlData /> },
     ],
   },
 ];

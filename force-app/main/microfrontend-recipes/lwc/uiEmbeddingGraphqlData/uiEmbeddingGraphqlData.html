@@ -1,0 +1,38 @@
+<template>
+  <div class="recipe-body">
+    <div class="shell-container">
+      <lightning-ui-embedding
+        lwc:ref="embedding"
+        sandbox="allow-popups"
+        shell-title="GraphQL Data"
+        src={computedSrc}
+        onrequestcontacts={handleRequestContacts}
+      ></lightning-ui-embedding>
+    </div>
+    <div class="recipe-footer">
+      <p class="recipe-description">
+        Externally hosted MFEs have no direct org data access. This host LWC
+        runs one GraphQL query that walks an Account to its related Contacts and
+        pushes the rows to the guest as a contactsdata custom event payload. The
+        React MFE listens with viewSDK.addEventListener() and renders data it
+        never fetched itself.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://github.com/trailheadapps/multiframework-recipes/tree/main/force-app/main/microfrontend-recipes/lwc/uiEmbeddingGraphqlData"
+          target="_blank"
+          rel="noopener"
+          class="view-source"
+        >
+          Host (uiEmbeddingGraphqlData)
+          <lightning-icon
+            icon-name="utility:new_window"
+            size="xx-small"
+            alternative-text="Opens in new tab"
+            class="external-icon"
+          ></lightning-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
