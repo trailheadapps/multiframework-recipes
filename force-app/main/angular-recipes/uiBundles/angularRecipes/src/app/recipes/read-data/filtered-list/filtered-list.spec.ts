@@ -39,7 +39,10 @@ describe('FilteredListComponent', () => {
 		(createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockQuery } });
 	});
 
-	afterEach(() => vi.clearAllMocks());
+	afterEach(() => {
+		vi.clearAllMocks();
+		vi.useRealTimers();
+	});
 
 	it('queries with a wildcard variable and renders matches after debounce', async () => {
 		mockQuery.mockResolvedValue({
@@ -74,6 +77,7 @@ describe('FilteredListComponent', () => {
 	});
 
 	it('ignores a stale response that resolves after a newer one', async () => {
+		vi.useFakeTimers();
 		const resolvers: ((value: unknown) => void)[] = [];
 		mockQuery.mockImplementation(() => new Promise((resolve) => resolvers.push(resolve)));
 
@@ -84,16 +88,15 @@ describe('FilteredListComponent', () => {
 
 		input.value = 'a';
 		input.dispatchEvent(new Event('input'));
-		await new Promise((resolve) => setTimeout(resolve, 350));
+		await vi.advanceTimersByTimeAsync(300);
 		input.value = 'ab';
 		input.dispatchEvent(new Event('input'));
-		await new Promise((resolve) => setTimeout(resolve, 350));
+		await vi.advanceTimersByTimeAsync(300);
 
 		expect(resolvers).toHaveLength(2);
 		resolvers[1](contactResult('Newer Match'));
 		resolvers[0](contactResult('Stale Match'));
-		await fixture.whenStable();
-		await new Promise((resolve) => setTimeout(resolve));
+		await vi.advanceTimersByTimeAsync(0);
 		fixture.detectChanges();
 
 		const text = fixture.nativeElement.textContent;
