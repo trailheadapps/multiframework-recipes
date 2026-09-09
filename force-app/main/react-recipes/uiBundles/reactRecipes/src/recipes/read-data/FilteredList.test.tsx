@@ -38,6 +38,31 @@ const FILTERED_SUCCESS = {
   errors: [],
 };
 
+function contactResult(name: string) {
+  return {
+    data: {
+      uiapi: {
+        query: {
+          Contact: {
+            edges: [
+              {
+                node: {
+                  Id: name,
+                  Name: { value: name },
+                  Title: { value: null },
+                  Phone: { value: null },
+                  Picture__c: { value: null },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+    errors: [],
+  };
+}
+
 describe('FilteredList', () => {
   const mockGraphql = vi.fn();
 
@@ -112,6 +137,33 @@ describe('FilteredList', () => {
       query: expect.any(String),
       variables: { name: '%Alice%' },
     });
+  });
+
+  it('ignores a stale response that resolves after a newer one', async () => {
+    const resolvers: Array<(value: unknown) => void> = [];
+    mockGraphql.mockImplementation(
+      () => new Promise(resolve => resolvers.push(resolve))
+    );
+    render(<FilteredList />);
+    const input = screen.getByPlaceholderText('Search by name…');
+
+    fireEvent.change(input, { target: { value: 'a' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(350);
+    });
+    fireEvent.change(input, { target: { value: 'ab' } });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(350);
+    });
+
+    expect(resolvers).toHaveLength(2);
+    await act(async () => {
+      resolvers[1](contactResult('Newer Match'));
+      resolvers[0](contactResult('Stale Match'));
+    });
+
+    expect(screen.getByText('Newer Match')).toBeInTheDocument();
+    expect(screen.queryByText('Stale Match')).toBeNull();
   });
 
   it('is accessible', async () => {

@@ -12,7 +12,7 @@
  * @see PaginatedList — cursor-based pagination with Load More
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createDataSDK } from '@salesforce/platform-sdk';
 
 type SortField = 'Name' | 'Title' | 'Phone';
@@ -78,18 +78,22 @@ export default function SortedResults() {
   const [contacts, setContacts] = useState<ContactFields[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
+  const requestIdRef = useRef(0);
 
   // Re-fetch whenever sort field or direction changes
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setError(undefined);
+    const id = ++requestIdRef.current;
 
     const fetchSorted = async () => {
       const sdk = await createDataSDK();
       const result = await sdk.graphql?.query<SortedContactsResponse>({
         query: buildQuery(field, dir),
       });
+
+      if (id !== requestIdRef.current) return;
 
       if (result?.errors?.length) {
         throw new Error(
@@ -112,9 +116,12 @@ export default function SortedResults() {
 
     fetchSorted()
       .catch(err => {
+        if (id !== requestIdRef.current) return;
         setError(err instanceof Error ? err.message : 'Request failed');
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (id === requestIdRef.current) setLoading(false);
+      });
   }, [field, dir]);
 
   return (
