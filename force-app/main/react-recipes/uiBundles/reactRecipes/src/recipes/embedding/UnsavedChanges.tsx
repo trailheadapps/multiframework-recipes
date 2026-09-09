@@ -55,8 +55,10 @@ const TYPES = [
 export default function UnsavedChanges() {
   const [saved, setSaved] = useState<AccountProps>({});
   const [form, setForm] = useState<AccountProps>({});
-  // Seeded once the host sends a payload with a recordId; keeps the form
-  // in sync with subsequent host echoes only if the user hasn't edited yet.
+  // Mirrors `saved` so the ui-state subscription can compare against the last
+  // saved values synchronously (the state captured in that closure is stale).
+  const savedRef = useRef<AccountProps>({});
+  // Set once the host sends a payload with a recordId.
   const seededRef = useRef(false);
   // Prevents rapid Save re-clicks from firing duplicate updateRecords.
   // The button stays clickable so its state doesn't dirty → clean → dirty
@@ -74,11 +76,23 @@ export default function UnsavedChanges() {
       const ui = sdk.getUiState?.();
       if (!ui) return;
       const seed = (p: AccountProps) => {
+        // Adopt the host's values into the form when the user has nothing in
+        // progress. That means the first payload, a form still matching the last
+        // saved values, or the echo from our own save (which the host may
+        // normalize). Otherwise keep the user's in-progress edits.
+        const prevSaved = savedRef.current;
+        const wasSeeded = seededRef.current;
+        const wasSaving = savingRef.current;
+        savedRef.current = p;
+        if (p.recordId) seededRef.current = true;
         setSaved(p);
-        if (!seededRef.current && p.recordId) {
-          setForm(p);
-          seededRef.current = true;
-        }
+        setForm(prevForm => {
+          const pristine =
+            prevForm.name === prevSaved.name &&
+            prevForm.rating === prevSaved.rating &&
+            prevForm.type === prevSaved.type;
+          return !wasSeeded || pristine || wasSaving ? p : prevForm;
+        });
       };
       seed(ui.state.props as AccountProps);
       unsubscribe = ui.subscribe(latest => {
@@ -123,7 +137,7 @@ export default function UnsavedChanges() {
       new CustomEvent('guestsave', {
         detail: { name: form.name, rating: form.rating, type: form.type },
         bubbles: true,
-      }),
+      })
     );
     // The host normally releases the guard by echoing fresh values via
     // ui-state. If its updateRecord fails (it surfaces a toast and doesn't
