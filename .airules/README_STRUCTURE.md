@@ -9,7 +9,7 @@ The root README covers shared setup and links to individual app READMEs. It must
 1. **Title** (`# Multiframework Recipes`)
 2. **CI Badges** — CI and codecov badges
 3. **Description** — 1-2 paragraphs explaining the project
-4. **Note** — Blockquote noting which frameworks are available today vs. in preview. The UI Bundles hosting platform that serves these apps is generally available; individual frameworks roll out over time.
+4. **Learn more** — A short pointer to the Salesforce Multi-Framework developer guide. All frameworks (React, Angular, Micro-Frontend) are generally available and ship with the standard deploy; don't describe any of them as preview or work-in-progress.
 5. **Table of Contents** (`## Table of Contents`)
 6. **Setting up a Scratch Org** (`## Setting up a Scratch Org`) — Shared steps: environment setup, CLI install, scratch org creation, metadata deployment, permset assignment, data import. Ends with a callout to follow per-app READMEs.
 7. **Recipe Apps** (`## Recipe Apps`) — Table with columns: App, Framework, README (link to per-app README)
@@ -21,7 +21,7 @@ The root README covers shared setup and links to individual app READMEs. It must
 - Local development commands
 - Testing instructions
 
-## 2. Per-App README (e.g., `force-app/main/<app>/uiBundles/<bundle>/README.md`)
+## 2. Per-App README (e.g., `force-app/main/<app>/README.md`)
 
 Each framework app has its own README covering install, deploy, dev, and test. It must include these sections in order:
 
