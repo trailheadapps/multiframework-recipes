@@ -215,13 +215,22 @@ jobs:
         run: npm run build
         working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
 
-      # Deploy to scratch org (Angular Recipes is excluded via .forceignore)
+      # Install Angular app dependencies
+      - name: "Install Angular app dependencies"
+        run: npm ci --prefix force-app/main/angular-recipes/uiBundles/angularRecipes
+
+      # Build Angular app
+      - name: "Build Angular app"
+        run: npm run build
+        working-directory: force-app/main/angular-recipes/uiBundles/angularRecipes
+
+      # Deploy to scratch org (all frameworks ship by default)
       - name: "Deploy source to scratch org"
         run: sf project deploy start --source-dir force-app
 
-      # Assign permissionset
-      - name: "Assign permissionset to default user"
-        run: sf org assign permset -n recipes
+      # Assign permission set group
+      - name: "Assign permission set group to default user"
+        run: sf org assign permset -n recipesAll
 
       # Fetch GraphQL schema and run codegen
       - name: "GraphQL schema and codegen"
