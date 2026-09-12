@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description
+  >Grants access to every recipe app (React, Angular, Micro-Frontend) plus the shared recipes objects, fields, tabs, and Apex.</description>
+    <label>Recipes (All Frameworks)</label>
+    <permissionSets>recipes</permissionSets>
+    <permissionSets>reactRecipes</permissionSets>
+    <permissionSets>angularRecipes</permissionSets>
+    <permissionSets>microfrontendRecipes</permissionSets>
+</PermissionSetGroup>
