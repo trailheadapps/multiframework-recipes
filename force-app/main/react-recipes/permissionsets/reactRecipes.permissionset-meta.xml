@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <applicationVisibilities>
-        <application>angularRecipes</application>
+        <application>reactRecipes</application>
         <visible>true</visible>
     </applicationVisibilities>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>Angular Recipes</label>
+    <label>React Recipes</label>
 </PermissionSet>
