@@ -228,9 +228,16 @@ jobs:
       - name: "Deploy source to scratch org"
         run: sf project deploy start --source-dir force-app
 
-      # Assign permission set group
+      # Assign permission set group (wait for async recalculation to reach "Updated")
       - name: "Assign permission set group to default user"
-        run: sf org assign permset -n recipesAll
+        run: |
+          for i in $(seq 1 24); do
+            psg_status=$(sf data query -q "SELECT Status FROM PermissionSetGroup WHERE DeveloperName='recipesAll'" -r csv | tail -n1 | tr -d '"\r')
+            echo "PermissionSetGroup recipesAll status: $psg_status"
+            [ "$psg_status" = "Updated" ] && break
+            sleep 5
+          done
+          sf org assign permset -n recipesAll
 
       # Fetch GraphQL schema and run codegen
       - name: "GraphQL schema and codegen"
