@@ -10,12 +10,39 @@ vi.mock('@salesforce/platform-sdk', () => ({
 
 const mockQuery = vi.fn();
 
+function contactResult(name: string) {
+	return {
+		data: {
+			uiapi: {
+				query: {
+					Contact: {
+						edges: [
+							{
+								node: {
+									Id: name,
+									Name: { value: name },
+									Title: { value: null },
+									Phone: { value: null },
+									Picture__c: { value: null },
+								},
+							},
+						],
+					},
+				},
+			},
+		},
+	};
+}
+
 describe('FilteredListComponent', () => {
 	beforeEach(() => {
 		(createDataSDK as Mock).mockResolvedValue({ graphql: { query: mockQuery } });
 	});
 
-	afterEach(() => vi.clearAllMocks());
+	afterEach(() => {
+		vi.clearAllMocks();
+		vi.useRealTimers();
+	});
 
 	it('queries with a wildcard variable and renders matches after debounce', async () => {
 		mockQuery.mockResolvedValue({
@@ -47,5 +74,33 @@ describe('FilteredListComponent', () => {
 
 		expect(mockQuery).toHaveBeenCalledWith(expect.objectContaining({ variables: { name: '%Amy%' } }));
 		expect(fixture.nativeElement.textContent).toContain('Amy Taylor');
+	});
+
+	it('ignores a stale response that resolves after a newer one', async () => {
+		vi.useFakeTimers();
+		const resolvers: ((value: unknown) => void)[] = [];
+		mockQuery.mockImplementation(() => new Promise((resolve) => resolvers.push(resolve)));
+
+		await TestBed.configureTestingModule({ imports: [FilteredListComponent] }).compileComponents();
+		const fixture = TestBed.createComponent(FilteredListComponent);
+		fixture.detectChanges();
+		const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+
+		input.value = 'a';
+		input.dispatchEvent(new Event('input'));
+		await vi.advanceTimersByTimeAsync(300);
+		input.value = 'ab';
+		input.dispatchEvent(new Event('input'));
+		await vi.advanceTimersByTimeAsync(300);
+
+		expect(resolvers).toHaveLength(2);
+		resolvers[1](contactResult('Newer Match'));
+		resolvers[0](contactResult('Stale Match'));
+		await vi.advanceTimersByTimeAsync(0);
+		fixture.detectChanges();
+
+		const text = fixture.nativeElement.textContent;
+		expect(text).toContain('Newer Match');
+		expect(text).not.toContain('Stale Match');
 	});
 });

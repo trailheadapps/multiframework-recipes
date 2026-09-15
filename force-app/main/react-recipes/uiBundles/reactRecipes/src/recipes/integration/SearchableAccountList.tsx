@@ -77,8 +77,10 @@ export default function SearchableAccountList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const requestIdRef = useRef(0);
 
   const fetchAccounts = useCallback(async (term: string) => {
+    const id = ++requestIdRef.current;
     setLoading(true);
     setError(undefined);
 
@@ -89,6 +91,8 @@ export default function SearchableAccountList() {
         query: QUERY,
         variables: { name: term ? `%${term}%` : '%%' },
       });
+
+      if (id !== requestIdRef.current) return;
 
       if (result?.errors?.length) {
         throw new Error(
@@ -108,9 +112,10 @@ export default function SearchableAccountList() {
           }))
       );
     } catch (err) {
+      if (id !== requestIdRef.current) return;
       setError(err instanceof Error ? err.message : 'Request failed');
     } finally {
-      setLoading(false);
+      if (id === requestIdRef.current) setLoading(false);
     }
   }, []);
 

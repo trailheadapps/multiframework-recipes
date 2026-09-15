@@ -54,9 +54,10 @@ export class FilteredListComponent implements OnDestroy {
 	protected readonly error = signal<string | undefined>(undefined);
 
 	private timer?: ReturnType<typeof setTimeout>;
+	private requestId = 0;
 
-	// Debounce: wait 300ms after the last keystroke before querying. Clearing the
-	// pending timer on each keystroke cancels the previous, in-flight request.
+	// Debounce: wait 300ms after the last keystroke before querying, so a burst
+	// of typing fires one request instead of one per character.
 	protected onSearch(value: string): void {
 		this.search.set(value);
 		clearTimeout(this.timer);
@@ -73,6 +74,7 @@ export class FilteredListComponent implements OnDestroy {
 	}
 
 	private async fetch(term: string): Promise<void> {
+		const id = ++this.requestId;
 		this.loading.set(true);
 		try {
 			const sdk = await createDataSDK();
@@ -80,6 +82,8 @@ export class FilteredListComponent implements OnDestroy {
 				query: QUERY,
 				variables: { name: `%${term}%` },
 			});
+
+			if (id !== this.requestId) return;
 
 			if (result?.errors?.length) {
 				throw new Error(result.errors.map((e: { message: string }) => e.message).join('; '));
@@ -99,9 +103,10 @@ export class FilteredListComponent implements OnDestroy {
 					})),
 			);
 		} catch (err) {
+			if (id !== this.requestId) return;
 			this.error.set(err instanceof Error ? err.message : 'Request failed');
 		} finally {
-			this.loading.set(false);
+			if (id === this.requestId) this.loading.set(false);
 		}
 	}
 }

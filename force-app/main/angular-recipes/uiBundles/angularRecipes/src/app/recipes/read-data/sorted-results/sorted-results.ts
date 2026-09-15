@@ -61,6 +61,8 @@ export class SortedResultsComponent implements OnInit {
 	protected readonly loading = signal(true);
 	protected readonly error = signal<string | undefined>(undefined);
 
+	private requestId = 0;
+
 	ngOnInit(): void {
 		this.load();
 	}
@@ -80,6 +82,7 @@ export class SortedResultsComponent implements OnInit {
 	}
 
 	private async load(): Promise<void> {
+		const id = ++this.requestId;
 		this.loading.set(true);
 		this.error.set(undefined);
 		try {
@@ -87,6 +90,8 @@ export class SortedResultsComponent implements OnInit {
 			const result = await sdk.graphql?.query<SortedContactsResponse>({
 				query: buildQuery(this.field(), this.dir()),
 			});
+
+			if (id !== this.requestId) return;
 
 			if (result?.errors?.length) {
 				throw new Error(result.errors.map((e: { message: string }) => e.message).join('; '));
@@ -104,9 +109,10 @@ export class SortedResultsComponent implements OnInit {
 					})),
 			);
 		} catch (err) {
+			if (id !== this.requestId) return;
 			this.error.set(err instanceof Error ? err.message : 'Request failed');
 		} finally {
-			this.loading.set(false);
+			if (id === this.requestId) this.loading.set(false);
 		}
 	}
 }
