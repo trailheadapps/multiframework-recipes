@@ -71,8 +71,7 @@ export class UnsavedChangesComponent implements OnInit, OnDestroy {
 			this.form().type !== this.saved().type,
 	);
 
-	// Seeded once the host sends a payload with a recordId, so later host echoes
-	// don't clobber in-progress edits.
+	// Set once the host sends a payload with a recordId.
 	private seeded = false;
 	// Stops rapid Save re-clicks from firing duplicate updateRecords.
 	private saving = false;
@@ -115,11 +114,14 @@ export class UnsavedChangesComponent implements OnInit, OnDestroy {
 	}
 
 	private seed(props: AccountProps): void {
+		// Adopt the host's values into the form when the user has nothing in
+		// progress. That means the first payload, a form still matching the last
+		// saved values, or the echo from our own save (which the host may
+		// normalize). Otherwise keep the user's in-progress edits.
+		const canAdopt = !this.seeded || !this.isDirty() || this.saving;
 		this.saved.set(props);
-		if (!this.seeded && props.recordId) {
-			this.form.set(props);
-			this.seeded = true;
-		}
+		if (canAdopt) this.form.set(props);
+		if (props.recordId) this.seeded = true;
 	}
 
 	protected setName(value: string): void {
