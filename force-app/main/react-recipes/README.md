@@ -4,14 +4,6 @@
 
 A Salesforce UI Bundle demonstrating how to build a React app that runs directly on the Salesforce platform. The bundle is built with Vite + TypeScript and deployed to the org as a single artifact; Salesforce serves the static assets.
 
-```mermaid
-graph LR
-    A[Framework App<br/>Vite + TypeScript] -->|Build| B[UI Bundle]
-    B -->|Deploy| C[Salesforce Org]
-    C -->|Query| D[GraphQL UIAPI]
-    C -->|Fetch| E[REST APIs]
-```
-
 **Use when:** you want a single-team workflow, zero external infrastructure, and deep integration with Salesforce's security/identity model.
 
 > Check the [prerequisites](../../../README.md#prerequisites) in the root README before starting.

@@ -6,14 +6,6 @@ A Salesforce UI Bundle demonstrating how to build an Angular app that runs direc
 
 The same bundle also serves the Micro-Frontend **guest** views: chromeless `/embedding/*` routes (plus an `/embedding` catalog, linked as **Micro-Frontends** in the nav) that render outside the app shell and exchange state and events with `<lightning-ui-embedding>` through `@salesforce/platform-sdk`. The LWC hosts that embed them live in [Micro-Frontend Recipes](../microfrontend-recipes).
 
-```mermaid
-graph LR
-    A[Framework App<br/>Angular CLI + TypeScript] -->|Build| B[UI Bundle]
-    B -->|Deploy| C[Salesforce Org]
-    C -->|Query| D[GraphQL UIAPI]
-    C -->|Fetch| E[REST APIs]
-```
-
 **Use when:** you want a single-team workflow, zero external infrastructure, and deep integration with Salesforce's security/identity model.
 
 > Check the [prerequisites](../../../README.md#prerequisites) in the root README before starting.

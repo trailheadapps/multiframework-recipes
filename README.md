@@ -19,9 +19,9 @@ This sample application is designed to run on the Salesforce Platform. It covers
 
 ## Multi-Framework Recipes
 
-| App                                           | Framework | README                                             |
-| --------------------------------------------- | --------- | -------------------------------------------------- |
-| [React Recipes](force-app/main/react-recipes) | React     | [README](force-app/main/react-recipes/README.md)   |
+| App                                               | Framework | README                                             |
+| ------------------------------------------------- | --------- | -------------------------------------------------- |
+| [React Recipes](force-app/main/react-recipes)     | React     | [README](force-app/main/react-recipes/README.md)   |
 | [Angular Recipes](force-app/main/angular-recipes) | Angular   | [README](force-app/main/angular-recipes/README.md) |
 
 ## Micro-Frontend Recipes
@@ -84,7 +84,6 @@ These steps deploy the shared metadata and **all three** recipe apps — React, 
    sf org assign permset -n recipesAll
    ```
 
-   > [!TIP]
    > If this fails with _"You can only assign users to permission set groups that have the 'Updated' status"_, the group is still recalculating after the deploy. Wait a few seconds and run the command again.
 
 1. Import sample data:

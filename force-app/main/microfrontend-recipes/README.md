@@ -4,8 +4,7 @@
 
 Recipes that show how to embed an externally hosted framework app into Salesforce via the standard `<lightning-ui-embedding>` base component. Each recipe is an LWC host component, deployed to the org, that embeds a small guest served by a Vite dev server on an `/embedding/*` route. Most hosts pair with their own guest; the ready- and error-state recipes reuse the Basic Render guest to demonstrate host-side handling.
 
-> [!NOTE]
-> See the [Micro-Frontends release notes](https://help.salesforce.com/s/articleView?id=release-notes.rn_mfe_data_exchange.htm&language=en_US&type=5&release=262) for details on the data-exchange feature these recipes use.
+**Learn more:** Read the [Salesforce Micro-Frontend developer guide](https://developer.salesforce.com/docs/platform/microfrontend/guide/get-started.html) for a comprehensive overview.
 
 ## How the pieces fit together
 
@@ -80,8 +79,7 @@ graph LR
    sf org assign permset -n microfrontendRecipes
    ```
 
-   > [!IMPORTANT]
-   > Both permission sets are required. Micro-Frontend Recipes has no data model of its own — its guests are React Recipes views — so it deliberately reuses the shared `recipes` permission set for Account access, and `microfrontendRecipes` only layers on the app and tab. Assign just one and the demo loads with no data (or no app).
+   > Both permission sets are required. Micro-Frontend Recipes has no data model of its own — its guests are React and Angular Recipes views — so it deliberately reuses the shared `recipes` permission set for Account access, and `microfrontendRecipes` only layers on the app and tab. Assign just one and the demo loads with no data (or no app).
 
 1. Import sample data:
 
