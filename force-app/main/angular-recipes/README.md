@@ -8,48 +8,7 @@ The same bundle also serves the Micro-Frontend **guest** views: chromeless `/emb
 
 **Use when:** you want a single-team workflow, zero external infrastructure, and deep integration with Salesforce's security/identity model.
 
-> Check the [prerequisites](../../../README.md#prerequisites) in the root README before starting.
-
-## Install & Deploy
-
-Unless noted, run these commands from the repository root.
-
-1. Install dependencies:
-
-   ```bash
-   npm run install:all
-   ```
-
-1. Build the app:
-
-   ```bash
-   npm run build
-   ```
-
-1. Deploy the shared metadata and the Angular UI bundle. This deploys Angular Recipes only — to ship every framework at once, deploy all of `force-app` and assign the `recipesAll` group instead (see the [root README](../../../README.md#setting-up-a-scratch-org)):
-
-   ```bash
-   sf project deploy start --source-dir force-app/main/default --source-dir force-app/main/angular-recipes
-   ```
-
-1. Assign the permission sets to the default user. `recipes` grants the shared object, field, tab, and Apex access; `angularRecipes` adds the Angular Recipes app:
-
-   ```bash
-   sf org assign permset -n recipes
-   sf org assign permset -n angularRecipes
-   ```
-
-1. Import sample data:
-
-   ```bash
-   sf data tree import -p ./data/data-plan.json
-   ```
-
-1. Open the org and select the **Angular Recipes** app in App Launcher:
-
-   ```bash
-   sf org open
-   ```
+> To install and deploy, follow [Setting up a Scratch Org](../../../README.md#setting-up-a-scratch-org) in the root README — it deploys every recipe app together. Unless noted, run the commands below from the repository root.
 
 ## Local Development
 

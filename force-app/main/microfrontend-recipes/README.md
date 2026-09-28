@@ -32,77 +32,19 @@ graph LR
 
 **Use when:** you already have an externally hosted app you want to reuse across Salesforce and non-Salesforce surfaces.
 
-> Check the [prerequisites](../../../README.md#prerequisites) in the root README before starting.
+> To install and deploy, follow [Setting up a Scratch Org](../../../README.md#setting-up-a-scratch-org) in the root README — it deploys the host components, their Lightning pages, and the CSP trusted site for `localhost:5173` along with every other recipe app.
 
-## Install & Run
+## Running the guest server
 
-1. Authorize your Dev Hub if you haven't already (alias **myhuborg**):
+The LWC hosts deploy to the org, but the guests they embed are served from your machine. After deploying, start a guest dev server from the repository root and keep it running while you use the app:
 
-   ```bash
-   sf org login web -d -a myhuborg
-   ```
+```bash
+npm run dev:react
+```
 
-1. Clone this repository:
+The server starts at `http://localhost:5173` and serves the guest recipes under `/embedding/*` (for example `http://localhost:5173/embedding/basic-render`). To serve the Angular guests instead, run `npm run dev:angular` — it serves the same routes on the same port.
 
-   ```bash
-   git clone https://github.com/trailheadapps/multiframework-recipes
-   cd multiframework-recipes
-   ```
-
-1. Create a scratch org (alias **recipes**):
-
-   ```bash
-   sf org create scratch -d -f config/project-scratch-def.json -a recipes
-   ```
-
-1. Install dependencies and build the framework bundle that hosts the guest recipes:
-
-   ```bash
-   cd force-app/main/react-recipes/uiBundles/reactRecipes
-   npm install
-   npm run build
-   ```
-
-   The generated GraphQL types are committed, so this builds as-is. Only if you change a query, regenerate them against your org: `npm run graphql:schema && npm run graphql:codegen`.
-
-1. Deploy the shared metadata and the Micro-Frontend host components. This deploys Micro-Frontend Recipes only — to ship every framework at once, deploy all of `force-app` and assign the `recipesAll` group instead (see the [root README](../../../README.md#setting-up-a-scratch-org)):
-
-   ```bash
-   cd ../../../../..
-   sf project deploy start --source-dir force-app/main/default --source-dir force-app/main/microfrontend-recipes
-   ```
-
-1. Assign the **recipes** and **microfrontendRecipes** permission sets to the default user. `recipes` grants the shared object, field, tab, and Apex access; `microfrontendRecipes` adds the Micro-Frontend Recipes app and its tab:
-
-   ```bash
-   sf org assign permset -n recipes
-   sf org assign permset -n microfrontendRecipes
-   ```
-
-   > Both permission sets are required. Micro-Frontend Recipes has no data model of its own — its guests are React and Angular Recipes views — so it deliberately reuses the shared `recipes` permission set for Account access, and `microfrontendRecipes` only layers on the app and tab. Assign just one and the demo loads with no data (or no app).
-
-1. Import sample data:
-
-   ```bash
-   sf data tree import -p ./data/data-plan.json
-   ```
-
-1. Start the Vite dev server that hosts the guest recipes:
-
-   ```bash
-   cd force-app/main/react-recipes/uiBundles/reactRecipes
-   npm run dev
-   ```
-
-   The server starts at `http://localhost:5173`; the guest recipes are served under `/embedding/*` (for example `http://localhost:5173/embedding/basic-render`). Keep this running while using the app in your org. The CSP trusted site for `localhost:5173` is included in the deployed metadata — no extra CSP step needed. This quick-start uses the React bundle as the guest host; to serve the Angular guests instead, run the Angular dev server (see [Angular Recipes → Local Development](../angular-recipes/README.md#local-development)) — it serves the same `/embedding/*` routes on the same port.
-
-1. In a new terminal, open the org and select the **Micro-Frontend Recipes** app in App Launcher:
-
-   ```bash
-   sf org open
-   ```
-
-   The app landing page is a banner that jumps to a demo Account. Within this app, Account record pages are overridden with `Microfrontend_Recipes_Account.flexipage` — an accordion of the ten recipes; every other app shows the stock Account page.
+Then open the org and select the **Micro-Frontend Recipes** app in App Launcher. The app landing page is a banner that jumps to a demo Account. Within this app, Account record pages are overridden with `Microfrontend_Recipes_Account.flexipage` — an accordion of the ten recipes; every other app shows the stock Account page.
 
 ## Local Development
 
@@ -115,7 +57,7 @@ Guests are served by a framework's Vite dev server on `http://localhost:5173` un
 - **React** — see [React Recipes → Local Development](../react-recipes/README.md#local-development)
 - **Angular** — see [Angular Recipes → Local Development](../angular-recipes/README.md#local-development)
 
-Each bundle keeps its guests under `src/recipes/embedding/`.
+Guests live under `src/recipes/embedding/` in the React bundle and `src/app/recipes/embedding/` in the Angular bundle.
 
 ### Hosts (LWC)
 
