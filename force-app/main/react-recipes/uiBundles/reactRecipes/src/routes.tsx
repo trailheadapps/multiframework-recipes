@@ -15,7 +15,10 @@ import Routing, {
 } from './pages/Routing';
 import Integration from './pages/Integration';
 import Embedding from './pages/Embedding';
-import { RouteParametersDetail } from './recipes/routing/RouteParameters';
+import {
+  RouteParametersDetail,
+  accountLoader,
+} from './recipes/routing/RouteParameters';
 import NestedRoutes, {
   NestedRoutesIndex,
   NestedRoutesDetail,
@@ -83,7 +86,13 @@ export const routes: RouteObject[] = [
         path: 'route-parameters',
         element: <RouteParametersPage />,
         handle: { showInNavigation: true, label: 'Route Parameters' },
-        children: [{ path: ':accountId', element: <RouteParametersDetail /> }],
+        children: [
+          {
+            path: ':accountId',
+            element: <RouteParametersDetail />,
+            loader: accountLoader,
+          },
+        ],
       },
       {
         path: 'nested-routes',

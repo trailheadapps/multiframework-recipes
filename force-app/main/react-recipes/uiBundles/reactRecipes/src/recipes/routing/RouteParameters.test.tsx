@@ -4,12 +4,13 @@
 // itself is the source of truth and no wire adapter registration is needed.
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, createMemoryRouter, RouterProvider } from 'react-router';
 import { createDataSDK } from '@salesforce/platform-sdk';
 import { axe } from 'vitest-axe';
 import {
   RouteParametersList,
   RouteParametersDetail,
+  accountLoader,
 } from './RouteParameters';
 
 vi.mock('@salesforce/platform-sdk', () => ({
@@ -129,20 +130,24 @@ describe('RouteParametersDetail', () => {
     vi.clearAllMocks();
   });
 
-  // Wrap in a Route with the :accountId segment so useParams() returns the
-  // right value. This is the React equivalent of emitting a CurrentPageReference
-  // with { attributes: { recordId: '001' } } via a wire adapter mock.
+  // RouteParametersDetail reads its data via useLoaderData()/<Await>, which
+  // only exist inside a data router. createMemoryRouter + RouterProvider is
+  // the test equivalent of wiring the real accountLoader into routes.tsx,
+  // with the :accountId segment resolved from the URL. This is the React
+  // equivalent of emitting a CurrentPageReference with
+  // { attributes: { recordId: '001' } } via a wire adapter mock.
   function renderDetail(accountId: string) {
-    return render(
-      <MemoryRouter initialEntries={[`/route-parameters/${accountId}`]}>
-        <Routes>
-          <Route
-            path="/route-parameters/:accountId"
-            element={<RouteParametersDetail />}
-          />
-        </Routes>
-      </MemoryRouter>
+    const router = createMemoryRouter(
+      [
+        {
+          path: '/route-parameters/:accountId',
+          element: <RouteParametersDetail />,
+          loader: accountLoader,
+        },
+      ],
+      { initialEntries: [`/route-parameters/${accountId}`] }
     );
+    return render(<RouterProvider router={router} />);
   }
 
   it('renders the account name after data loads', async () => {
