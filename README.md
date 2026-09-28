@@ -28,7 +28,7 @@ This sample application is designed to run on the Salesforce Platform. It covers
 
 **[Micro-Frontend Recipes](force-app/main/microfrontend-recipes)** demonstrates how to embed an externally hosted app inside a Lightning page and exchange data and events over the Platform SDK.
 
-It ships with the standard deploy alongside React and Angular. See its [README](force-app/main/microfrontend-recipes/README.md) for the details.
+It deploys with everything else below. Its guests are served from your machine, so it needs one extra step — see [Running the guest server](force-app/main/microfrontend-recipes/README.md#running-the-guest-server).
 
 ## Prerequisites
 
@@ -44,7 +44,7 @@ It ships with the standard deploy alongside React and Angular. See its [README](
 
 ## Setting up a Scratch Org
 
-These steps deploy the shared metadata and **all three** recipe apps — React, Angular, and Micro-Frontend. For framework-specific development, build, and testing — or to deploy and assign just one framework — follow the per-app READMEs (see [Multi-Framework Recipes](#multi-framework-recipes) and [Micro-Frontend Recipes](#micro-frontend-recipes)).
+These steps deploy the shared metadata and **all three** recipe apps — React, Angular, and Micro-Frontend — as a single project. The per-app READMEs cover local development and testing only.
 
 1. If you haven't already done so, authorize your hub org and provide it with an alias (**myhuborg** in the command below):
 
@@ -94,12 +94,11 @@ These steps deploy the shared metadata and **all three** recipe apps — React, 
 
 1. Open the org and pick any of the **React Recipes**, **Angular Recipes**, or **Micro-Frontend Recipes** apps in App Launcher:
 
+   > **Micro-Frontend Recipes** embeds guests from `http://localhost:5173`, so start a guest dev server first — see [Running the guest server](force-app/main/microfrontend-recipes/README.md#running-the-guest-server).
+
    ```bash
    sf org open
    ```
-
-> [!NOTE]
-> To deploy and assign a single framework instead of everything, follow that app's README ([React](force-app/main/react-recipes/README.md), [Angular](force-app/main/angular-recipes/README.md), [Micro-Frontend](force-app/main/microfrontend-recipes/README.md)) — each one layers its thin permission set on top of the shared `recipes` set.
 
 ## Optional Installation Instructions
 
