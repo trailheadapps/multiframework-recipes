@@ -11,7 +11,7 @@
  * @see SortedResults — sorting query results with dynamic orderBy
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createDataSDK, gql } from '@salesforce/platform-sdk';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
@@ -81,6 +81,7 @@ export default function FilteredList() {
   const [contacts, setContacts] = useState<ContactFields[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     if (!search.trim()) return;
@@ -91,6 +92,7 @@ export default function FilteredList() {
     // The cleanup cancels the pending timer if search changes again before it fires.
     const timer = setTimeout(() => {
       setLoading(true);
+      const id = ++requestIdRef.current;
       const fetchFiltered = async () => {
         const sdk = await createDataSDK();
         // Wrap the search term in % wildcards for the `like` operator
@@ -98,6 +100,8 @@ export default function FilteredList() {
           query: QUERY,
           variables: { name: `%${search}%` },
         });
+
+        if (id !== requestIdRef.current) return;
 
         if (result?.errors?.length) {
           throw new Error(
@@ -122,9 +126,12 @@ export default function FilteredList() {
 
       fetchFiltered()
         .catch(err => {
+          if (id !== requestIdRef.current) return;
           setError(err instanceof Error ? err.message : 'Request failed');
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          if (id === requestIdRef.current) setLoading(false);
+        });
     }, 300);
 
     return () => clearTimeout(timer);

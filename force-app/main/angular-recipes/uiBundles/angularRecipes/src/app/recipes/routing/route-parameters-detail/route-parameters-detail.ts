@@ -51,6 +51,8 @@ export class RouteParametersDetailComponent {
 	protected readonly loading = signal(true);
 	protected readonly error = signal<string | undefined>(undefined);
 
+	private requestId = 0;
+
 	constructor() {
 		effect(() => {
 			const id = this.accountId();
@@ -59,6 +61,7 @@ export class RouteParametersDetailComponent {
 	}
 
 	private async load(id: string): Promise<void> {
+		const reqId = ++this.requestId;
 		this.loading.set(true);
 		this.error.set(undefined);
 		try {
@@ -67,6 +70,9 @@ export class RouteParametersDetailComponent {
 				query: DETAIL_QUERY,
 				variables: { id },
 			});
+
+			if (reqId !== this.requestId) return;
+
 			if (result?.errors?.length) {
 				throw new Error(result.errors.map((e: { message: string }) => e.message).join('; '));
 			}
@@ -82,9 +88,10 @@ export class RouteParametersDetailComponent {
 					: undefined,
 			);
 		} catch (err) {
+			if (reqId !== this.requestId) return;
 			this.error.set(err instanceof Error ? err.message : 'Request failed');
 		} finally {
-			this.loading.set(false);
+			if (reqId === this.requestId) this.loading.set(false);
 		}
 	}
 }
