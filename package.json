@@ -46,7 +46,7 @@
     "@prettier/plugin-xml": "^3.4.2",
     "@salesforce/sfdx-lwc-jest": "^7.9.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.6.0",
     "prettier": "^3.9.6",
     "prettier-plugin-apex": "^2.3.0"
   },
