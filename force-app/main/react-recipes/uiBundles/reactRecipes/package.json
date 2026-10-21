@@ -69,7 +69,7 @@
     "shiki": "^4.0.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4",
+    "vite": "^7.3.7",
     "vite-plugin-graphql-codegen": "^3.6.3",
     "vitest": "^4.1.11",
     "vitest-axe": "^1.0.0-pre.5"
