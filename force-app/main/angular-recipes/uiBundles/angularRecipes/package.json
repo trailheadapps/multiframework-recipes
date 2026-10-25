@@ -43,7 +43,7 @@
     "@angular-builders/custom-esbuild": "^21.0.0",
     "@angular-eslint/builder": "^21.0.0",
     "@angular/build": "^21.2.11",
-    "@angular/cli": "^21.2.26",
+    "@angular/cli": "^21.2.28",
     "@angular/compiler-cli": "^21.2.0",
     "@eslint/js": "^9.0.0",
     "@graphql-eslint/eslint-plugin": "^4.1.0",
