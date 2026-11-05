@@ -63,7 +63,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "graphql": "^16.11.0",
-    "graphql-codegen-typescript-operation-types": "^2.0.2",
+    "graphql-codegen-typescript-operation-types": "^3.0.0",
     "jsdom": "^25.0.1",
     "serve": "^14.2.5",
     "shiki": "^4.0.2",
