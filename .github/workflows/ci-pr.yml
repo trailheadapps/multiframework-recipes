@@ -270,6 +270,13 @@ jobs:
           npm run graphql:codegen
         working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
 
+      # Fail if the committed GraphQL types drifted from the scratch org schema
+      - name: "Check generated GraphQL types are up to date"
+        # Prerelease orgs can expose a different schema, so only gate on GA orgs.
+        if: ${{ !env.IS_PRERELEASE }}
+        run: git diff --exit-code -- src/api/graphql-operations-types.ts
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
       # Import sample data
       - name: "Import sample data"
         run: sf data tree import -p ./data/data-plan.json
