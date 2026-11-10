@@ -66,10 +66,7 @@ export default class UiEmbeddingGraphqlData extends LightningElement {
       query AccountContacts($accountId: ID) {
         uiapi {
           query {
-            Account(
-              where: { Id: { eq: $accountId } }
-              first: 1
-            ) {
+            Account(where: { Id: { eq: $accountId } }, first: 1) {
               edges {
                 node {
                   Id
@@ -142,7 +139,7 @@ export default class UiEmbeddingGraphqlData extends LightningElement {
 
   get computedSrc() {
     const url = new URL(this.baseUrl);
-    url.pathname = "/embedding/graphql-data";
+    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/graphql-data`;
     return url.toString();
   }
 

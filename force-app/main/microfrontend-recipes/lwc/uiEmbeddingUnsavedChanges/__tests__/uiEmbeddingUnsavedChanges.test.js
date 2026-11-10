@@ -135,4 +135,34 @@ describe("c-ui-embedding-unsaved-changes", () => {
     const text = Array.from(detail).map((node) => node.textContent);
     expect(text).toEqual(["Acme Corp", "Warm", "Prospect"]);
   });
+
+  it.each([
+    [
+      "http://localhost:5173",
+      "http://localhost:5173/embedding/unsaved-changes"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/unsaved-changes"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes/",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/unsaved-changes"
+    ]
+  ])(
+    "appends the guest route to the base URL path (%s)",
+    async (baseUrl, expected) => {
+      const el = createElement("c-ui-embedding-unsaved-changes", {
+        is: UiEmbeddingUnsavedChanges
+      });
+      el.baseUrl = baseUrl;
+      el.recordId = "001";
+      document.body.appendChild(el);
+      await Promise.resolve();
+
+      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+        expected
+      );
+    }
+  );
 });

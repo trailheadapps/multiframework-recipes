@@ -21,7 +21,7 @@ export default class UiEmbeddingSendToHost extends LightningElement {
 
   get computedSrc() {
     const url = new URL(this.baseUrl);
-    url.pathname = "/embedding/send-to-host";
+    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/send-to-host`;
     return url.toString();
   }
 

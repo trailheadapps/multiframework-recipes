@@ -24,7 +24,7 @@ export default class UiEmbeddingBasicRender extends LightningElement {
 
   get computedSrc() {
     const url = new URL(this.baseUrl);
-    url.pathname = "/embedding/basic-render";
+    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/basic-render`;
     return url.toString();
   }
 

@@ -26,7 +26,7 @@ export default class UiEmbeddingReadHostData extends LightningElement {
 
   get computedSrc() {
     const url = new URL(this.baseUrl);
-    url.pathname = "/embedding/read-host-data";
+    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/read-host-data`;
     return url.toString();
   }
 

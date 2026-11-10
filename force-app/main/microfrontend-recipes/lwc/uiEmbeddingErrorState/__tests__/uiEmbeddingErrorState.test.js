@@ -76,8 +76,47 @@ describe("c-ui-embedding-error-state", () => {
     expect(el.shadowRoot.querySelector(".error-panel")).toBeNull();
     const embed = el.shadowRoot.querySelector("lightning-ui-embedding");
     expect(embed.src).toContain("/embedding/basic-render");
-    expect(embed.props).toEqual(
-      expect.objectContaining({ recordId: "001" })
-    );
+    expect(embed.props).toEqual(expect.objectContaining({ recordId: "001" }));
   });
+
+  it.each([
+    ["http://localhost:5173", "http://localhost:5173/embedding/basic-render"],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/basic-render"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes/",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/basic-render"
+    ]
+  ])(
+    "appends the guest route to the base URL path (%s)",
+    async (baseUrl, expected) => {
+      const el = createElement("c-ui-embedding-error-state", {
+        is: UiEmbeddingErrorState
+      });
+      el.baseUrl = baseUrl;
+      el.recordId = "001";
+      document.body.appendChild(el);
+      await Promise.resolve();
+
+      // Loads in the broken state; switch to the real guest first.
+      el.shadowRoot.querySelector("lightning-ui-embedding").dispatchEvent(
+        new CustomEvent("sf-embedding.component.error", {
+          bubbles: true,
+          composed: true,
+          detail: { phase: "configuration", code: "SAME_ORIGIN_SRC" }
+        })
+      );
+      await Promise.resolve();
+      el.shadowRoot
+        .querySelector("lightning-button")
+        .dispatchEvent(new CustomEvent("click"));
+      await Promise.resolve();
+
+      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+        expected
+      );
+    }
+  );
 });

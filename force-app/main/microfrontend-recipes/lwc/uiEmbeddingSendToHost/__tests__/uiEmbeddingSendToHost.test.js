@@ -48,7 +48,9 @@ describe("c-ui-embedding-send-to-host", () => {
   });
 
   it("toasts an error when updateRecord rejects", async () => {
-    updateRecord.mockRejectedValue({ body: { message: "Insufficient access." } });
+    updateRecord.mockRejectedValue({
+      body: { message: "Insufficient access." }
+    });
     const el = createElement("c-ui-embedding-send-to-host", {
       is: UiEmbeddingSendToHost
     });
@@ -75,4 +77,31 @@ describe("c-ui-embedding-send-to-host", () => {
     expect(title).toBe("Scoring failed");
     expect(message).toBe("Insufficient access.");
   });
+
+  it.each([
+    ["http://localhost:5173", "http://localhost:5173/embedding/send-to-host"],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/send-to-host"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes/",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/send-to-host"
+    ]
+  ])(
+    "appends the guest route to the base URL path (%s)",
+    async (baseUrl, expected) => {
+      const el = createElement("c-ui-embedding-send-to-host", {
+        is: UiEmbeddingSendToHost
+      });
+      el.baseUrl = baseUrl;
+      el.recordId = "001";
+      document.body.appendChild(el);
+      await Promise.resolve();
+
+      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+        expected
+      );
+    }
+  );
 });

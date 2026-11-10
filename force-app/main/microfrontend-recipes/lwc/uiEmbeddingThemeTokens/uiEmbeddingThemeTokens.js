@@ -27,7 +27,7 @@ export default class UiEmbeddingThemeTokens extends LightningElement {
 
   get computedSrc() {
     const url = new URL(this.baseUrl);
-    url.pathname = "/embedding/theme-tokens";
+    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/theme-tokens`;
     return url.toString();
   }
 

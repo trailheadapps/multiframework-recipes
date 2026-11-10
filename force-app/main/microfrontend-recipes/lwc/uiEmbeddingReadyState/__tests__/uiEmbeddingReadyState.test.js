@@ -77,4 +77,31 @@ describe("c-ui-embedding-ready-state", () => {
     expect(el.shadowRoot.querySelector("lightning-spinner")).toBeNull();
     expect(el.shadowRoot.querySelector("lightning-badge")).not.toBeNull();
   });
+
+  it.each([
+    ["http://localhost:5173", "http://localhost:5173/embedding/basic-render"],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/basic-render"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes/",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/basic-render"
+    ]
+  ])(
+    "appends the guest route to the base URL path (%s)",
+    async (baseUrl, expected) => {
+      const el = createElement("c-ui-embedding-ready-state", {
+        is: UiEmbeddingReadyState
+      });
+      el.baseUrl = baseUrl;
+      el.recordId = "001";
+      document.body.appendChild(el);
+      await Promise.resolve();
+
+      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+        expected
+      );
+    }
+  );
 });
