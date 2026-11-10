@@ -48,4 +48,31 @@ describe("c-ui-embedding-receive-event", () => {
 
     expect(el.shadowRoot.querySelector("lightning-button").disabled).toBe(true);
   });
+
+  it.each([
+    ["http://localhost:5173", "http://localhost:5173/embedding/receive-event"],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/receive-event"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes/",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/receive-event"
+    ]
+  ])(
+    "appends the guest route to the base URL path (%s)",
+    async (baseUrl, expected) => {
+      const el = createElement("c-ui-embedding-receive-event", {
+        is: UiEmbeddingReceiveEvent
+      });
+      el.baseUrl = baseUrl;
+      el.recordId = "001";
+      document.body.appendChild(el);
+      await Promise.resolve();
+
+      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+        expected
+      );
+    }
+  );
 });

@@ -120,4 +120,31 @@ describe("c-ui-embedding-graphql-data", () => {
     expect(last().error).toBe("insufficient access");
     expect(last().contacts).toHaveLength(0);
   });
+
+  it.each([
+    ["http://localhost:5173", "http://localhost:5173/embedding/graphql-data"],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/graphql-data"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes/",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/graphql-data"
+    ]
+  ])(
+    "appends the guest route to the base URL path (%s)",
+    async (baseUrl, expected) => {
+      const el = createElement("c-ui-embedding-graphql-data", {
+        is: UiEmbeddingGraphqlData
+      });
+      el.baseUrl = baseUrl;
+      el.recordId = "001";
+      document.body.appendChild(el);
+      await Promise.resolve();
+
+      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+        expected
+      );
+    }
+  );
 });

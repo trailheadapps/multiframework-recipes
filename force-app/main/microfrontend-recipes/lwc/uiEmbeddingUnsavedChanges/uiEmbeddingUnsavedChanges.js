@@ -28,7 +28,7 @@ export default class UiEmbeddingUnsavedChanges extends LightningElement {
 
   get computedSrc() {
     const url = new URL(this.baseUrl);
-    url.pathname = "/embedding/unsaved-changes";
+    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/unsaved-changes`;
     return url.toString();
   }
 

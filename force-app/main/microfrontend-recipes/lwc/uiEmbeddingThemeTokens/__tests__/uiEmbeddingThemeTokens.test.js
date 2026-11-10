@@ -26,4 +26,31 @@ describe("c-ui-embedding-theme-tokens", () => {
 
     expect(embed.props.theme).toBe("dark");
   });
+
+  it.each([
+    ["http://localhost:5173", "http://localhost:5173/embedding/theme-tokens"],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/theme-tokens"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes/",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/theme-tokens"
+    ]
+  ])(
+    "appends the guest route to the base URL path (%s)",
+    async (baseUrl, expected) => {
+      const el = createElement("c-ui-embedding-theme-tokens", {
+        is: UiEmbeddingThemeTokens
+      });
+      el.baseUrl = baseUrl;
+      el.recordId = "001";
+      document.body.appendChild(el);
+      await Promise.resolve();
+
+      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+        expected
+      );
+    }
+  );
 });

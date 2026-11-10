@@ -39,4 +39,31 @@ describe("c-ui-embedding-basic-render", () => {
       website: "acme.example"
     });
   });
+
+  it.each([
+    ["http://localhost:5173", "http://localhost:5173/embedding/basic-render"],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/basic-render"
+    ],
+    [
+      "https://example.my.salesforce.app/app/c__reactRecipes/",
+      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/basic-render"
+    ]
+  ])(
+    "appends the guest route to the base URL path (%s)",
+    async (baseUrl, expected) => {
+      const el = createElement("c-ui-embedding-basic-render", {
+        is: UiEmbeddingBasicRender
+      });
+      el.baseUrl = baseUrl;
+      el.recordId = "001";
+      document.body.appendChild(el);
+      await Promise.resolve();
+
+      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+        expected
+      );
+    }
+  );
 });

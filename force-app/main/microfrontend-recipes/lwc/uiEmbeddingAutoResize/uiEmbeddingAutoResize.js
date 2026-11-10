@@ -12,7 +12,7 @@ export default class UiEmbeddingAutoResize extends LightningElement {
 
   get computedSrc() {
     const url = new URL(this.baseUrl);
-    url.pathname = "/embedding/auto-resize";
+    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/auto-resize`;
     return url.toString();
   }
 }
