@@ -204,7 +204,8 @@ const response = await sdk.fetch("/services/data/v66.0/ui-api/records/001...");
 - `schema.graphql` is **generated from a connected org**, not committed to the repo
 - Generate it: `npm run graphql:schema` (runs `scripts/get-graphql-schema.mjs`)
 - Then generate types: `npm run graphql:codegen` (reads `codegen.yml`)
-- Generated types land in `src/api/graphql-operations-types.ts`
+- Generated types land in `src/api/graphql-operations-types.ts` (committed)
+- Regenerate only against a fresh scratch org built from `config/project-scratch-def.json` (deployed + `recipesAll` assigned); CI fails if the committed types drift from that schema
 - `codegen.yml` includes full UIAPI scalar mappings (Currency, Date, Picklist, etc.)
 
 ---

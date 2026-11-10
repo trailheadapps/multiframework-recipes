@@ -22,13 +22,15 @@ Build the app for production:
 npm run build
 ```
 
-The generated GraphQL types under `src/api/` are committed. If you change a query, regenerate them against your org:
+The generated GraphQL types under `src/api/` are committed. If you change a query, regenerate them against a fresh scratch org created from `config/project-scratch-def.json`, with the source deployed and the `recipesAll` permission set group assigned:
 
 ```bash
 cd force-app/main/react-recipes/uiBundles/reactRecipes
 npm run graphql:schema
 npm run graphql:codegen
 ```
+
+Don't regenerate against an org that has other customizations. Its extra fields end up in the committed types. CI regenerates the types against its own scratch org and fails if `graphql-operations-types.ts` differs from the committed file.
 
 ## Testing
 
