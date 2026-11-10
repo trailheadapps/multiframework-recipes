@@ -44,7 +44,7 @@ Work through the categories in this order. Each builds on concepts from the prev
 | Error Handling | GraphqlErrors | Executes a query that intentionally requests a nonexistent field to trigger a GraphQL error. |
 | Error Handling | ErrorBoundaryRecipe | An Error Boundary catches JavaScript errors thrown during rendering and displays a fallback UI. |
 | Salesforce APIs | DisplayCurrentUser | Fetches the current user via the Chatter REST endpoint /users/me using DataSDK.fetch. |
-| Salesforce APIs | ConnectApi | Calls the Chatter Connect API via DataSDK.fetch to fetch the current user's news feed. |
+| Salesforce APIs | ConnectApi | Reads the org's file upload config from the Connect REST resource connect/file/upload/config using DataSDK.fetch. |
 | Salesforce APIs | ApexRest | Calls a custom Apex REST endpoint to fetch Contacts via DataSDK.fetch. |
 | Salesforce APIs | UiApiRest | Uses DataSDK.fetch with two UI API endpoints: list-ui and list-records. |
 | Routing | LinkDemo | Client-side navigation with React Router's Link component. |
