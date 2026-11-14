@@ -8,7 +8,7 @@
  * current user's ID, then @wire(getRecord) on the User object to fetch
  * fields like Name and Email.
  *
- * @see ConnectApi — fetching Chatter feed data via Connect API
+ * @see ConnectApi — reading another Connect resource (file upload config)
  */
 import { useEffect, useState } from 'react';
 import { createDataSDK } from '@salesforce/platform-sdk';
