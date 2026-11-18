@@ -149,6 +149,21 @@ jobs:
         run: npm run test:e2e
         working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
 
+      # Install the Angular app's Playwright browser (its Playwright version can differ from React's)
+      - name: "Install Playwright browsers for Angular"
+        run: npx playwright install chromium
+        working-directory: force-app/main/angular-recipes/uiBundles/angularRecipes
+
+      # Build Angular for E2E
+      - name: "Build Angular for E2E"
+        run: npm run build:e2e
+        working-directory: force-app/main/angular-recipes/uiBundles/angularRecipes
+
+      # Run Angular E2E tests
+      - name: "Run Angular Playwright E2E tests"
+        run: npm run e2e
+        working-directory: force-app/main/angular-recipes/uiBundles/angularRecipes
+
       # Prettier formatting
       - name: "Code formatting verification with Prettier"
         run: npm run prettier:verify
