@@ -116,3 +116,13 @@ npm run test:unit:coverage
 ### Guest recipes (React or Angular)
 
 Guests are covered by their framework's test suite — see [React Recipes → Testing](../react-recipes/README.md#testing) or [Angular Recipes → Testing](../angular-recipes/README.md#testing).
+
+### Embedding in an org
+
+Checks that the React and Angular guests render embedded in the Account page of a deployed org. It needs the app deployed and `npm run setup:mfe-csp` run, and it uses Playwright from the React bundle (`npx playwright install chromium` there if needed):
+
+```bash
+npm run test:mfe-embedding
+```
+
+CI runs it against a scratch org. Pass `-- --target-org <alias>` to use an org other than your default.

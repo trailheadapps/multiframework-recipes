@@ -32,6 +32,7 @@
     "install:angular": "npm install --prefix force-app/main/angular-recipes/uiBundles/angularRecipes",
     "install:all": "npm run install:react && npm run install:angular",
     "setup:mfe-csp": "node scripts/setup-mfe-csp.mjs",
+    "test:mfe-embedding": "node scripts/test-mfe-embedding.mjs",
     "test:unit": "sfdx-lwc-jest",
     "test:unit:coverage": "sfdx-lwc-jest --coverage",
     "prettier": "prettier --write \"**/*.{cls,trigger,xml,yaml,yml}\"",
