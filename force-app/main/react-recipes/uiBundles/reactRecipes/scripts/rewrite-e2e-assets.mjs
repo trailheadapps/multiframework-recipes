@@ -8,10 +8,10 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, '..', 'dist');
 
-// Rewrite index.html so asset paths are root-relative (/assets/...)
+// Rewrite index.html so every relative src/href is root-relative (/assets/..., /favicon.ico, ...)
 const indexPath = join(distDir, 'index.html');
 let html = readFileSync(indexPath, 'utf8');
-html = html.replace(/(src|href)="[^"]*\/assets\//g, '$1="/assets/');
+html = html.replace(/(src|href)="\.\//g, '$1="/');
 writeFileSync(indexPath, html);
 
 // SPA fallback so /about, /non-existent-route etc. serve index.html
