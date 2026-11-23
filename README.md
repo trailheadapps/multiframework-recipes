@@ -28,7 +28,7 @@ This sample application is designed to run on the Salesforce Platform. It covers
 
 **[Micro-Frontend Recipes](force-app/main/microfrontend-recipes)** demonstrates how to embed an externally hosted app inside a Lightning page and exchange data and events over the Platform SDK.
 
-It deploys with everything else below. Its guests are served from your machine, so it needs one extra step — see [Running the guest server](force-app/main/microfrontend-recipes/README.md#running-the-guest-server).
+It deploys with everything else below. Its guests are the React and Angular apps deployed to your org, so there's no local server to run. It needs one extra step after deploying — [trusting the guest origin](force-app/main/microfrontend-recipes/README.md#trusting-the-guest-origin).
 
 ## Prerequisites
 
@@ -78,6 +78,12 @@ These steps deploy the shared metadata and **all three** recipe apps — React, 
    sf project deploy start --source-dir force-app
    ```
 
+1. Trust the origin that serves your deployed UI bundles, so the Micro-Frontend Recipes can embed them. This creates a CSP Trusted Site scoped to your org only:
+
+   ```bash
+   npm run setup:mfe-csp
+   ```
+
 1. Assign the **Recipes (All Frameworks)** permission set group to the default user. It bundles the shared `recipes` set with the React, Angular, and Micro-Frontend sets:
 
    ```bash
@@ -94,7 +100,7 @@ These steps deploy the shared metadata and **all three** recipe apps — React, 
 
 1. Open the org and pick any of the **React Recipes**, **Angular Recipes**, or **Micro-Frontend Recipes** apps in App Launcher:
 
-   > **Micro-Frontend Recipes** embeds guests from `http://localhost:5173`, so start a guest dev server first — see [Running the guest server](force-app/main/microfrontend-recipes/README.md#running-the-guest-server).
+   > **Micro-Frontend Recipes** embeds the deployed React app by default. Use the **Guest app** switcher on the Account page to try Angular, or to point at a local dev server — see [Choosing a guest](force-app/main/microfrontend-recipes/README.md#choosing-a-guest).
 
    ```bash
    sf org open
