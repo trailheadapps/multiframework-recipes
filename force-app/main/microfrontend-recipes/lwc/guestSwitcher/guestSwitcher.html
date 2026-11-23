@@ -1,0 +1,24 @@
+<template>
+  <div class="switcher">
+    <lightning-radio-group
+      name="guest"
+      label="Guest app"
+      options={options}
+      value={state.mode}
+      type="button"
+      onchange={handleModeChange}
+    ></lightning-radio-group>
+    <template lwc:if={isExternal}>
+      <lightning-input
+        class="url-input slds-m-top_x-small"
+        type="url"
+        label="External guest base URL"
+        value={state.externalUrl}
+        placeholder={externalPlaceholder}
+        message-when-type-mismatch="Enter a full URL, for example http://localhost:5173"
+        onchange={handleUrlChange}
+      ></lightning-input>
+    </template>
+    <p class={statusClass}>{status}</p>
+  </div>
+</template>

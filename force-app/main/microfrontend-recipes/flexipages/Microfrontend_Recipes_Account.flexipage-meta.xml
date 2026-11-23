@@ -322,6 +322,12 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>guestSwitcher</componentName>
+                <identifier>guestSwitcher</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>accordionSections</name>
                     <value>Facet-3a12688c-287e-49b2-9576-93955360aea7</value>

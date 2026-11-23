@@ -4,6 +4,10 @@
         <application>microfrontendRecipes</application>
         <visible>true</visible>
     </applicationVisibilities>
+    <classAccesses>
+        <apexClass>MicrofrontendOrigin</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Micro-Frontend Recipes</label>
     <tabSettings>

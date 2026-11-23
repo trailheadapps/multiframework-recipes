@@ -17,6 +17,8 @@ module.exports = {
     // lightning/uiEmbedding (<lightning-ui-embedding>) is a Developer Preview
     // base component not covered by sfdx-lwc-jest's stubs; map it to a local mock.
     "^lightning/uiEmbedding$":
-      "<rootDir>/test/jest-mocks/lightning/uiEmbedding/uiEmbedding"
+      "<rootDir>/test/jest-mocks/lightning/uiEmbedding/uiEmbedding",
+    // c/guestHost calls Apex; component tests use this stand-in.
+    "^c/guestHost$": "<rootDir>/test/jest-mocks/c/guestHost"
   }
 };
