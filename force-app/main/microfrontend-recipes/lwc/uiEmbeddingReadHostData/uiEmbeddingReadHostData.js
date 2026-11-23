@@ -7,6 +7,7 @@
  * callback fires with the new values.
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import NAME from "@salesforce/schema/Account.Name";
 import RATING from "@salesforce/schema/Account.Rating";
@@ -18,16 +19,25 @@ import PHONE from "@salesforce/schema/Account.Phone";
 const FIELDS = [NAME, RATING, TYPE, INDUSTRY, WEBSITE, PHONE];
 
 export default class UiEmbeddingReadHostData extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
   record;
 
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/read-host-data`;
-    return url.toString();
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("read-host-data", (src) => {
+      this.computedSrc = src;
+    });
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
   }
 
   get account() {

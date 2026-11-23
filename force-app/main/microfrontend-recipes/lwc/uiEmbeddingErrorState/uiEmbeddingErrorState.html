@@ -45,7 +45,7 @@
           src={brokenSrc}
         ></lightning-ui-embedding>
       </template>
-      <template lwc:else>
+      <template lwc:elseif={guestSrc}>
         <lightning-ui-embedding
           sandbox="allow-popups"
           shell-title="Error State"

@@ -29,6 +29,7 @@
  * @see uiEmbeddingReadyState — the success side of the same lifecycle
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import NAME from "@salesforce/schema/Account.Name";
 import INDUSTRY from "@salesforce/schema/Account.Industry";
@@ -42,7 +43,8 @@ const FIELDS = [NAME, INDUSTRY, TYPE, WEBSITE];
 const ERROR_EVENT = "sf-embedding.component.error";
 
 export default class UiEmbeddingErrorState extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
@@ -57,14 +59,23 @@ export default class UiEmbeddingErrorState extends LightningElement {
     this.error = { phase, code, message, retryable };
   };
 
+  // The real cross-origin guest, from c/guestHost (undefined while loading or remounting).
+  guestSrc;
+  unsubscribeGuestSrc;
+
   connectedCallback() {
     // Listen before the embedding mounts. The event is composed, so it
     // reaches this shadow root even though it originates a level down.
     this.template.addEventListener(ERROR_EVENT, this.handleError);
+    this.unsubscribeGuestSrc = subscribeGuestSrc("basic-render", (src) => {
+      if (!src) this.error = undefined;
+      this.guestSrc = src;
+    });
   }
 
   disconnectedCallback() {
     this.template.removeEventListener(ERROR_EVENT, this.handleError);
+    this.unsubscribeGuestSrc?.();
   }
 
   // The host's own origin — same-origin with the Lightning page, which the
@@ -82,13 +93,6 @@ export default class UiEmbeddingErrorState extends LightningElement {
       type: getFieldValue(this.record?.data, TYPE),
       website: getFieldValue(this.record?.data, WEBSITE)
     };
-  }
-
-  // The real cross-origin guest URL, which loads normally.
-  get guestSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/basic-render`;
-    return url.toString();
   }
 
   get hasError() {

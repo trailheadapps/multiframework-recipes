@@ -29,13 +29,14 @@
  * @see uiEmbeddingSendToHost — guest → host events (payload on detail)
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { gql, graphql } from "lightning/graphql";
 
 export default class UiEmbeddingGraphqlData extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
-
   // Set by Lightning when the host sits on a record page — the account being
   // viewed. That's the bound context whose contacts we fetch.
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   accountName;
@@ -137,10 +138,18 @@ export default class UiEmbeddingGraphqlData extends LightningElement {
     this.sendContacts();
   }
 
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/graphql-data`;
-    return url.toString();
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("graphql-data", (src) => {
+      this.computedSrc = src;
+    });
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
   }
 
   get payload() {

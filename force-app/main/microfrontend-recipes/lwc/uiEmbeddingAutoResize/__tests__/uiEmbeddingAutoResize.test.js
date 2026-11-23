@@ -1,4 +1,5 @@
 import { createElement } from "lwc";
+import { __emitGuestSrc, MOCK_GUEST_BASE } from "c/guestHost";
 import UiEmbeddingAutoResize from "c/uiEmbeddingAutoResize";
 
 describe("c-ui-embedding-auto-resize", () => {
@@ -8,42 +9,39 @@ describe("c-ui-embedding-auto-resize", () => {
     }
   });
 
-  it("mounts the embedding at the auto-resize route", () => {
+  it("embeds the guest route from c/guestHost", async () => {
     const el = createElement("c-ui-embedding-auto-resize", {
       is: UiEmbeddingAutoResize
     });
-    el.baseUrl = "http://localhost:5173";
+    el.recordId = "001";
     document.body.appendChild(el);
+    await Promise.resolve();
 
-    const embed = el.shadowRoot.querySelector("lightning-ui-embedding");
-    expect(embed).not.toBeNull();
-    expect(embed.src).toBe("http://localhost:5173/embedding/auto-resize");
+    expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+      `${MOCK_GUEST_BASE}/embedding/auto-resize`
+    );
   });
 
-  it.each([
-    ["http://localhost:5173", "http://localhost:5173/embedding/auto-resize"],
-    [
-      "https://example.my.salesforce.app/app/c__reactRecipes",
-      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/auto-resize"
-    ],
-    [
-      "https://example.my.salesforce.app/app/c__reactRecipes/",
-      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/auto-resize"
-    ]
-  ])(
-    "appends the guest route to the base URL path (%s)",
-    async (baseUrl, expected) => {
-      const el = createElement("c-ui-embedding-auto-resize", {
-        is: UiEmbeddingAutoResize
-      });
-      el.baseUrl = baseUrl;
-      el.recordId = "001";
-      document.body.appendChild(el);
-      await Promise.resolve();
+  it("remounts the embedding when the guest src changes", async () => {
+    const el = createElement("c-ui-embedding-auto-resize", {
+      is: UiEmbeddingAutoResize
+    });
+    el.recordId = "001";
+    document.body.appendChild(el);
+    await Promise.resolve();
+    const before = el.shadowRoot.querySelector("lightning-ui-embedding");
 
-      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
-        expected
-      );
-    }
-  );
+    __emitGuestSrc("auto-resize", undefined);
+    await Promise.resolve();
+    expect(el.shadowRoot.querySelector("lightning-ui-embedding")).toBeNull();
+
+    __emitGuestSrc(
+      "auto-resize",
+      "https://other.example/embedding/auto-resize"
+    );
+    await Promise.resolve();
+    const after = el.shadowRoot.querySelector("lightning-ui-embedding");
+    expect(after.src).toBe("https://other.example/embedding/auto-resize");
+    expect(after).not.toBe(before);
+  });
 });

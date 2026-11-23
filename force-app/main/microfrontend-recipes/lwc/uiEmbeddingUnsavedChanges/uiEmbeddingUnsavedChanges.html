@@ -17,12 +17,14 @@
     </div>
     <div class="embed-grid">
       <div class="shell-container">
-        <lightning-ui-embedding
-          sandbox="allow-popups"
-          shell-title="Unsaved Changes"
-          src={computedSrc}
-          props={account}
-        ></lightning-ui-embedding>
+        <template lwc:if={computedSrc}>
+          <lightning-ui-embedding
+            sandbox="allow-popups"
+            shell-title="Unsaved Changes"
+            src={computedSrc}
+            props={account}
+          ></lightning-ui-embedding>
+        </template>
       </div>
       <!-- Reads the getRecord wire (LDS cache), so it reflects what is actually
            saved on the Account — the guest form shows the draft, this shows the

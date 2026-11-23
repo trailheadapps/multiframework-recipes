@@ -11,6 +11,7 @@
  * (data only the guest can fetch).
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import NAME from "@salesforce/schema/Account.Name";
 import TICKER from "@salesforce/schema/Account.TickerSymbol";
@@ -18,16 +19,25 @@ import TICKER from "@salesforce/schema/Account.TickerSymbol";
 const FIELDS = [NAME, TICKER];
 
 export default class UiEmbeddingReceiveEvent extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
   record;
 
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/receive-event`;
-    return url.toString();
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("receive-event", (src) => {
+      this.computedSrc = src;
+    });
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
   }
 
   get account() {

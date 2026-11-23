@@ -1,4 +1,5 @@
 import { createElement } from "lwc";
+import { __emitGuestSrc, MOCK_GUEST_BASE } from "c/guestHost";
 import UiEmbeddingSendToHost from "c/uiEmbeddingSendToHost";
 import { updateRecord } from "lightning/uiRecordApi";
 
@@ -78,30 +79,39 @@ describe("c-ui-embedding-send-to-host", () => {
     expect(message).toBe("Insufficient access.");
   });
 
-  it.each([
-    ["http://localhost:5173", "http://localhost:5173/embedding/send-to-host"],
-    [
-      "https://example.my.salesforce.app/app/c__reactRecipes",
-      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/send-to-host"
-    ],
-    [
-      "https://example.my.salesforce.app/app/c__reactRecipes/",
-      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/send-to-host"
-    ]
-  ])(
-    "appends the guest route to the base URL path (%s)",
-    async (baseUrl, expected) => {
-      const el = createElement("c-ui-embedding-send-to-host", {
-        is: UiEmbeddingSendToHost
-      });
-      el.baseUrl = baseUrl;
-      el.recordId = "001";
-      document.body.appendChild(el);
-      await Promise.resolve();
+  it("embeds the guest route from c/guestHost", async () => {
+    const el = createElement("c-ui-embedding-send-to-host", {
+      is: UiEmbeddingSendToHost
+    });
+    el.recordId = "001";
+    document.body.appendChild(el);
+    await Promise.resolve();
 
-      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
-        expected
-      );
-    }
-  );
+    expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+      `${MOCK_GUEST_BASE}/embedding/send-to-host`
+    );
+  });
+
+  it("remounts the embedding when the guest src changes", async () => {
+    const el = createElement("c-ui-embedding-send-to-host", {
+      is: UiEmbeddingSendToHost
+    });
+    el.recordId = "001";
+    document.body.appendChild(el);
+    await Promise.resolve();
+    const before = el.shadowRoot.querySelector("lightning-ui-embedding");
+
+    __emitGuestSrc("send-to-host", undefined);
+    await Promise.resolve();
+    expect(el.shadowRoot.querySelector("lightning-ui-embedding")).toBeNull();
+
+    __emitGuestSrc(
+      "send-to-host",
+      "https://other.example/embedding/send-to-host"
+    );
+    await Promise.resolve();
+    const after = el.shadowRoot.querySelector("lightning-ui-embedding");
+    expect(after.src).toBe("https://other.example/embedding/send-to-host");
+    expect(after).not.toBe(before);
+  });
 });

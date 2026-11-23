@@ -19,12 +19,14 @@
         </lightning-record-edit-form>
       </template>
       <div class="shell-container">
-        <lightning-ui-embedding
-          sandbox="allow-popups"
-          shell-title="Read Host Data"
-          src={computedSrc}
-          props={account}
-        ></lightning-ui-embedding>
+        <template lwc:if={computedSrc}>
+          <lightning-ui-embedding
+            sandbox="allow-popups"
+            shell-title="Read Host Data"
+            src={computedSrc}
+            props={account}
+          ></lightning-ui-embedding>
+        </template>
       </div>
     </div>
     <div class="recipe-footer">

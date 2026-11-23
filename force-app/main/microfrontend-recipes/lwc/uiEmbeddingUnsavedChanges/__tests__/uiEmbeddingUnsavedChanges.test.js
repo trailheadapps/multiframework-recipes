@@ -1,4 +1,5 @@
 import { createElement } from "lwc";
+import { __emitGuestSrc, MOCK_GUEST_BASE } from "c/guestHost";
 import UiEmbeddingUnsavedChanges from "c/uiEmbeddingUnsavedChanges";
 import { getRecord, updateRecord } from "lightning/uiRecordApi";
 
@@ -136,33 +137,39 @@ describe("c-ui-embedding-unsaved-changes", () => {
     expect(text).toEqual(["Acme Corp", "Warm", "Prospect"]);
   });
 
-  it.each([
-    [
-      "http://localhost:5173",
-      "http://localhost:5173/embedding/unsaved-changes"
-    ],
-    [
-      "https://example.my.salesforce.app/app/c__reactRecipes",
-      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/unsaved-changes"
-    ],
-    [
-      "https://example.my.salesforce.app/app/c__reactRecipes/",
-      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/unsaved-changes"
-    ]
-  ])(
-    "appends the guest route to the base URL path (%s)",
-    async (baseUrl, expected) => {
-      const el = createElement("c-ui-embedding-unsaved-changes", {
-        is: UiEmbeddingUnsavedChanges
-      });
-      el.baseUrl = baseUrl;
-      el.recordId = "001";
-      document.body.appendChild(el);
-      await Promise.resolve();
+  it("embeds the guest route from c/guestHost", async () => {
+    const el = createElement("c-ui-embedding-unsaved-changes", {
+      is: UiEmbeddingUnsavedChanges
+    });
+    el.recordId = "001";
+    document.body.appendChild(el);
+    await Promise.resolve();
 
-      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
-        expected
-      );
-    }
-  );
+    expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+      `${MOCK_GUEST_BASE}/embedding/unsaved-changes`
+    );
+  });
+
+  it("remounts the embedding when the guest src changes", async () => {
+    const el = createElement("c-ui-embedding-unsaved-changes", {
+      is: UiEmbeddingUnsavedChanges
+    });
+    el.recordId = "001";
+    document.body.appendChild(el);
+    await Promise.resolve();
+    const before = el.shadowRoot.querySelector("lightning-ui-embedding");
+
+    __emitGuestSrc("unsaved-changes", undefined);
+    await Promise.resolve();
+    expect(el.shadowRoot.querySelector("lightning-ui-embedding")).toBeNull();
+
+    __emitGuestSrc(
+      "unsaved-changes",
+      "https://other.example/embedding/unsaved-changes"
+    );
+    await Promise.resolve();
+    const after = el.shadowRoot.querySelector("lightning-ui-embedding");
+    expect(after.src).toBe("https://other.example/embedding/unsaved-changes");
+    expect(after).not.toBe(before);
+  });
 });

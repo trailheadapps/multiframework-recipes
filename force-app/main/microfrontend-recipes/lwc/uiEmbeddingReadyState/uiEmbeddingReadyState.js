@@ -24,6 +24,7 @@
  * miss it.
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import NAME from "@salesforce/schema/Account.Name";
 import INDUSTRY from "@salesforce/schema/Account.Industry";
@@ -37,7 +38,8 @@ const FIELDS = [NAME, INDUSTRY, TYPE, WEBSITE];
 const READY_EVENT = "sf-embedding.component.ready";
 
 export default class UiEmbeddingReadyState extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   ready = false;
@@ -54,6 +56,26 @@ export default class UiEmbeddingReadyState extends LightningElement {
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
   record;
 
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("basic-render", (src) => {
+      if (!src) {
+        // Embedding is unmounting: drop the old listener, show the spinner again.
+        this.refs?.embedding?.removeEventListener(
+          READY_EVENT,
+          this.handleReady
+        );
+        this.hasRegistered = false;
+        this.ready = false;
+        this.instanceId = undefined;
+      }
+      this.computedSrc = src;
+    });
+  }
+
   renderedCallback() {
     if (this.hasRegistered) return;
     const embedding = this.refs?.embedding;
@@ -63,16 +85,11 @@ export default class UiEmbeddingReadyState extends LightningElement {
   }
 
   disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
     this.refs?.embedding?.removeEventListener(READY_EVENT, this.handleReady);
     // Reset so renderedCallback re-attaches the listener if LWC reconnects this
     // instance; otherwise the guard above would leave the spinner stuck.
     this.hasRegistered = false;
-  }
-
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/basic-render`;
-    return url.toString();
   }
 
   // Reuses the Basic Render guest — this recipe is about the host-side
