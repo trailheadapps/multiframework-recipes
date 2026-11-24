@@ -1,4 +1,5 @@
 import { createElement } from "lwc";
+import { __emitGuestSrc, MOCK_GUEST_BASE } from "c/guestHost";
 import UiEmbeddingBasicRender from "c/uiEmbeddingBasicRender";
 import { getRecord } from "lightning/uiRecordApi";
 
@@ -40,30 +41,39 @@ describe("c-ui-embedding-basic-render", () => {
     });
   });
 
-  it.each([
-    ["http://localhost:5173", "http://localhost:5173/embedding/basic-render"],
-    [
-      "https://example.my.salesforce.app/app/c__reactRecipes",
-      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/basic-render"
-    ],
-    [
-      "https://example.my.salesforce.app/app/c__reactRecipes/",
-      "https://example.my.salesforce.app/app/c__reactRecipes/embedding/basic-render"
-    ]
-  ])(
-    "appends the guest route to the base URL path (%s)",
-    async (baseUrl, expected) => {
-      const el = createElement("c-ui-embedding-basic-render", {
-        is: UiEmbeddingBasicRender
-      });
-      el.baseUrl = baseUrl;
-      el.recordId = "001";
-      document.body.appendChild(el);
-      await Promise.resolve();
+  it("embeds the guest route from c/guestHost", async () => {
+    const el = createElement("c-ui-embedding-basic-render", {
+      is: UiEmbeddingBasicRender
+    });
+    el.recordId = "001";
+    document.body.appendChild(el);
+    await Promise.resolve();
 
-      expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
-        expected
-      );
-    }
-  );
+    expect(el.shadowRoot.querySelector("lightning-ui-embedding").src).toBe(
+      `${MOCK_GUEST_BASE}/embedding/basic-render`
+    );
+  });
+
+  it("remounts the embedding when the guest src changes", async () => {
+    const el = createElement("c-ui-embedding-basic-render", {
+      is: UiEmbeddingBasicRender
+    });
+    el.recordId = "001";
+    document.body.appendChild(el);
+    await Promise.resolve();
+    const before = el.shadowRoot.querySelector("lightning-ui-embedding");
+
+    __emitGuestSrc("basic-render", undefined);
+    await Promise.resolve();
+    expect(el.shadowRoot.querySelector("lightning-ui-embedding")).toBeNull();
+
+    __emitGuestSrc(
+      "basic-render",
+      "https://other.example/embedding/basic-render"
+    );
+    await Promise.resolve();
+    const after = el.shadowRoot.querySelector("lightning-ui-embedding");
+    expect(after.src).toBe("https://other.example/embedding/basic-render");
+    expect(after).not.toBe(before);
+  });
 });

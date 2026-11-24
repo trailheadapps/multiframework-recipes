@@ -6,13 +6,23 @@
  * applies them to the iframe.
  */
 import { LightningElement, api } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 
 export default class UiEmbeddingAutoResize extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
 
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/auto-resize`;
-    return url.toString();
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("auto-resize", (src) => {
+      this.computedSrc = src;
+    });
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
   }
 }

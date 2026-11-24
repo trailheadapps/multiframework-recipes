@@ -10,7 +10,7 @@
           class="slds-m-bottom_x-small status-badge status-badge_ready"
         ></lightning-badge>
       </template>
-      <template lwc:else>
+      <template lwc:elseif={computedSrc}>
         <div class="waiting">
           <div class="spinner-box">
             <lightning-spinner
@@ -23,13 +23,15 @@
           >
         </div>
       </template>
-      <lightning-ui-embedding
-        lwc:ref="embedding"
-        sandbox="allow-popups"
-        shell-title="Ready State"
-        src={computedSrc}
-        props={account}
-      ></lightning-ui-embedding>
+      <template lwc:if={computedSrc}>
+        <lightning-ui-embedding
+          lwc:ref="embedding"
+          sandbox="allow-popups"
+          shell-title="Ready State"
+          src={computedSrc}
+          props={account}
+        ></lightning-ui-embedding>
+      </template>
     </div>
     <div class="recipe-footer">
       <p class="recipe-description">

@@ -20,12 +20,14 @@
       </lightning-button-group>
     </div>
     <div class="shell-container">
-      <lightning-ui-embedding
-        sandbox="allow-popups"
-        shell-title="Theme Tokens"
-        src={computedSrc}
-        props={payload}
-      ></lightning-ui-embedding>
+      <template lwc:if={computedSrc}>
+        <lightning-ui-embedding
+          sandbox="allow-popups"
+          shell-title="Theme Tokens"
+          src={computedSrc}
+          props={payload}
+        ></lightning-ui-embedding>
+      </template>
     </div>
     <div class="recipe-footer">
       <p class="recipe-description">

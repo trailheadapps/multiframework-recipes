@@ -1,13 +1,15 @@
 <template>
   <div class="recipe-body">
     <div class="shell-container">
-      <lightning-ui-embedding
-        sandbox="allow-popups"
-        shell-title="Send To Host"
-        src={computedSrc}
-        props={account}
-        onscore={handleScore}
-      ></lightning-ui-embedding>
+      <template lwc:if={computedSrc}>
+        <lightning-ui-embedding
+          sandbox="allow-popups"
+          shell-title="Send To Host"
+          src={computedSrc}
+          props={account}
+          onscore={handleScore}
+        ></lightning-ui-embedding>
+      </template>
     </div>
     <div class="recipe-footer">
       <p class="recipe-description">

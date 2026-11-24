@@ -9,13 +9,15 @@
       ></lightning-button>
     </div>
     <div class="shell-container">
-      <lightning-ui-embedding
-        lwc:ref="embedding"
-        sandbox="allow-popups"
-        shell-title="Receive Event"
-        src={computedSrc}
-        props={account}
-      ></lightning-ui-embedding>
+      <template lwc:if={computedSrc}>
+        <lightning-ui-embedding
+          lwc:ref="embedding"
+          sandbox="allow-popups"
+          shell-title="Receive Event"
+          src={computedSrc}
+          props={account}
+        ></lightning-ui-embedding>
+      </template>
     </div>
     <div class="recipe-footer">
       <p class="recipe-description">

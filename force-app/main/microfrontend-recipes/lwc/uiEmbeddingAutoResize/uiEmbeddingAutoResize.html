@@ -1,12 +1,14 @@
 <template>
   <div class="recipe-body">
     <div class="shell-container">
-      <lightning-ui-embedding
-        class="auto-resize-embed"
-        sandbox="allow-popups"
-        shell-title="Auto Resize"
-        src={computedSrc}
-      ></lightning-ui-embedding>
+      <template lwc:if={computedSrc}>
+        <lightning-ui-embedding
+          class="auto-resize-embed"
+          sandbox="allow-popups"
+          shell-title="Auto Resize"
+          src={computedSrc}
+        ></lightning-ui-embedding>
+      </template>
     </div>
     <div class="recipe-footer">
       <p class="recipe-description">

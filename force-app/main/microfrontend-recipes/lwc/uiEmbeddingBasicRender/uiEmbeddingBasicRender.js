@@ -7,6 +7,7 @@
  * other recipes build on this pattern.
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import NAME from "@salesforce/schema/Account.Name";
 import INDUSTRY from "@salesforce/schema/Account.Industry";
@@ -16,16 +17,25 @@ import WEBSITE from "@salesforce/schema/Account.Website";
 const FIELDS = [NAME, INDUSTRY, TYPE, WEBSITE];
 
 export default class UiEmbeddingBasicRender extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
   record;
 
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/basic-render`;
-    return url.toString();
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("basic-render", (src) => {
+      this.computedSrc = src;
+    });
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
   }
 
   // Fresh object identity on each read so the embedding's `props` setter

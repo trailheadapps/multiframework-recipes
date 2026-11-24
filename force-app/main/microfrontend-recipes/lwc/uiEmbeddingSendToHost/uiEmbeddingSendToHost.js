@@ -5,6 +5,7 @@
  * via `updateRecord`.
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { getRecord, getFieldValue, updateRecord } from "lightning/uiRecordApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import RATING from "@salesforce/schema/Account.Rating";
@@ -13,16 +14,25 @@ import TYPE from "@salesforce/schema/Account.Type";
 const FIELDS = [RATING, TYPE];
 
 export default class UiEmbeddingSendToHost extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
   record;
 
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/send-to-host`;
-    return url.toString();
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("send-to-host", (src) => {
+      this.computedSrc = src;
+    });
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
   }
 
   get account() {

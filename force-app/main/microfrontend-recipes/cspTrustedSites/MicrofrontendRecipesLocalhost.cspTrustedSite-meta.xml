@@ -4,7 +4,7 @@
     <canAccessMicrophone>false</canAccessMicrophone>
     <context>All</context>
     <description
-  >Lets the lightning-ui-embedding iframe load the Microfrontend Recipes guest routes from the local Vite dev server (localhost:5173) in development. Ships only with the force-ignored Microfrontend Recipes package.</description>
+  >Lets the lightning-ui-embedding iframe load the Microfrontend Recipes guest routes from the local Vite dev server (localhost:5173) in development. Used by the External URL option of the guest switcher.</description>
     <endpointUrl>http://localhost:5173</endpointUrl>
     <isActive>true</isActive>
     <isApplicableToConnectSrc>false</isApplicableToConnectSrc>

@@ -9,6 +9,7 @@
  * `updateRecord` and lets the wire re-emit clean values back.
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { getRecord, getFieldValue, updateRecord } from "lightning/uiRecordApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import NAME from "@salesforce/schema/Account.Name";
@@ -18,7 +19,8 @@ import TYPE from "@salesforce/schema/Account.Type";
 const FIELDS = [NAME, RATING, TYPE];
 
 export default class UiEmbeddingUnsavedChanges extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   isDirty = false;
@@ -26,10 +28,18 @@ export default class UiEmbeddingUnsavedChanges extends LightningElement {
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
   record;
 
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/unsaved-changes`;
-    return url.toString();
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("unsaved-changes", (src) => {
+      this.computedSrc = src;
+    });
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
   }
 
   get account() {

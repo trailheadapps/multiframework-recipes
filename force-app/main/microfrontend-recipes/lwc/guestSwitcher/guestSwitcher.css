@@ -1,0 +1,9 @@
+.switcher {
+  padding: var(--slds-g-spacing-3, 12px);
+}
+
+/* Keep the URL field a sensible width instead of stretching across the page. */
+.url-input {
+  display: block;
+  max-width: 28rem;
+}

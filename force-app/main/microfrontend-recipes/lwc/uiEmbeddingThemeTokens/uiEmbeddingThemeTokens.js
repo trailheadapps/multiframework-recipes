@@ -8,6 +8,7 @@
  * token values (like `--brand-primary: #0176d3`).
  */
 import { LightningElement, api, wire } from "lwc";
+import { subscribeGuestSrc } from "c/guestHost";
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 import NAME from "@salesforce/schema/Account.Name";
 import INDUSTRY from "@salesforce/schema/Account.Industry";
@@ -17,7 +18,8 @@ import WEBSITE from "@salesforce/schema/Account.Website";
 const FIELDS = [NAME, INDUSTRY, TYPE, WEBSITE];
 
 export default class UiEmbeddingThemeTokens extends LightningElement {
-  @api baseUrl = "http://localhost:5173";
+  // Unused. Kept so deploys over an org that has an older version succeed.
+  @api baseUrl;
   @api recordId;
 
   theme = "light";
@@ -25,10 +27,18 @@ export default class UiEmbeddingThemeTokens extends LightningElement {
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
   record;
 
-  get computedSrc() {
-    const url = new URL(this.baseUrl);
-    url.pathname = `${url.pathname.replace(/\/+$/, "")}/embedding/theme-tokens`;
-    return url.toString();
+  // Set by c/guestHost; undefined while loading or remounting.
+  computedSrc;
+  unsubscribeGuestSrc;
+
+  connectedCallback() {
+    this.unsubscribeGuestSrc = subscribeGuestSrc("theme-tokens", (src) => {
+      this.computedSrc = src;
+    });
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeGuestSrc?.();
   }
 
   // The theme string is the only payload the guest needs to switch its

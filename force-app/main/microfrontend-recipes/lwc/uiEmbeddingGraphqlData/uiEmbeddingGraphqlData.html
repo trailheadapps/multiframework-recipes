@@ -1,13 +1,15 @@
 <template>
   <div class="recipe-body">
     <div class="shell-container">
-      <lightning-ui-embedding
-        lwc:ref="embedding"
-        sandbox="allow-popups"
-        shell-title="GraphQL Data"
-        src={computedSrc}
-        onrequestcontacts={handleRequestContacts}
-      ></lightning-ui-embedding>
+      <template lwc:if={computedSrc}>
+        <lightning-ui-embedding
+          lwc:ref="embedding"
+          sandbox="allow-popups"
+          shell-title="GraphQL Data"
+          src={computedSrc}
+          onrequestcontacts={handleRequestContacts}
+        ></lightning-ui-embedding>
+      </template>
     </div>
     <div class="recipe-footer">
       <p class="recipe-description">

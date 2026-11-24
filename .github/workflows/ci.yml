@@ -281,6 +281,19 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: Apex
 
+      # Trust this org's guest origin so the Micro-Frontend Recipes can embed the deployed bundles
+      - name: "Trust Micro-Frontend guest origin"
+        run: npm run setup:mfe-csp
+
+      # Install Playwright browser for the embedding check
+      - name: "Install Playwright browsers for embedding check"
+        run: npx playwright install --with-deps chromium
+        working-directory: force-app/main/react-recipes/uiBundles/reactRecipes
+
+      # Check the React and Angular guests render embedded in the Account page
+      - name: "Test Micro-Frontend embedding in scratch org"
+        run: npm run test:mfe-embedding
+
       # Housekeeping
       - name: "Delete scratch org"
         if: always()
