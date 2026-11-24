@@ -65,7 +65,7 @@
     "graphql": "^16.11.0",
     "graphql-codegen-typescript-operation-types": "^3.0.0",
     "jsdom": "^25.0.1",
-    "serve": "^14.2.5",
+    "serve": "^14.2.8",
     "shiki": "^4.0.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
