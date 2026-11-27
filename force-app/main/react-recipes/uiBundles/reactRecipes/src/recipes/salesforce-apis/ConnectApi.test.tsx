@@ -1,9 +1,9 @@
 /**
  * Connect API responses are plain JSON (no { value } wrappers like UIAPI).
- * The component fetches Chatter feed elements via DataSDK.fetch and renders
- * actor names, body text, photos, and relative timestamps. Tests mock
- * sdk.fetch to return feed payloads and verify each UI branch: loading
- * skeleton, populated feed, empty state, actor photos, and error handling.
+ * The component fetches the org's file upload config via DataSDK.fetch and
+ * renders each field. Tests mock sdk.fetch and verify the requested
+ * resource, the rendered fields, that the upload token is never shown,
+ * and error handling.
  */
 import { render, screen } from '@testing-library/react';
 import { type Mock } from 'vitest';
@@ -15,28 +15,14 @@ vi.mock('@salesforce/platform-sdk', () => ({
   createDataSDK: vi.fn(),
 }));
 
-// Radix Avatar defers <img> rendering until onLoad fires (no-op in jsdom)
-vi.mock('@/components/ui/avatar', () => ({
-  Avatar: ({ children, ...props }: Record<string, unknown> & { children?: React.ReactNode }) => <span {...props}>{children}</span>,
-  AvatarImage: (props: Record<string, unknown>) => <img {...props} />,
-  AvatarFallback: (props: Record<string, unknown>) => <span {...props} />,
-}));
-
-const makeFeedItem = (
-  id: string,
-  displayName: string,
-  text: string | null,
-  photoUrl: string | null = null
-) => ({
-  id,
-  type: 'TextPost',
-  createdDate: new Date(Date.now() - 30 * 60_000).toISOString(), // 30m ago
-  actor: {
-    displayName,
-    photo: photoUrl ? { smallPhotoUrl: photoUrl } : null,
-  },
-  body: text ? { text } : null,
-});
+const UPLOAD_CONFIG = {
+  allowedFileExtensions: ['pdf', 'png'],
+  hasCustomRecordTypes: false,
+  maxFileAttachmentsOnFeed: 10,
+  maxFileSize: 2048,
+  token: 'secret-upload-token',
+  uploadUrl: '/chatter/handlers/file/body',
+};
 
 describe('ConnectApi', () => {
   const mockFetch = vi.fn();
@@ -49,91 +35,54 @@ describe('ConnectApi', () => {
     vi.clearAllMocks();
   });
 
-  it('renders feed items after data loads', async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          elements: [
-            makeFeedItem('001', 'Alice', 'Hello world'),
-            makeFeedItem('002', 'Bob', 'Another post'),
-          ],
-          currentPageUrl: '/page',
-        }),
-    });
+  const respondWith = (body: unknown) =>
+    mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve(body) });
 
+  it('requests the file upload config Connect resource', async () => {
+    respondWith(UPLOAD_CONFIG);
     render(<ConnectApi />);
-    expect(await screen.findByText('Alice')).toBeInTheDocument();
-    expect(screen.getByText('Hello world')).toBeInTheDocument();
-    expect(screen.getByText('Bob')).toBeInTheDocument();
-    expect(screen.getByText('Another post')).toBeInTheDocument();
+    await screen.findByText('uploadUrl');
+    expect(mockFetch).toHaveBeenCalledWith(
+      '/services/data/v66.0/connect/file/upload/config'
+    );
   });
 
-  it('renders actor photo when available', async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          elements: [makeFeedItem('001', 'Alice', 'Hi', 'https://example.com/photo.jpg')],
-          currentPageUrl: '/page',
-        }),
-    });
-
+  it('renders the upload config fields', async () => {
+    respondWith(UPLOAD_CONFIG);
     render(<ConnectApi />);
-    const img = await screen.findByRole('img');
-    expect(img).toHaveAttribute('src', 'https://example.com/photo.jpg');
-    expect(img).toHaveAttribute('alt', 'Alice');
+    expect(await screen.findByText('["pdf","png"]')).toBeInTheDocument();
+    expect(screen.getByText('2048')).toBeInTheDocument();
+    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.getByText('/chatter/handlers/file/body')).toBeInTheDocument();
   });
 
-  it('shows empty message when no feed items', async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () =>
-        Promise.resolve({ elements: [], currentPageUrl: '/page' }),
-    });
+  it('never renders the upload token', async () => {
+    respondWith(UPLOAD_CONFIG);
+    const { container } = render(<ConnectApi />);
+    await screen.findByText('uploadUrl');
+    expect(container.textContent).not.toContain('secret-upload-token');
+  });
 
+  it('renders an empty extension list as []', async () => {
+    respondWith({ ...UPLOAD_CONFIG, allowedFileExtensions: [], maxFileSize: 0 });
     render(<ConnectApi />);
-    expect(
-      await screen.findByText(/No Chatter feed items found/)
-    ).toBeInTheDocument();
+    expect(await screen.findByText('[]')).toBeInTheDocument();
+    expect(screen.getByText('0')).toBeInTheDocument();
   });
 
   it('shows error when Connect API fails', async () => {
-    mockFetch.mockResolvedValue({ ok: false, status: 403 });
-
+    mockFetch.mockResolvedValue({ ok: false, status: 401 });
     render(<ConnectApi />);
     expect(
-      await screen.findByText('Connect API error: 403')
+      await screen.findByText('Connect API error: 401')
     ).toBeInTheDocument();
   });
 
-  it('displays relative time for feed items', async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          elements: [makeFeedItem('001', 'Alice', 'Post')],
-          currentPageUrl: '/page',
-        }),
-    });
-
-    render(<ConnectApi />);
-    expect(await screen.findByText(/30m ago/)).toBeInTheDocument();
-  });
-
   it('is accessible', async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          elements: [makeFeedItem('001', 'Alice', 'Hello world')],
-          currentPageUrl: '/page',
-        }),
-    });
+    respondWith(UPLOAD_CONFIG);
     const { container } = render(<ConnectApi />);
-    await screen.findByText('Alice');
+    await screen.findByText('uploadUrl');
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
-
 });

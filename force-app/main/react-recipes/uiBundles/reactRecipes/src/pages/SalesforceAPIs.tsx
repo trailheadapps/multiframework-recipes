@@ -1,9 +1,11 @@
 import Layout, { type RecipeItem } from '@/components/app/Layout';
 import DisplayCurrentUser from '@/recipes/salesforce-apis/DisplayCurrentUser';
+import ConnectApi from '@/recipes/salesforce-apis/ConnectApi';
 import UiApiRest from '@/recipes/salesforce-apis/UiApiRest';
 import ApexRest from '@/recipes/salesforce-apis/ApexRest';
 
 import displayCurrentUserSource from '@/recipes/salesforce-apis/DisplayCurrentUser.tsx?shiki';
+import connectApiSource from '@/recipes/salesforce-apis/ConnectApi.tsx?shiki';
 import uiApiRestSource from '@/recipes/salesforce-apis/UiApiRest.tsx?shiki';
 import apexRestSource from '@/recipes/salesforce-apis/ApexRest.tsx?shiki';
 
@@ -15,6 +17,13 @@ export default function SalesforceAPIs() {
         'Fetches the current user via the Chatter REST endpoint /users/me using DataSDK.fetch. Returns plain JSON with displayName and email.',
       component: <DisplayCurrentUser />,
       source: displayCurrentUserSource,
+    },
+    {
+      name: 'Connect API',
+      description:
+        'Reads the org\'s file upload config from the Connect REST resource connect/file/upload/config via DataSDK.fetch. Deployed UI Bundles can reach only specific Connect resources, not all of connect/* or chatter/*.',
+      component: <ConnectApi />,
+      source: connectApiSource,
     },
     {
       name: 'UI API (REST)',
